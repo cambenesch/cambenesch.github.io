@@ -1,4 +1,4 @@
----
+<!-- ---
 layout: page
 title: Bookmarks
 description: Useful online tools and resources
@@ -21,4 +21,4 @@ If you have any suggestions to add, or a better way to organize this page, feel 
 
 {% if site.comments_repo %}
 {% include comments.html %}
-{% endif %}
+{% endif %} -->
