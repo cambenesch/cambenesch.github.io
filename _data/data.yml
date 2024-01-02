@@ -7,8 +7,8 @@ sidebar:
     education: True # set to False if you want education in main section instead of in sidebar
 
     # Profile information
-    name: Biagio Brattoli
-    tagline: Computer Vision and Machine Learning researcher
+    name: Cameron Benesch
+    tagline: CS Grad Student, former Quant Trader
     avatar: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 
     # Sidebar links
@@ -47,7 +47,7 @@ sidebar:
 career-profile:
     title: Career Profile
     summary: |
-      Current nondegree CS grad student at UIC. Former Trader and ETF Pricing Specialist at IMC. Bachelor's in Math from Cornell. 
+      Current nondegree CS grad student at UIC. Former Quant Trader and ETF Pricing Specialist at IMC. Bachelor's in Math from Cornell. 
       I'm passionate about statistics and computation, and am actively seeking employment in a position combining those interests. 
 
 news:
