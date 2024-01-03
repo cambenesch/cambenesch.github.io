@@ -240,12 +240,12 @@ and conditionals $g_{j}\left( x^{(j)} \middle| x^{(l \neq j)} \right)$.
 As before, suppose we cannot sample from $k$, but we can sample from
 each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs
 sampling is the following procedure, which generates
-$\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$,
+$\left\lbrack \boldsymbol{X_1},\ldots,\boldsymbol{X_n} \right\rbrack$,
 where
-$\mathbf{X}_{\mathbf{i}}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
+$\boldsymbol{X_i}\boldsymbol{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
 as our sample from $k$.
 
-(1) Choose $\mathbf{x}_{\mathbf{1}}\mathbf{\in}\Omega$, and set $i = 2$.
+(1) Choose $\boldsymbol{x_1}}\boldsymbol{\in}\Omega$, and set $i = 2$.
 
 (2) For $j \in \lbrack 1..m\rbrack$:
 
@@ -253,13 +253,13 @@ as our sample from $k$.
 > $g_{j}\left( x^{(j)} \middle| x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
 
 (3) Record
-    $\mathbf{x}_{\mathbf{i}}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
+    $\boldsymbol{x_i}}\boldsymbol{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
     and increment $i$.
 
 (4) If $i \leq n$, then cycle back to step (2).
 
 This is very similar to our 2 variable procedure. One difference is that
-here, we are first fixing $\mathbf{x}_{\mathbf{1}}$ as a full draw from
+here, we are first fixing $\boldsymbol{x_1}}$ as a full draw from
 the joint distribution. In contrast, for our 2 variable case, we only
 required choosing $x_{1}$ (as opposed to $(x_{1},y_{1})$), and we did
 one preliminary conditional sample to choose $y_{1}$. This difference is
@@ -340,17 +340,17 @@ $g_{1}(\theta|\beta_{1},x)$.
 5.  Relevant research
 
 One important property of our sample
-$\left\lbrack \mathbf{X}_{\mathbf{1}},\ldots,\mathbf{X}_{\mathbf{n}} \right\rbrack$
-is that $\mathbf{x}_{\mathbf{i}}$ is generated based on
-$\mathbf{x}_{\mathbf{i - 1}}$, but does not consider the values
-$\mathbf{x}_{\mathbf{1}}\mathbf{,\ldots,}\mathbf{x}_{\mathbf{i - 2}}$.
+$\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$
+is that $\mathbf{x_i}$ is generated based on
+$\mathbf{x_{i - 1}}$, but does not consider the values
+$\mathbf{x_1}\mathbf{,\ldots,}\mathbf{x_{i - 2}}$.
 By definition, this makes our sample a Markov chain, in which
-$\mathbf{X}_{\mathbf{i}}$ is correlated with
-$\mathbf{X}_{\mathbf{i + a}}$, and the magnitude of that correlation is
+$\mathbf{X_i}$ is correlated with
+$\mathbf{X_{i + a}}$, and the magnitude of that correlation is
 decreasing in $|a|$. In other words, the closer two draws are in this
 chain, the more correlated they are. And in particular, the earlier a
 draw is, the more correlated it is with our arbitrarily chosen
-$\mathbf{X}_{\mathbf{1}}$! This seems bad, since we don't want a
+$\mathbf{X_{1}}$! This seems bad, since we don't want a
 significant portion of our sample to depend on an arbitrarily chosen
 starting point.
 
@@ -358,9 +358,9 @@ We cannot zero this correlation with a finite sample size, but after
 enough steps it should become negligible. So in practice, a *burn-in*
 period is used -- this just means we ignore the first $b$ draws,
 yielding
-$\left\lbrack \mathbf{X}_{\mathbf{b + 1}},\ldots,\mathbf{X}_{\mathbf{n}} \right\rbrack$
+$\left\lbrack \mathbf{X_{b + 1}},\ldots,\mathbf{X_{n}} \right\rbrack$
 rather than
-$\left\lbrack \mathbf{X}_{\mathbf{1}},\ldots,\mathbf{X}_{\mathbf{n}} \right\rbrack$.
+$\left\lbrack \mathbf{X_{1}},\ldots,\mathbf{X_{n}} \right\rbrack$.
 
 As an aside, a common practice in Gibbs sampling is recording only every
 $q^{th}$ sample after the burn-in period. If, for example, $n = 21$,
