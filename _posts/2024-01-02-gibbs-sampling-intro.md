@@ -419,7 +419,7 @@ generated](/assets/images/gibbs3.png)
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/gibbs3.png"> <br>
-    Figure 3 \[11\]
+    Figure 3 [11]
 </p>
 
 Figure 3 \[11\]
