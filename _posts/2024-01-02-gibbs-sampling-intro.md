@@ -414,9 +414,6 @@ factor. In the table below, note that the two islands model (data is
 divided into two clusters) mixes exponentially slowly. One can think of
 it as a nearly-reducible Markov chain.
 
-![A black background with white text Description automatically
-generated](/assets/images/gibbs3.png)
-
 <p align="center" width="100%">
     <img width="70%" src="/assets/images/gibbs3.png"> <br>
     Figure 3 [11]
