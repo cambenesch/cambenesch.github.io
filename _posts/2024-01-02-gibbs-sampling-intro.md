@@ -95,7 +95,7 @@ distribution
 > \end{bmatrix} \right)$$
 
 which is the standard bivariate normal distribution \[3\] with
-correlation coefficient $\rho = \frac{1}{2}$.
+correlation coefficient \\[ \rho = \frac{1}{2} \\].
 
 Now let $W(x,y) = xy\sqrt{\log{(x + y)}}$. How do we compute
 $E\left\lbrack W(X,Y) \right\rbrack$?
