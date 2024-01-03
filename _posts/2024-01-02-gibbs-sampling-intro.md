@@ -181,8 +181,7 @@ However, we observed that the conditional distributions $g_{Y|X}$ and
 $g_{Y|X}$ were both univariate normal, and were easy to sample from.
 
 ![A graph of a function Description automatically
-generated](/assets/images/gibbs1.png){width="4.0879997812773405in"
-height="3.412343613298338in"}
+generated](/assets/images/gibbs1.png)
 
 Figure 1 \[5\]
 
@@ -207,8 +206,7 @@ Following the black arrows, we now have $(x_{2},y_{2})$ as our next draw
 from $k_{X,Y}$!
 
 ![A graph of a function Description automatically
-generated](/assets/images/gibbs2.png){width="3.9220439632545934in"
-height="4.100965660542432in"}
+generated](/assets/images/gibbs2.png)
 
 Figure 2 \[6\]
 
@@ -417,8 +415,11 @@ divided into two clusters) mixes exponentially slowly. One can think of
 it as a nearly-reducible Markov chain.
 
 ![A black background with white text Description automatically
-generated](/assets/images/gibbs3.png){width="5.208489720034995in"
-height="2.304311023622047in"}
+generated](/assets/images/gibbs3.png)
+
+<p align="center" width="100%">
+    <img width="33%" src="/assets/images/gibbs3.png">
+</p>
 
 Figure 3 \[11\]
 
