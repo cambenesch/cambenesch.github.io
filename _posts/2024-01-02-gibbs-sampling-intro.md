@@ -206,7 +206,7 @@ Following the black arrows, we now have $(x_{2},y_{2})$ as our next draw
 from $k_{X,Y}$!
 
 <p align="center" width="100%">
-    <img width="60%" src="/assets/images/gibbs2.png"> <br>
+    <img width="70%" src="/assets/images/gibbs2.png"> <br>
     Figure 2 [6]
 </p>
 
@@ -418,7 +418,7 @@ it as a nearly-reducible Markov chain.
 generated](/assets/images/gibbs3.png)
 
 <p align="center" width="100%">
-    <img width="60%" src="/assets/images/gibbs3.png"> <br>
+    <img width="70%" src="/assets/images/gibbs3.png"> <br>
     Figure 3 [11]
 </p>
 
