@@ -266,7 +266,7 @@ each conditional draw in Step (2) conditions on the *most recent* value
 of each $x^{(l \neq j)}$. If $x_{i}^{(l)}$ has already been computed,
 then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
-4.  Application: Hierarchical Bayes
+# Application: Hierarchical Bayes
 
 Consider the problem of estimating the distribution of a parameter
 $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$.
