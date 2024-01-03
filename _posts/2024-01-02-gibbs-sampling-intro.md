@@ -180,10 +180,10 @@ problem: it was also difficult to sample from $k_{X,Y}(x,y)$ directly.
 However, we observed that the conditional distributions $g_{Y|X}$ and
 $g_{Y|X}$ were both univariate normal, and were easy to sample from.
 
-![A graph of a function Description automatically
-generated](/assets/images/gibbs1.png)
-
-Figure 1 \[5\]
+<p align="center" width="100%">
+    <img width="100%" src="/assets/images/gibbs1.png"> <br>
+    Figure 1 [5]
+</p>
 
 So we chose a starting value $x_{1}$ (We didn't specify how that
 starting value was chosen -- we'll discuss that later.) Then we computed
@@ -205,10 +205,10 @@ step by sampling from $g_{Y|X}\left( y \middle| X = x_{2} \right)$.
 Following the black arrows, we now have $(x_{2},y_{2})$ as our next draw
 from $k_{X,Y}$!
 
-![A graph of a function Description automatically
-generated](/assets/images/gibbs2.png)
-
-Figure 2 \[6\]
+<p align="center" width="100%">
+    <img width="100%" src="/assets/images/gibbs2.png"> <br>
+    Figure 2 [6]
+</p>
 
 Intuitively, what's happening is we're selecting an initial
 x-coordinate. From there, each conditional draw from $g_{Y|X}$ is
@@ -421,8 +421,6 @@ generated](/assets/images/gibbs3.png)
     <img width="100%" src="/assets/images/gibbs3.png"> <br>
     Figure 3 [11]
 </p>
-
-Figure 3 \[11\]
 
 These relatively new findings have immense practical implications. In
 practice, Gibbs sampling may not be appropriate for certain datasets.
