@@ -239,7 +239,7 @@ $k\left( x^{(1)},\ldots,x^{(m)} \right)$, joint sample space $\Omega$,
 and conditionals $g_{j}\left( x^{(j)} \middle| x^{(l \neq j)} \right)$.
 As before, suppose we cannot sample from $k$, but we can sample from
 each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs
-sampling is the following procedure, which generates $\boldsymbol{X}$ $\mathbf{X}$ $*X*$
+sampling is the following procedure, which generates $\boldsymbol{X}$, $\mathbf{X}$, $*X*$, $**X**$, 
 $\left\lbrack \boldsymbol{X}_{\boldsymbol{1}},\ldots,\boldsymbol{X}_{\boldsymbol{n}} \right\rbrack$,
 where
 $\mathbf{X}_{\mathbf{i}}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
