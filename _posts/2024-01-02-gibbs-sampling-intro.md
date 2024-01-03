@@ -245,7 +245,7 @@ where
 $\mathbf{X_i}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
 as our sample from $k$.
 
-(1) Choose $\mathbf{x_1}}\mathbf{\in}\Omega$, and set $i = 2$.
+(1) Choose $\mathbf{x_1}\mathbf{\in}\Omega$, and set $i = 2$.
 
 (2) For $j \in \lbrack 1..m\rbrack$:
 
@@ -253,13 +253,13 @@ as our sample from $k$.
 > $g_{j}\left( x^{(j)} \middle| x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
 
 (3) Record
-    $\mathbf{x_i}}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
+    $\mathbf{x_i}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
     and increment $i$.
 
 (4) If $i \leq n$, then cycle back to step (2).
 
 This is very similar to our 2 variable procedure. One difference is that
-here, we are first fixing $\mathbf{x_1}}$ as a full draw from
+here, we are first fixing $\mathbf{x_1}$ as a full draw from
 the joint distribution. In contrast, for our 2 variable case, we only
 required choosing $x_{1}$ (as opposed to $(x_{1},y_{1})$), and we did
 one preliminary conditional sample to choose $y_{1}$. This difference is
