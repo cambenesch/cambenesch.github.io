@@ -1,2 +1,1 @@
-a very popular blog
-
+One of the most popular blogs

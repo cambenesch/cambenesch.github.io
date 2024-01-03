@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-This is a blog.
+One of the most popular blogs.
