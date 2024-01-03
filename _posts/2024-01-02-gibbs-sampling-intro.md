@@ -418,7 +418,8 @@ it as a nearly-reducible Markov chain.
 generated](/assets/images/gibbs3.png)
 
 <p align="center" width="100%">
-    <img width="33%" src="/assets/images/gibbs3.png">
+    <img width="100%" src="/assets/images/gibbs3.png"> <br>
+    Figure 3 \[11\]
 </p>
 
 Figure 3 \[11\]
