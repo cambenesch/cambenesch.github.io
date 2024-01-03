@@ -240,7 +240,7 @@ and conditionals $g_{j}\left( x^{(j)} \middle| x^{(l \neq j)} \right)$.
 As before, suppose we cannot sample from $k$, but we can sample from
 each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs
 sampling is the following procedure, which generates
-$\left\lbrack \mathbf{X}_{\mathbf{1}},\ldots,\mathbf{X}_{\mathbf{n}} \right\rbrack$,
+$\left\lbrack \boldsymbol{X}_{\mathbf{1}},\ldots,\mathbf{X}_{\mathbf{n}} \right\rbrack$,
 where
 $\mathbf{X}_{\mathbf{i}}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
 as our sample from $k$.
