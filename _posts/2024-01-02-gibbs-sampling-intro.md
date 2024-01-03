@@ -8,7 +8,7 @@ meta: "Chicago"
 
 We'll give an overview of Gibbs sampling here, and point to a bit of interesting research regarding its use. Some background in probability is assumed.
 
-1.  Summary
+# Summary
 
 In statistics, a probability distribution describes many outcomes,
 assigning a probability to each outcome. Sometimes, each outcome
@@ -60,7 +60,7 @@ useful. We give an example of where Gibbs sampling fails. The order of
 sampling from the conditionals may also affect our Gibbs sample, and we
 discuss the size of such an effect.
 
-2.  History of the term
+# History of the term
 
 In 1868, while studying thermal properties of gases, physicist Ludwig
 Boltzmann discovered a probability distribution describing the state of
@@ -79,9 +79,9 @@ Gibbs sampler was popularized by this paper, so the name stuck. Today,
 that paper remains fundamental and highly cited, and the Gibbs sampler
 is used more frequently than ever.
 
-3.  Description of Gibbs Sampling
+# Description of Gibbs Sampling
 
-# Motivation: sampling from a joint distribution
+## Motivation: sampling from a joint distribution
 
 Suppose we have 2 random variables $X,Y$ with joint probability
 distribution
@@ -127,7 +127,7 @@ $$E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left(
 From this example, it should be clear why sampling from a joint
 distribution can be useful.
 
-# Example Gibbs sampling procedure
+## Example Gibbs sampling procedure
 
 But how do we select the sample to begin with? In the univariate case,
 we can sample from a distribution directly by passing $Unif(0,1)$
@@ -171,7 +171,7 @@ At the end, we have a sample
 $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$
 from the joint distribution $k_{X,Y}$. This is Gibbs sampling!
 
-# Intuition
+## Intuition
 
 Let's reflect on what we just did. To estimate a difficult-to-compute
 expectation, we wanted to sample from a bivariate normal distribution
@@ -231,7 +231,7 @@ The speed of convergence depends on the sampler's *mixing time*, which
 is a term describing how large an $n$ is required for the sample's
 distribution to approach the true joint distribution $k$.
 
-# Definition
+## Definition
 
 Rather than just $X,Y$, let's generalize to more than 2 variables. Call
 them $X^{(1)},\ldots,X^{(m)}$, with joint pdf
@@ -337,7 +337,7 @@ would begin by setting some initial $\theta_{1} > 0$, sampling
 $\beta_{1}$ from $g_{2}(\beta|x,\theta)$, and sampling $\theta_{2}$ from
 $g_{1}(\theta|\beta_{1},x)$.
 
-5.  Relevant research
+# Relevant research
 
 One important property of our sample
 $\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$
@@ -429,7 +429,7 @@ order. How to choose a good scan order is a topic for future research.
 Regardless, great care must be taken to verify whether an implementation
 of Gibbs sampling is appropriate for sampling from a particular $k$.
 
-7.  References
+# References
 
 \[1\] Wikimedia Foundation. (2023, September 24). *Boltzmann
 distribution*. Wikipedia.
