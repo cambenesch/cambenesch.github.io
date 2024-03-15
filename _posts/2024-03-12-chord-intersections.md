@@ -6,29 +6,22 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-# ChordIntersections
-algo to count # intersections of n chords in a circle in $\Theta(n \log n)$ time
+In this post I'll explain a cool way to use annotated trees to solve a naively $\Theta(n^2)$ problem in $\Theta(n\log n)$ time. Should be an easy read if you know a bit about binary trees, hashmaps, and big O notation. 
 
-## How to run compiled code
+## The Problem
 
-Just run `intersections.exe` (compiled from `intersections.cpp` using C++23)
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints, as shown below. 
 
-Enter user input followed by Return.
+<p align="center" width="100%">
+    <img width="60%" src="/assets/images/chord1.png"> <br>
+    Figure 1 [5]
+</p>
 
-e.g. user might enter `[(0.1,0.2,4.4,5.9),("e1","s1","e2","s1")]`
+## Slow algorithm
 
-The first measure in the first tuple corresponds to the first label in the second tuple
+Compare every pair of chords. 
 
-We assume no two intersection points are identical.
-
-Enter radian measures in increasing order, with radians in $[0,2\pi)$
-
-Each chord should have exactly one starting point and exactly one ending point.
-
-sample input: `[(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0),("s3","e2","s1","e5","s4","e1","e3","s2","s5","e4")]`
-this contains 8 intersections
-
-## Explanation of algorithm
+## Fast Algorithm
 
 Key observation 1: consider two chords `i` and `j`, whose endpoints (i.e. starting or ending points) we encounter in the order `{i,j,i,j}` or `{i,j,i,j}`. You can convince yourself geometrically that these chords intersect. The other possibilities are `{i,i,j,j}`, `{j,j,i,i}`, `{i,j,j,i}`, `{j,i,i,j}`. These chords do not intersect. 
 
