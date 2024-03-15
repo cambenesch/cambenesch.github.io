@@ -13,7 +13,7 @@ In this post I'll explain a cool way to use annotated trees to solve a naively $
 Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints, as shown below. 
 
 <p align="center" width="100%">
-    <img width="60%" src="/assets/images/chord1.png"> <br>
+    <img width="85%" src="/assets/images/chord1.png"> <br>
     Figure 1 [5]
 </p>
 
