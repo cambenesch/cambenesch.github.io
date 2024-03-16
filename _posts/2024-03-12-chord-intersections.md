@@ -43,29 +43,21 @@ Next, remember that we labeled the chords by starting at the green dashed line a
 Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
 
 
-\begin{algorithm}[H]
-**Input**: $C=\{(s_1,e_1),...,(s_n,e_n)\}$, where $s_k,e_k$ are angular endpoints of chord $i$. 
-**Output**: $I$, the number of intersecting pairs of the given chords. 
-
-Initialize $I=0$
-**for** $k=1,n$ **do**
-&emsp;**if** $s_k>e_k$ **then** 
-&emsp;&emsp;swap$(s_k,e_k)$
-&emsp;**end if**
-**end for**
-sort $C$ by increasing $s_k$
-
-**for** $i=1,n$ **do**
-&emsp;Get chord endpoints $(s_i,e_i)=C[i]$
-&emsp; **for** $j=i+1,n$ **do**
-&emsp;&emsp;Get chord endpoints $(s_j,e_j)=C[j]$
-&emsp;&emsp;**if** $s_i<s_j<e_i<e_j$ **then**
-&emsp;&emsp;&emsp;increment $I$
-&emsp;&emsp;**end if**
-&emsp;**end for**
-**end for**
-\end{algorithm} 
-
+**Input**: $C=\{(s_1,e_1),...,(s_n,e_n)\}$, where $s_k,e_k$ are angular endpoints of chord $i$. \
+**Output**: $I$, the number of intersecting pairs of the given chords. \
+\
+Initialize $I=0$\
+> **for** $k=1,n$:\
+&emsp;**if** $s_k>e_k$ **then** swap$(s_k,e_k)$\
+**end for**\
+sort $C$ by increasing $s_k$\
+\
+**for** $i=1,n$ **do**\
+&emsp;Get chord endpoints $(s_i,e_i)=C[i]$\
+&emsp; **for** $j=i+1,n$ **do**\
+&emsp;&emsp;Get chord endpoints $(s_j,e_j)=C[j]$\
+&emsp;&emsp;**if** $s_i<s_j<e_i<e_j$ **then**\
+&emsp;&emsp;&emsp;increment $I$\
 
 ## Fast Algorithm
 
