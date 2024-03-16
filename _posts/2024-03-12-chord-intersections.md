@@ -33,7 +33,7 @@ Suppose each chord intersects every other chord. Then, as an upper bound, we hav
 How can we determine whether chords $C_i=(s_i,e_i)$ and $C_j=(s_j,e_j)$ intersect, for $i<j$? 
 
 ### Checking whether 2 chords intersect
-Note that $(s_i,e_i)$ is the same chord as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. Thus we can safely assume that $s_i<e_i$ (if not, then just go ahead and swap them).
+Note that $(s_i,e_i)$ is the same chord as $(e_i,s_i)$. We can freely swap the starting and ending angles of any chord. Thus we can safely assume that $s_i<e_i$ (if not, then just go ahead and swap them).
 
 Next, remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if we sort $s_i,e_i,s_j,e_j$ in increasing order, $s_i$ must appear first. From here, convince yourself that there are only 3 possibilities for the sorted sequence: $s_i<s_j<e_i<e_j$, $s_i<s_j<e_j<e_i$, $s_i<e_i<s_j,e_j$. Of these 3, as illustrated in Figure 2, only $s_i<s_j<e_i<e_j$ corresponds to an intersection between chords $i$ and $j$. 
 
