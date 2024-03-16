@@ -11,14 +11,14 @@ In this post I'll explain a cool way to use annotated trees to speed up an $O(n^
 # Problem Formulation
 
 ### Numeric chord labeling
-Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no endpoints are reused (see Figure 1). Now let's assign a numeric label to each chord. Moving counterclockwise from the green dashed line, search for chord endpoints. Every time we encounter the endpoint of a *newly seen* chord, we can assign that chord the next label. For instance, the first endpoint we see will be from Chord 0. (If we encounter the second endpoint of an already-labeled chord, that doesn't impact our labeling.) The chord numbers in Figure 1 reflect this labeling process.
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no endpoints are reused (see Figure 1). Now let's assign a numeric label to each chord. Moving counterclockwise from the green dashed line, search for chord endpoints. Every time you encounter the endpoint of a **newly seen** chord, assign the next label to that chord. For instance, the first endpoint you see must be from Chord 0. The chord numbers in Figure 1 reflect this labeling process.
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
     Figure 1
 </p>
 
-In the right side of Fig 1, we see 4 intersection points: Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, among other pairs, do not intersect. 
+The right side of Fig 1 shows 4 intersection points, between Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, among other pairs, do not intersect. 
 
 ### Input format
 Each endpoint on the circumference corresponds to an angle $0^{\circ}\leq \theta < 360^{\circ}$, indicating the counterclockwise degrees from the circle's rightmost point. The green dashed line shows $\theta=0^{\circ}$. As another example, $\theta=270^{\circ}$ is bottom-most point on the circle. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
