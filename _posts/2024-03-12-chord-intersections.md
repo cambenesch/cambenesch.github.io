@@ -21,7 +21,7 @@ Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wik
 In the right side of Fig 1, we see 4 intersection points: Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, among other pairs, do not intersect. 
 
 #### Input format
-Each endpoint on the circumference corresponds to an angle $0\leq \theta < 360$, indicating the counterclockwise degrees from the circle's rightmost point. The green dashed line shows $\theta=0$. As another example, $\theta=270$ is bottom-most point on the circle. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
+Each endpoint on the circumference corresponds to an angle $0^{\circ}\leq \theta < 360^{\circ}$, indicating the counterclockwise degrees from the circle's rightmost point. The green dashed line shows $\theta=0^{\circ}$. As another example, $\theta=270^{\circ}$ is bottom-most point on the circle. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
 
 #### Question of interest
 In general we have $n$ chords, given as a list $C=[(s_1,e_1),...,(s_n,e_n)]$. We'll discuss how to count the number $I$ of distinct pairs of chords which cross paths - that is, the number of intersections - as quickly as possible. 
@@ -62,7 +62,7 @@ sort $C$ by increasing $s_k$\
 
 The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$ time. 
 
-## Fast $O(n\log n) Algorithm
+## Fast $O(n\log n)$ Algorithm
 
 #### Preprocessing (sorting step)
 Let's try to count intersections without explicitly checking every possible pair of chords. In the slow algo, we sorted $C$. Using this sorted $C$, we'll construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Then sort $P$. After this preprocessing, $P$ is a list of angles of increasing magnitude, and each angle has a label indicating which chord it's an endpoint of. For the example below, $P$ would be $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. Then, as a final step, we'll completely remove the first elements, such that $P=[0,1,2,0,3,2,3,1]$. 
