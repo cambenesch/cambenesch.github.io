@@ -11,7 +11,7 @@ In this post I'll explain a cool way to use annotated trees to speed up an $O(n^
 # Problem Formulation
 
 ### Numeric chord labeling
-Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no endpoints are reused (see Figure 1). Now let's assign a numeric label to each chord. Moving counterclockwise from the circle's rightmost edge, search for chord endpoints. Every time we encounter the endpoint of a *newly seen* chord, we can assign that chord the next label. For instance, the first endpoint we see will be from Chord 0. (If we encounter the second endpoint of an already-labeled chord, that doesn't impact our labeling.) The chord numbers in Figure 1 reflect this labeling process.
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no endpoints are reused (see Figure 1). Now let's assign a numeric label to each chord. Moving counterclockwise from the green dashed line, search for chord endpoints. Every time we encounter the endpoint of a *newly seen* chord, we can assign that chord the next label. For instance, the first endpoint we see will be from Chord 0. (If we encounter the second endpoint of an already-labeled chord, that doesn't impact our labeling.) The chord numbers in Figure 1 reflect this labeling process.
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
