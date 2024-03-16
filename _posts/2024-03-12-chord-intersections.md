@@ -12,7 +12,7 @@ In this post I'll explain a cool way to use annotated trees to solve a naively $
 
 ## The Problem
 
-Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints. Now let's assign a numeric label to each chord. Starting on the right end of the circle and moving counterclockwise, we can begin searching for chord endpoints. Every time we encounter the endpoint of a newly seen chord, we can assign that chord the next label. So, for instance, the first endpoint we see will be from Chord 0. (If we encounter the other endpoint of an already-labeled chord, that doesn't impact our labeling.) This is illustrated in Figure 1. 
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints. Now let's assign a numeric label to each chord. Starting on the right end of the circle and moving counterclockwise, we can begin searching for chord endpoints. Every time we encounter the endpoint of a newly seen chord, we can assign that chord the next label. For instance, the first endpoint we see will be from Chord 0. (If we encounter the other endpoint of an already-labeled chord, that doesn't impact our labeling.) This is illustrated in Figure 1. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
@@ -31,7 +31,7 @@ Clearly, we can have $I=0$, if all chords are mutually parallel. On the other ha
 
 How can we determine whether chords $C_i=(s_i,e_i)$ and $C_j=(s_j,e_j)$ intersect, for $i<j$? 
 
-First off, note that $(s_i,e_i)$ looks exactly the same as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. So we can safely assume that $s_i<e_i$ - if not, then swap them. 
+First off, note that $(s_i,e_i)$ looks exactly the same as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. Thus we can safely assume that $s_i<e_i$ - if not, then swap them. 
 
 Next, remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if we sort $s_i,e_i,s_j,e_j$ in increasing order, $s_i$ must appear first. From here, you can convince yourself that there are only 3 possibilities for the sorted sequence: $s_i<s_j<e_i<e_j$, $s_i<s_j<e_j<e_i$, $s_i<e_i<s_j,e_j$. And of these 3, as illustrated in Figure 2, only $s_i<s_j<e_i<e_j$ indicates an intersection between chords $i$ and $j$. 
 
@@ -42,26 +42,28 @@ Next, remember that we labeled the chords by starting at the green dashed line a
 
 Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
 
-# Algorithm 1
-Just a sample algorithmn
+
 \begin{algorithm}[H]
-\DontPrintSemicolon
-\SetAlgoLined
-\KwResult{Write here the result}
-\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
-\Input{Write here the input}
-\Output{Write here the output}
-\BlankLine
-\While{While condition}{
-    instructions\;
-    \eIf{condition}{
-        instructions1\;
-        instructions2\;
-    }{
-        instructions3\;
-    }
-}
-\caption{While loop with If/Else condition}
+**Input**: $C=\{(s_1,e_1),...,(s_n,e_n)\}$, where $s_k,e_k$ are angular endpoints of chord $i$. 
+**Output**: $I$, the number of intersecting pairs of the given chords. 
+
+Initialize $I=0$
+**for** $k=1,n$ **do**
+&emsp;**if** $s_k>e_k$ **then** 
+&emsp;&emsp;swap$(s_k,e_k)$
+&emsp;**end if**
+**end for**
+sort $C$ by increasing $s_k$
+
+**for** $i=1,n$ **do**
+&emsp;Get chord endpoints $(s_i,e_i)=C[i]$
+&emsp; **for** $j=i+1,n$ **do**
+&emsp;&emsp;Get chord endpoints $(s_j,e_j)=C[j]$
+&emsp;&emsp;**if** $s_i<s_j<e_i<e_j$ **then**
+&emsp;&emsp;&emsp;increment $I$
+&emsp;&emsp;**end if**
+&emsp;**end for**
+**end for**
 \end{algorithm} 
 
 
