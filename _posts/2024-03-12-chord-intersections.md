@@ -10,7 +10,7 @@ In this post I'll explain a cool way to use annotated trees to speed up an $O(n^
 
 # Problem Formulation
 
-### Numeric chord labeling
+### Chord numbering process
 Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no endpoints are reused (see Figure 1). Now let's assign a numeric label to each chord. Moving counterclockwise from the green dashed line, search for chord endpoints. Every time you encounter the endpoint of a **newly seen** chord, assign the next label to that chord. For instance, the first endpoint you see must be from Chord 0. The chord numbers in Figure 1 reflect this labeling process.
 
 <p align="center" width="100%">
@@ -64,7 +64,7 @@ The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$
 
 # Fast $O(n\log n)$ Algorithm
 
-### Preprocessing (sorting step)
+### Sorting (preprocessing step)
 Let's try to count intersections without explicitly checking every possible pair of chords. In the slow algo, we sorted $C$. Using this sorted $C$, we'll construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Then sort $P$. After this preprocessing, $P$ is a list of angles of increasing magnitude, and each angle has a label indicating which chord it's an endpoint of. For the example below, $P$ would be $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. Then, as a final step, we'll completely remove the first elements, such that $P=[0,1,2,0,3,2,3,1]$. 
 
 <p align="center" width="100%">
