@@ -10,11 +10,11 @@ In this post I'll explain a cool way to use annotated trees to solve a naively $
 
 ## The Problem
 
-Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints, as shown below. 
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints. Now let's assign a numeric label to each chord. Starting on the right end of the circle and moving counterclockwise, we can begin searching for chord endpoints. Every time we encounter the endpoint of a newly seen chord, we can assign that chord the next label. So the first endpoint we see will be from Chord 0. Of course, if we encounter the endpoint of an already-labeled chord, that doesn't impact our labeling. 
 
 <p align="center" width="100%">
-    <img width="85%" src="/assets/images/chord1.png"> <br>
-    Figure 1 [5]
+    <img width="100%" src="/assets/images/chord1.png"> <br>
+    Figure 1
 </p>
 
 ## Slow algorithm
