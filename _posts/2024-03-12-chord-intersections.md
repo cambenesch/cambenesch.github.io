@@ -18,24 +18,24 @@ Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wik
     Figure 1
 </p>
 
-The right side of Fig 1 shows 4 intersection points, between Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, among other pairs, do not intersect. 
+The right side of Fig 1 shows 4 intersections: Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, among other pairs, do not intersect. 
 
 ### Input format
-Each endpoint on the circumference corresponds to an angle $0^{\circ}\leq \theta < 360^{\circ}$, indicating the counterclockwise degrees from the circle's rightmost point. The green dashed line shows $\theta=0^{\circ}$. As another example, $\theta=270^{\circ}$ is bottom-most point on the circle. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
+Each endpoint on the circumference corresponds to an angle $0^{\circ}\leq \theta < 360^{\circ}$, indicating the counterclockwise degrees from the circle's rightmost point. The green dashed line shows $\theta=0^{\circ}$. As another example, $\theta=270^{\circ}$ is bottom-most point on the circle. So a tuple of two angles $(s_i, e_i)$ is sufficient to encode a chord on the circle. 
 
 ### Question of interest
-In general we have $n$ chords, given as a list $C=[(s_1,e_1),...,(s_n,e_n)]$. We'll discuss how to count the number $I$ of distinct pairs of chords which cross paths - that is, the number of intersections - as quickly as possible. 
+In general we have $n$ chords, given as a list $C=[(s_1,e_1),...,(s_n,e_n)]$. We'll discuss how to efficiently count the number $I$ of distinct pairs of intersecting chords. 
 
 # Slow $O(n^2)$ algorithm
 
-Clearly if all chords are mutually parallel, then $I=0$. On the other hand, suppose each chord intersects each other chord. Then, at most, we can have ${n\choose 2} = n(n-1)/2 = O(n^2)$ intersections. This reveals a simple solution. Starting with $I=0$, just look at each pair of distinct chords, and increment $I$ if they intersect. 
+Suppose each chord intersects every other chord. Then, as an upper bound, we have ${n\choose 2} = n(n-1)/2 = O(n^2)$ intersections. This suggests a simple solution. Starting with $I=0$, just look at each pair of distinct chords, and increment $I$ if they intersect. 
 
 How can we determine whether chords $C_i=(s_i,e_i)$ and $C_j=(s_j,e_j)$ intersect, for $i<j$? 
 
 ### Checking whether 2 chords intersect
-Note that $(s_i,e_i)$ looks exactly the same as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. Thus we can safely assume that $s_i<e_i$ (if not, then just go ahead and swap them).
+Note that $(s_i,e_i)$ is the same chord as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. Thus we can safely assume that $s_i<e_i$ (if not, then just go ahead and swap them).
 
-Next, remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if we sort $s_i,e_i,s_j,e_j$ in increasing order, $s_i$ must appear first. From here, you can convince yourself that there are only 3 possibilities for the sorted sequence: $s_i<s_j<e_i<e_j$, $s_i<s_j<e_j<e_i$, $s_i<e_i<s_j,e_j$. And of these 3, as illustrated in Figure 2, only $s_i<s_j<e_i<e_j$ corresponds to an intersection between chords $i$ and $j$. 
+Next, remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if we sort $s_i,e_i,s_j,e_j$ in increasing order, $s_i$ must appear first. From here, convince yourself that there are only 3 possibilities for the sorted sequence: $s_i<s_j<e_i<e_j$, $s_i<s_j<e_j<e_i$, $s_i<e_i<s_j,e_j$. Of these 3, as illustrated in Figure 2, only $s_i<s_j<e_i<e_j$ corresponds to an intersection between chords $i$ and $j$. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord2.png"> <br>
@@ -65,7 +65,7 @@ The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$
 # Fast $O(n\log n)$ Algorithm
 
 ### Sorting (preprocessing step)
-Let's try to count intersections without explicitly checking every possible pair of chords. In the slow algo, we sorted $C$. Using this sorted $C$, we'll construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Then sort $P$. After this preprocessing, $P$ is a list of angles of increasing magnitude, and each angle has a label indicating which chord it's an endpoint of. For the example below, $P$ would be $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. Then, as a final step, we'll completely remove the first elements, such that $P=[0,1,2,0,3,2,3,1]$. 
+Let's try to count intersections without explicitly checking every possible pair of chords. In the slow algo, we sorted $C$. Using this sorted $C$, we'll construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Then sort $P$ by increasing angle. After this preprocessing, $P$ is a list of angles of increasing magnitude, and each angle has a label indicating which chord it's an endpoint of. For the example below, $P$ is now $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. Then, as a final step, completely remove the angles, such that $P=[0,1,2,0,3,2,3,1]$. 
 
 <p align="center" width="100%">
     <img width="60%" src="/assets/images/chord3.png"> <br>
