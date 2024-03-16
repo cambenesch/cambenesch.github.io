@@ -4,6 +4,8 @@ title: "Counting Chord Intersections"
 categories: Computer Science
 author: Cam Benesch
 meta: "Chicago"
+header-includes:
+  - \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 ---
 
 In this post I'll explain a cool way to use annotated trees to solve a naively $\Theta(n^2)$ problem in $\Theta(n\log n)$ time. Should be an easy read if you know a bit about binary trees, hashmaps, and big O notation. 
@@ -38,6 +40,29 @@ Next, remember that we labeled the chords by starting at the green dashed line a
     Figure 2
 </p>
 
+Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
+
+# Algorithm 1
+Just a sample algorithmn
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\SetAlgoLined
+\KwResult{Write here the result}
+\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+\Input{Write here the input}
+\Output{Write here the output}
+\BlankLine
+\While{While condition}{
+    instructions\;
+    \eIf{condition}{
+        instructions1\;
+        instructions2\;
+    }{
+        instructions3\;
+    }
+}
+\caption{While loop with If/Else condition}
+\end{algorithm} 
 
 
 ## Fast Algorithm
