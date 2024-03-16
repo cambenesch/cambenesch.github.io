@@ -10,16 +10,35 @@ In this post I'll explain a cool way to use annotated trees to solve a naively $
 
 ## The Problem
 
-Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints. Now let's assign a numeric label to each chord. Starting on the right end of the circle and moving counterclockwise, we can begin searching for chord endpoints. Every time we encounter the endpoint of a newly seen chord, we can assign that chord the next label. So the first endpoint we see will be from Chord 0. Of course, if we encounter the endpoint of an already-labeled chord, that doesn't impact our labeling. 
+Let's start with a circle, then draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on its circumference. For simplicity, assume no chords have any identical endpoints. Now let's assign a numeric label to each chord. Starting on the right end of the circle and moving counterclockwise, we can begin searching for chord endpoints. Every time we encounter the endpoint of a newly seen chord, we can assign that chord the next label. So, for instance, the first endpoint we see will be from Chord 0. (If we encounter the other endpoint of an already-labeled chord, that doesn't impact our labeling.) This is illustrated in Figure 1. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
     Figure 1
 </p>
 
+In the right side of Fig 1, we can see 4 intersection points: Chords 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3, for instance, do not intersect. 
+
+Each endpoint on the circle corresponds to an angle $0\leq \theta < 360$, indicating the counterclockwise degrees from the circle's rightmost point. For instance, the green dashed line shows $\theta=0$, and the bottom-most point on the circle is $\theta=270$. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
+
+In general, say we have $n$ chords, given as an unordered set $C=\{(s_1,e_1),...,(s_n,e_n)\}$. We'll discuss how to count the number $I$ of distinct pairs of chords which cross paths - that is, the number of intersections - as quickly as possible. 
+
 ## Slow algorithm
 
-Compare every pair of chords. 
+Clearly, we can have $I=0$, if all chords are mutually parallel. On the other hand, suppose each chord intersects every other chord. Then, at most, we can have ${n\choose 2} = n(n-1)/2 = O(n^2)$ intersections. This reveals a simple solution. Starting with $I=0$, just look at each pair of distinct chords, see if they intersect, and increment $I$ if they do. 
+
+How can we determine whether chords $C_i=(s_i,e_i)$ and $C_j=(s_j,e_j)$ intersect, for $i<j$? 
+
+First off, note that $(s_i,e_i)$ looks exactly the same as $(e_i,s_i)$. We can freely swap the starting and ending angles of a chord. So we can safely assume that $s_i<e_i$ - if not, then swap them. 
+
+Next, remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if we sort $s_i,e_i,s_j,e_j$ in increasing order, $s_i$ must appear first. From here, you can convince yourself that there are only 3 possibilities for the sorted sequence: $s_i<s_j<e_i<e_j$, $s_i<s_j<e_j<e_i$, $s_i<e_i<s_j,e_j$. And of these 3, as illustrated in Figure 2, only $s_i<s_j<e_i<e_j$ indicates an intersection between chords $i$ and $j$. 
+
+<p align="center" width="100%">
+    <img width="100%" src="/assets/images/chord2.png"> <br>
+    Figure 2
+</p>
+
+
 
 ## Fast Algorithm
 
