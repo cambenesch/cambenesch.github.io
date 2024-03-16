@@ -24,10 +24,10 @@ In the right side of Fig 1, we can see 4 intersection points: Chords 0 & 1, 0 & 
 ### Input format
 Each endpoint on the circle corresponds to an angle $0\leq \theta < 360$, indicating the counterclockwise degrees from the circle's rightmost point. For instance, the green dashed line shows $\theta=0$, and the bottom-most point on the circle is $\theta=270$. So a tuple of two angles $(s_i, e_i)$ is sufficient to represent a chord on the circle. 
 
-### Main question
+### Question of interest
 In general, say we have $n$ chords, given as an unordered set $C=\\{(s_1,e_1),...,(s_n,e_n)\\}$. We'll discuss how to count the number $I$ of distinct pairs of chords which cross paths - that is, the number of intersections - as quickly as possible. 
 
-## Slow algorithm
+## Slow $O(n^2)$ algorithm
 
 Clearly, we can have $I=0$, if all chords are mutually parallel. On the other hand, suppose each chord intersects every other chord. Then, at most, we can have ${n\choose 2} = n(n-1)/2 = O(n^2)$ intersections. This reveals a simple solution. Starting with $I=0$, just look at each pair of distinct chords, see if they intersect, and increment $I$ if they do. 
 
@@ -43,7 +43,7 @@ Next, remember that we labeled the chords by starting at the green dashed line a
     Figure 2
 </p>
 
-### $O(n^2)$ Algorithm
+### Algorithm Pseudocode
 Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
 
 **Input**: $C=\\{(s_1,e_1),...,(s_n,e_n)\\}$, where $s_k,e_k$ are angular endpoints of chord $i$. \
@@ -63,7 +63,7 @@ sort $C$ by increasing $s_k$\
 
 The sorting step takes $O(n\log n)$ time, and the for loops take $O(n^2)$ time. 
 
-## Fast Algorithm
+## Fast $O(n\log n) Algorithm
 
 ### Preprocessing (sorting step)
 Let's try to count intersections without explicitly checking every possible pair of chords. In the slow algo, we sorted $C$. Using this sorted $C$, we'll construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Then sort $P$. After this preprocessing, $P$ is a list of angles of increasing magnitude, and each angle has a label indicating which chord it's an endpoint of. For the example below, $P$ would be $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. Then, as a final step, we'll completely remove the first elements, such that $P=[0,1,2,0,3,2,3,1]$. 
@@ -91,7 +91,7 @@ Key observation: For leaf node `i` (`val=i`), we can count the number of higher-
 
 We also maintain a hashmap to indicate the order in which the first endpoint of each chord was encountered. This facilitates relabeling of the nodes. 
 
-### $O(n\log n)$ Algorithm
+### Algorithm Pseudocode
 
 Loop through each (radian measure, chord number) pair, of which there are $2n$. 
 
