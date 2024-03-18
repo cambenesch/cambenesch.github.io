@@ -8,58 +8,6 @@ meta: "Chicago"
 
 We'll give an overview of Gibbs sampling here, and point to a bit of interesting research regarding its use. Some background in probability is assumed.
 
-# Summary
-
-In statistics, a probability distribution describes many outcomes,
-assigning a probability to each outcome. Sometimes, each outcome
-requires multiple values to describe it. For instance, we might have a
-probability distribution jointly describing people's height and weight.
-One outcome would be 180 pounds, and 53 inches, which is described by
-multiple values. Such a multidimensional distribution is referred to as
-a *joint* distribution.
-
-We might want to compute a statistic which summarizes a joint
-distribution. For instance, we might want to know the average BMI. Some
-distributions are well-studied and easy to represent, so for those joint
-distributions, we can use or derive a formula for the statistic. For
-others, we might not be able to directly compute the statistic, so we
-have to choose a bunch of samples, and use those to estimate the
-statistic. In our example, choosing 10 people and averaging their BMIs
-would help us estimate of the average BMI. This is called *sampling*.
-
-Sampling isn't always as easy as choosing people. Sometimes the
-distribution is only described abstractly, and we don't have the
-population at our disposal. In this case, we need to generate a sample
-on our own. This can often be done on a computer, but sometimes a joint
-distribution is too complicated for the computer to sample from
-directly.
-
-So we might first give the program an arbitrary height, say 60 inches.
-Then out of people who are 60 inches tall, the computer samples a
-weight, say 145 pounds. Then, out of people who weigh 145 pounds, the
-computer samples a height. And so on. Of course, we are assuming that
-these *conditional* samples are simple enough to compute. If that is the
-case, we can follow the procedure described to generate a sample from
-the joint distribution, and use the average BMI of that sample as our
-estimate. This technique is an example of *Gibbs sampling*.
-
-Below, we briefly present the history of Gibbs sampling. We motivate
-sampling in general, and introduce Gibbs sampling for a two-dimensional
-joint distribution. We then bolster the reader's intuition for Gibbs
-sampling, and formally define it for two or more dimensions. Finally, we
-illustrate an application called Hierarchical Bayes, which is an
-extension of classical Bayesian estimation involving a multi-level prior
-distribution.
-
-Gibbs sampling has been an active area of research for decades, and in
-Section 5 we discuss a few recent results. Gibbs samples form Markov
-chains, which means draws aren't independent from one another, as would
-ideally be the case. Two techniques which attempt to address this are
-called burn-in and thinning, and we discuss when and why they might be
-useful. We give an example of where Gibbs sampling fails. The order of
-sampling from the conditionals may also affect our Gibbs sample, and we
-discuss the size of such an effect.
-
 # History of the term
 
 In 1868, while studying thermal properties of gases, physicist Ludwig
@@ -81,7 +29,7 @@ is used more frequently than ever.
 
 # Description of Gibbs Sampling
 
-## Motivation: sampling from a joint distribution
+### Motivation: sampling from a joint distribution
 
 Suppose we have 2 random variables $X,Y$ with joint probability
 distribution
@@ -127,7 +75,7 @@ $$E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left(
 From this example, it should be clear why sampling from a joint
 distribution can be useful.
 
-## Example Gibbs sampling procedure
+### Example Gibbs sampling procedure
 
 But how do we select the sample to begin with? In the univariate case,
 we can sample from a distribution directly by passing $Unif(0,1)$
@@ -171,7 +119,7 @@ At the end, we have a sample
 $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$
 from the joint distribution $k_{X,Y}$. This is Gibbs sampling!
 
-## Intuition
+### Intuition
 
 Let's reflect on what we just did. To estimate a difficult-to-compute
 expectation, we wanted to sample from a bivariate normal distribution
@@ -229,7 +177,7 @@ The speed of convergence depends on the sampler's *mixing time*, which
 is a term describing how large an $n$ is required for the sample's
 distribution to approach the true joint distribution $k$.
 
-## Definition
+### Definition
 
 Rather than just $X,Y$, let's generalize to more than 2 variables. Call
 them $X^{(1)},\ldots,X^{(m)}$, with joint pdf
@@ -428,52 +376,37 @@ of Gibbs sampling is appropriate for sampling from a particular $k$.
 
 # References
 
-\[1\] Wikimedia Foundation. (2023, September 24). *Boltzmann
-distribution*. Wikipedia.
-<https://en.wikipedia.org/wiki/Boltzmann_distribution>
+\[1\] https://en.wikipedia.org/wiki/Boltzmann_distribution
 
-\[2\] S. Geman and D. Geman, \"Stochastic Relaxation, Gibbs
-Distributions, and the Bayesian Restoration of Images,\" in *IEEE
-Transactions on Pattern Analysis and Machine Intelligence*, vol. PAMI-6,
-no. 6, pp. 721-741, Nov. 1984, doi: 10.1109/TPAMI.1984.4767596.
-<https://ieeexplore.ieee.org/document/4767596>
+\[2\] S. Geman and D. Geman. Stochastic Relaxation, Gibbs
+Distributions, and the Bayesian Restoration of Images\
+https://ieeexplore.ieee.org/document/4767596
 
-\[3\] Pishro-Nik, H. (2014). 5.3.2 Bivariate Normal Distribution. In
-*Introduction to probability, statistics, and Random Processes*. essay,
-Kappa Research, LLC.
-<https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php>
+\[3\] Pishro-Nik, H. (2014). Bivariate Normal Distribution \
+https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php
 
-\[4\] Rasmussen, C. E., & I., W. C. K. (2008). A.2 Gaussian Identities.
-In *Gaussian processes for machine learning* (pp. 201--201). essay, MIT
-Press. <https://gaussianprocess.org/gpml/chapters/RWA.pdf>
+\[4\] Rasmussen. Gaussian processes for machine learning* (pp. 201--201)\
+https://gaussianprocess.org/gpml/chapters/RWA.pdf
 
-\[5\] Culley, Dave & Funke, S & Kramer, S & Piggott, Matthew. (2015).
-Tidal stream resource assessment through optimisation of array design
-with quantification of uncertainty.
-<https://www.researchgate.net/figure/Linking-two-points-using-a-bivariate-Gaussian-distribution-enables-the-conditional-pdf_fig1_318429539>
+\[5\] Culley, 2015. Tidal stream resource assessment through optimisation of array design with quantification of uncertainty.\
+https://www.researchgate.net/figure/Linking-two-points-using-a-bivariate-Gaussian-distribution-enables-the-conditional-pdf_fig1_318429539
 
-\[6\] Stringham, J. (2018, May 9). *Gibbs Sampling in Python*.
-JessicaStringham.net.
-<https://jessicastringham.net/2018/05/09/gibbs-sampling/>
+\[6\] Stringham, J 2018. Gibbs Sampling in Python.\
+https://jessicastringham.net/2018/05/09/gibbs-sampling/
 
 \[7\] G.O. Roberts, A.F.M. Smith, Simple conditions for the convergence
-of the Gibbs sampler and Metropolis-Hastings algorithms, Stochastic
-Processes and their Applications, Volume 49, Issue 2, 1994, Pages
-207-216, ISSN 0304-4149, <https://doi.org/10.1016/0304-4149(94)90134-1>.
+of the Gibbs sampler and Metropolis-Hastings algorithms, 1994. \
+https://doi.org/10.1016/0304-4149(94)90134-1
 
-\[8\] Hogg, R. V., McKean, J. W., & Craig, A. T. (2020). 11.4 Modern
-Bayesian Methods. In *Introduction to mathematical statistics* (pp.
-681--681). essay, Pearson.
+\[8\] Hogg, 2020. Introduction to mathematical statistics, page 681
 
-\[9\] Charles J. Geyer. \"Practical Markov Chain Monte Carlo.\" Statist.
-Sci. 7 (4) 473 - 483, November,
-1992. <https://doi.org/10.1214/ss/1177011137>
+\[9\] Charles J. Geyer, 1992. Practical Markov Chain Monte Carlo. \
+https://doi.org/10.1214/ss/1177011137
 
 \[10\] Art B. Owen (2017) Statistically Efficient Thinning of a Markov
-Chain Sampler, Journal of Computational and Graphical
-Statistics, 26:3, 738-744, DOI: [10.1080/10618600.2017.1336446](https://doi.org/10.1080/10618600.2017.1336446)
+Chain Sampler\
+https://doi.org/10.1080/10618600.2017.1336446
 
-\[11\] He B, De Sa C, Mitliagkas I, Ré C. Scan Order in Gibbs Sampling:
-Models in Which it Matters and Bounds on How Much. Adv Neural Inf
-Process Syst. 2016;29:6589. PMID: 28344429; PMCID: PMC5361064.
-<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064/>
+\[11\] He B, 2016. Scan Order in Gibbs Sampling:
+Models in Which it Matters and Bounds on How Much.\
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064/
