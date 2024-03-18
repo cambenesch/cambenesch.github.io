@@ -376,37 +376,37 @@ of Gibbs sampling is appropriate for sampling from a particular $k$.
 
 # References
 
-\[1\] https://en.wikipedia.org/wiki/Boltzmann_distribution
+\[1\] <https://en.wikipedia.org/wiki/Boltzmann_distribution>
 
-\[2\] S. Geman and D. Geman. Stochastic Relaxation, Gibbs
+\[2\] Geman & Geman. Stochastic Relaxation, Gibbs
 Distributions, and the Bayesian Restoration of Images\
-https://ieeexplore.ieee.org/document/4767596
+<https://ieeexplore.ieee.org/document/4767596>
 
-\[3\] Pishro-Nik, H. (2014). Bivariate Normal Distribution \
-https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php
+\[3\] Pishro-Nik, 2014. Bivariate Normal Distribution \
+<https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php>
 
 \[4\] Rasmussen. Gaussian processes for machine learning* (pp. 201--201)\
-https://gaussianprocess.org/gpml/chapters/RWA.pdf
+<https://gaussianprocess.org/gpml/chapters/RWA.pdf>
 
 \[5\] Culley, 2015. Tidal stream resource assessment through optimisation of array design with quantification of uncertainty.\
-https://www.researchgate.net/figure/Linking-two-points-using-a-bivariate-Gaussian-distribution-enables-the-conditional-pdf_fig1_318429539
+<https://www.researchgate.net/figure/Linking-two-points-using-a-bivariate-Gaussian-distribution-enables-the-conditional-pdf_fig1_318429539>
 
-\[6\] Stringham, J 2018. Gibbs Sampling in Python.\
-https://jessicastringham.net/2018/05/09/gibbs-sampling/
+\[6\] Stringham, 2018. Gibbs Sampling in Python.\
+<https://jessicastringham.net/2018/05/09/gibbs-sampling/>
 
-\[7\] G.O. Roberts, A.F.M. Smith, Simple conditions for the convergence
-of the Gibbs sampler and Metropolis-Hastings algorithms, 1994. \
-https://doi.org/10.1016/0304-4149(94)90134-1
+\[7\] Roberts & Smith, 1994. Simple conditions for the convergence
+of the Gibbs sampler and Metropolis-Hastings algorithms. \
+<https://doi.org/10.1016/0304-4149(94)90134-1>
 
 \[8\] Hogg, 2020. Introduction to mathematical statistics, page 681
 
-\[9\] Charles J. Geyer, 1992. Practical Markov Chain Monte Carlo. \
-https://doi.org/10.1214/ss/1177011137
+\[9\] Geyer, 1992. Practical Markov Chain Monte Carlo. \
+<https://doi.org/10.1214/ss/1177011137>
 
-\[10\] Art B. Owen (2017) Statistically Efficient Thinning of a Markov
+\[10\] Owen (2017) Statistically Efficient Thinning of a Markov
 Chain Sampler\
-https://doi.org/10.1080/10618600.2017.1336446
+<https://doi.org/10.1080/10618600.2017.1336446>
 
 \[11\] He B, 2016. Scan Order in Gibbs Sampling:
 Models in Which it Matters and Bounds on How Much.\
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064/
+<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064/>
