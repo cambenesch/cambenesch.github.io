@@ -127,7 +127,7 @@ This gives a recursive $O(\log n)$ procedure for counting how many higher-number
 &emsp;set A to `cur.parent`\
 &emsp;**if** `cur` is left child of A **then** \
 &emsp;&emsp;add size of A's right child to $G$\
-&emsp;set `cur` to A\
+&emsp;set `cur` to A
 
 ## Final $O(n\log n)$ algo
 
