@@ -62,7 +62,7 @@ Remember that we labeled the chords by starting at the green dashed line and sea
 Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
 
 <p align="center" width="100%">
-    <br> <b>Algorithm 1 - slow intersection counting<b>
+    <br> Algorithm 1 - slow intersection counting
 </p>
 **Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
@@ -124,7 +124,7 @@ Now, back to the reason we created `t`: When we close a chord, we need to quickl
 This gives a recursive $O(\log n)$ procedure for counting how many higher-numbered chords are open when we close Chord $i$. See Fig 5 for an illustration. 
 
 <p align="center" width="100%">
-    <br> <b>Algorithm 2 - recursively count higher-numbered leafs<b>
+    <br> Algorithm 2 - recursively count higher-numbered leafs
 </p>
 **Input**: \
 Complete binary annotated tree `T`\
@@ -151,7 +151,7 @@ Numeric chord label $i$ to close \
 Now that we can count a single chord's higher-numbered intersections in $O(\log n)$ time, we can do this for each chord to get an $O(n\log n)$ algorithm. Illustration in Fig 5, pseudocode below. 
 
 <p align="center" width="100%">
-    <br> <b>Algorithm 3 - fast intersection counting**<b>
+    <br> Algorithm 3 - fast intersection counting**
 </p>
 **Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
