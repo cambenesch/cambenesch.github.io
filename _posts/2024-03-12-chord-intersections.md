@@ -38,7 +38,7 @@ The order of $C''$ gives the numeric chord labeling.
 
 <p align="center" width="100%">
     <img width="50%" src="/assets/images/chord4.gif"> 
-    <img width="50%" src="/assets/images/gif9.gif"> 
+    <img width="50%" src="/assets/images/gif9.png"> 
     <br>
     Figure 2
 </p>
