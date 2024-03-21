@@ -84,7 +84,7 @@ Starting with $C''$, construct a new list $P$ as follows: for every $(s_i,e_i)$ 
 Now sort $P$ by increasing angle. For Figure 2's example, $P$ is now $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. As a final step, completely remove the angles, such that $P$ is just a sorted list of $2n$ endpoint labels, e.g. $P=[0,1,2,0,3,2,3,1]$. 
 
 ## Counting higher-numbered "open" chords
-We'll try counting intersections via a single loop thru $P$. As we loop through $P$, let's call a chord **"open"** if we've encountered exactly one of its endpoints, and **"closed"** if we've encountered neither or both of its endpoints. To keep track of open/closed status, we can maintain a hashset $h$ which contains the numeric labels of only the currently open chords. 
+We'll try counting intersections via a single loop thru $P$. As we loop through $P$, let's call a chord **"open"** if we've encountered exactly one of its endpoints, and **"closed"** if we've encountered neither or both of its endpoints. 
 
 Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
@@ -95,7 +95,7 @@ Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, the
 
 In this example, we would open 0, open 1, open 2, close 0 (add two intersections since chords 1 and 2 are still open), open 3, close 2 (add one intersection since chord 3 is open), close 3, close 1. This gives $I=2+1=3$, which agrees with the diagram. (The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2.)
 
-This method still has one missing detail: When we close a chord, how do we know how many higher-numbered chords are currently open? In other words, given a hashset `h`, how many elements greater than $k$ does `h` contain? 
+This method still has one missing detail: When we close a chord, how do we know how many **higher-numbered** chords are currently open? 
 
 Checking each element of `h` takes $O(n)$ time. Clearly, doing so each time we close a chord just produces another $O(n^2)$ algorithm. Can we do better?
 
