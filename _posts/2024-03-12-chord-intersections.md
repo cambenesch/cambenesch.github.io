@@ -158,9 +158,9 @@ Now that we can count a single chord's higher-numbered intersections in $O(\log 
 
 > Initialize intersection count $I=0$\
 Initialize $n=$ length$(C)$\
-Initialize depth $d=\lceil \log n \rceil$\
 Initialize complete binary tree `T`$=$ root node\
 &emsp;Any node added to `T` starts with size = 0\
+Initialize depth $d=\lceil \log n \rceil$\
 Initialize array `leaf` of length $n$\
 Initialize empty endpoints arrays $P, P', P"$\
 \
@@ -170,7 +170,7 @@ Initialize empty endpoints arrays $P, P', P"$\
 &emsp;Leaf should be as far left as possible\
 &emsp;Set `leaf[k]` to point to leaf node\
 Set $C"$ to be $C$, sorted in order of increasing $s_k$\
-**for** $k=0,n-1$:\
+**for** $k=0,n-1$ **do**\
 &emsp;add tuple $(s_k, k)$ to $P$\
 &emsp;add tuple $(e_k, k)$ to $P$\
 $P$ is now an array of (angle, chord label)\
