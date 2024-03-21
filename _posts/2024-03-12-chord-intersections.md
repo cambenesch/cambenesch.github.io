@@ -134,9 +134,7 @@ Refer to Fig 4. During our loop, first we come across chord 0, then chord 1, the
     Figure 4 - Slow algorithm illustration
 </p>
 
-The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2. This method still has one missing detail: When we close a chord, how do we know how many **higher-numbered** chords are currently open? 
-
-Checking each open chord takes $O(n)$ time (worst case). Clearly, doing so each time we close a chord just produces another $O(n^2)$ algorithm. Can we do better?
+The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2. With this method, checking each open chord takes $O(n)$ time (worst case). Clearly, doing so each time we close a chord just produces another $O(n^2)$ algorithm. Can we do better? In particular, when we close a chord, can we count how many **higher-numbered** chords are currently open in less than $O(n)$ time? 
 
 ## Indexed complete binary tree
 
