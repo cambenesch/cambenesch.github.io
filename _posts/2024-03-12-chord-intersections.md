@@ -5,8 +5,43 @@ author: Cam Benesch
 meta: "Chicago"
 carousels:
   - images: 
-    - image: /assets/images/chord1.png
-    - image: /assets/images/chord2.png
+    - image: /assets/images/final_algo/foo.png
+    - image: /assets/images/final_algo/foo0.png
+    - image: /assets/images/final_algo/foo1.png
+    - image: /assets/images/final_algo/foo2.png
+    - image: /assets/images/final_algo/foo3.png
+    - image: /assets/images/final_algo/foo4.png
+    - image: /assets/images/final_algo/foo5.png
+    - image: /assets/images/final_algo/foo6.png
+    - image: /assets/images/final_algo/foo7.png
+    - image: /assets/images/final_algo/foo8.png
+  - images: 
+    - image: /assets/images/final_algo/Slide3.JPG
+    - image: /assets/images/final_algo/Slide4.JPG
+    - image: /assets/images/final_algo/Slide5.JPG
+    - image: /assets/images/final_algo/Slide6.JPG
+    - image: /assets/images/final_algo/Slide7.JPG
+    - image: /assets/images/final_algo/Slide8.JPG
+    - image: /assets/images/final_algo/Slide9.JPG
+    - image: /assets/images/final_algo/Slide10.JPG
+    - image: /assets/images/final_algo/Slide11.JPG
+    - image: /assets/images/final_algo/Slide12.JPG
+    - image: /assets/images/final_algo/Slide13.JPG
+    - image: /assets/images/final_algo/Slide14.JPG
+    - image: /assets/images/final_algo/Slide15.JPG
+    - image: /assets/images/final_algo/Slide16.JPG
+    - image: /assets/images/final_algo/Slide17.JPG
+    - image: /assets/images/final_algo/Slide18.JPG
+    - image: /assets/images/final_algo/Slide19.JPG
+    - image: /assets/images/final_algo/Slide20.JPG
+    - image: /assets/images/final_algo/Slide21.JPG
+    - image: /assets/images/final_algo/Slide22.JPG
+    - image: /assets/images/final_algo/Slide23.JPG
+    - image: /assets/images/final_algo/Slide24.JPG
+    - image: /assets/images/final_algo/Slide25.JPG
+    - image: /assets/images/final_algo/Slide26.JPG
+    - image: /assets/images/final_algo/Slide27.JPG
+    - image: /assets/images/final_algo/Slide28.JPG
 ---
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
@@ -26,7 +61,7 @@ As input we are given $n$ chords, $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$. For sim
 
 Note that a chord doesn't change if the starting and ending angles are swapped. $(s_i,e_i)$ is the same chord as $(e_i,s_i)$. Thus we can safely assume that $s_i<e_i$ (if not, then just go ahead and swap them). This is a preprocessing of $C$, and let's call the preprocessed list $C'$. 
 
-As another preprocessing step, sort $C'$ in increasing order of starting angle $s_i$. We'll call the sorted list $C"$. After this sorting, each chord's label is its position in $C"$. Visually, starting at the green dashed line and proceeding counterclockwise, the chords are numerically labeled in the order of endpoint encounters. See the example below for clarity. 
+As another preprocessing step, sort $C'$ in increasing order of starting angle $s_i$. We'll call the sorted list $C"$. After this sorting, each chord's label is its position in $C"$. Visually, starting at the green dashed line and proceeding counterclockwise, the chords are numerically labeled in the order of endpoint encounters. See the example below for clarity.
 
 ## Example
 
@@ -37,24 +72,24 @@ As another preprocessing step, sort $C'$ in increasing order of starting angle $
     Figure 2 - Labeling the chords
 </p>
 
-Fig 2 shows $n=4$ chords labeled 0 thru 3. There are ${4\choose 2} = 6$ pairs of distinct chords. Four of these pairs intersect: 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3 and 1 & 3 do not intersect.
+Fig 2 shows $n=4$ chords labeled 0 thru 3. There are ${4\choose 2} = 6$ pairs of distinct chords. $I=4$ of these pairs intersect: 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3 and 1 & 3 do not intersect.
 
-Unprocessed input: $C = [(110^{\circ},270^{\circ}),(320^{\circ},180^{\circ}),(90^{\circ},330^{\circ}),(150^{\circ},40^{\circ})]$
+Unprocessed input: $C = [(110^{\circ},270^{\circ}),(320^{\circ},180^{\circ}),$ $(90^{\circ},330^{\circ}),(150^{\circ},40^{\circ})]$
 
-After sorting each tuple: $C' = [(110^{\circ},270^{\circ}),(180^{\circ},320^{\circ}),(90^{\circ},330^{\circ}),(40^{\circ},150^{\circ})]$
+After sorting each tuple: $C' = [(110^{\circ},270^{\circ}),(180^{\circ},320^{\circ}),$ $(90^{\circ},330^{\circ}),(40^{\circ},150^{\circ})]$
 
-After sorting list: $C" = [(40^{\circ},150^{\circ}),(90^{\circ},330^{\circ}),(110^{\circ},270^{\circ}),(180^{\circ},320^{\circ})]$. \
+After sorting list: $C" = [(40^{\circ},150^{\circ}),(90^{\circ},330^{\circ}),$ $(110^{\circ},270^{\circ}),(180^{\circ},320^{\circ})]$. \
 The order of $C"$ gives the numeric chord labeling. 
 
 ## Number of possible intersections
 
 Suppose each chord intersects each other chord. Then, as an upper bound, we have ${n\choose 2} = n(n-1)/2 = O(n^2)$ intersections. This suggests a simple $O(n^2)$ solution. Starting with $I=0$, check each pair of chords, and increment $I$ if they intersect.
 
-How can we determine whether chords $C_i=(s_i,e_i)$ and $C_j=(s_j,e_j)$ intersect, for $i<j$? 
+How can we determine whether chords $C_i"=(s_i,e_i)$ and $C_j"=(s_j,e_j)$ intersect, for $i<j$? 
 
 ## Checking whether 2 chords intersect
 
-Remember that we labeled the chords by starting at the green dashed line and searching counterclockwise for new endpoints. So if $i<j$, then $s_i$ must be the minimum of $s_i,e_i,s_j,e_j$. From here, convince yourself that there are only 3 possible orderings: $s_i<s_j<e_i<e_j$, or $s_i<s_j<e_j<e_i$, or $s_i<e_i<s_j<e_j$. Of these orderings, as illustrated in Fig 3, only $s_i<s_j<e_i<e_j$ indicates an intersection between chords $i$ and $j$. 
+Remember that we sorted $C"$ by starting angle. So if $i<j$, then $s_i$ must be the minimum of $s_i,e_i,s_j,e_j$. From here, convince yourself that there are only 3 possible orderings: $s_i<s_j<e_i<e_j$, or $s_i<s_j<e_j<e_i$, or $s_i<e_i<s_j<e_j$. Of these orderings, as illustrated in Fig 3, only $s_i<s_j<e_i<e_j$ indicates an intersection between chords $i$ and $j$. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord2.png"> <br>
@@ -76,9 +111,9 @@ Using this observation, we can write an $O(n^2)$ algorithm which just checks eac
 $C"$ = $C$ sorted by increasing $s_k$\
 \
 **for** $i=0,n-1$ **do**\
-&emsp;Get chord endpoints $(s_i,e_i)=C"[i]$\
+&emsp;Get chord endpoints $(s_i,e_i)$ $=C"[i]$\
 &emsp; **for** $j=i+1,n-1$ **do**\
-&emsp;&emsp;Get chord endpoints $(s_j,e_j)=C"[j]$\
+&emsp;&emsp;Get chord endpoints $(s_j,e_j)$ $=C"[j]$\
 &emsp;&emsp;**if** $s_i<s_j<e_i<e_j$ **then**\
 &emsp;&emsp;&emsp;increment $I$
 
@@ -87,15 +122,14 @@ The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$
 ## Sorted list of endpoint labels
 Starting with $C"$, construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Each entry in $P$ contains the angle of an endpoint, and the numeric label of that endpoint. 
 
-Now sort $P$ by increasing angle to get $P'$. For Fig 2's example, $P'$ is $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. As a final step, completely remove the angles, such that $P"$ is just a sorted list of $2n$ endpoint labels, e.g. $P"=[0,1,2,0,3,2,3,1]$.
+Now sort $P$ by increasing angle to get $P'$. For Fig 2's example, $P'$ is $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. As a final step, completely remove the angles, such that $P"$ is just a list of $2n$ endpoint labels in their order of appearance, e.g. $P"=[0,1,2,0,3,2,3,1]$.
 
 ## Counting higher-numbered "open" chords
 We'll try counting intersections via a single loop thru $P"$. As we loop through $P"$, let's call a chord **"open"** if we've encountered exactly one of its endpoints, and **"closed"** if we've encountered neither or both of its endpoints. 
 
 Refer to Fig 4. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
-<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321" controls="controls" style="max-width: 730px;">
-</video>
+{% include carousel.html height="50" unit="%" duration="3" number="1" %}
 <p align="center" width="100%">
     Figure 4 - Slow algorithm illustration
 </p>
@@ -108,19 +142,19 @@ Checking each open chord takes $O(n)$ time (worst case). Clearly, doing so each 
 
 It turns out we can't do better. Just kidding, we can. We'll count higher-numbered elements in $O(\log n)$ time by extending a [complete binary tree](https://www.geeksforgeeks.org/complete-binary-tree/). 
 
-Our tree `T` will have one **leaf** node for each of the $n$ chords. All leaf nodes reside at the same depth level, $d=\lceil \log n \rceil$, where the root has depth 0. (Logs in this post use base 2.)
+Our tree $T$ will have one **leaf** node for each of the $n$ chords. All leaf nodes reside at the same depth level, $d=\lceil \log n \rceil$, where the root has depth 0. (Logs in this post use base 2.)
 
-The leafs have the same left-to-right order as the numeric chord labelings. For instance, Chord 0 corresponds to `T`'s leftmost leaf, and Chord $n-1$ corresponds to the rightmost leaf. Since we know $n$'s value, we can construct `T` by adding leafs one at a time. Each leaf addition takes $d=O(\log n)$ time, so constructing `T` with $n$ leafs takes $O(n\log n)$ time. 
+The leafs have the same left-to-right order as the numeric chord labelings. For instance, Chord 0 corresponds to $T$'s leftmost leaf, and Chord $n-1$ corresponds to the rightmost leaf. Since we know $n$'s value, we can construct $T$ by adding leafs one at a time. Each leaf addition takes $d=O(\log n)$ time, so constructing $T$ with $n$ leafs takes $O(n\log n)$ time. 
 
-For quick constant-time access to leafs (indexing), we can use an array `leaf` with `leaf[i]` pointing to Chord $i$'s leaf node in `T`. This isn't necessary, but will make life easier. And to quickly navigate `T`, each node has 3 pointers: left child, right child, and parent. 
+For quick constant-time access to leafs (indexing), we can use a leaf array $LF$ with $LF[i]$ pointing to Chord $i$'s leaf node in $T$. This isn't necessary, but will make life easier. And to quickly navigate $T$, each node has 3 pointers: left child, right child, and parent. 
 
 ## Annotating the tree
 
 Each tree node, leaf or not, is annotated with a "size". Leaf $i$'s size is 1 if Chord $i$ is open, 0 otherwise. A non-leaf's size is the number of open leafs in its subtree. For instance, the root's size is equal to the total number of open leafs. Before looping thru $P"$, all nodes have initial size 0. 
 
-What happens when we open chord $i$? Clearly, we should set `leaf[i]`'s size to 1. Each of $i$'s ancestors' sizes should also be incremented, since one leaf in their subtree was newly opened. This takes $O(\log n)$ time. Likewise, closing chord $i$ requires setting `leaf[i]`'s size to 0, and decrementing each of $i$'s ancestors' sizes. 
+What happens when we open chord $i$? Clearly, we should set $LF[i]$'s size to 1. Each of $i$'s ancestors' sizes should also be incremented, since one leaf in their subtree was newly opened. This takes $O(\log n)$ time. Likewise, closing chord $i$ requires setting $LF[i]$'s size to 0, and decrementing each of $i$'s ancestors' sizes. 
 
-Now, back to the reason we created `t`: When we close a chord, we need to quickly count how many higher-numbered chords are still open. 
+Now, back to the reason we created $T$: When we close a chord, we need to quickly count how many higher-numbered chords are still open. 
 - Suppose node $R$ is a **right** child of its immediate parent $A$. Consider the highest-numbered leaf $B$ in the subtree rooted at $A$. Since the leafs are in increasing order from left to right, $B$ must also be in the subtree rooted at $R$. Thus, $A$ contains no higher-numbered leafs than $R$. 
 - Suppose node $L$ is a **left** child of $A$, and $A$ has right child $R$. Then every single open leaf in the subtree rooted at $R$ is higher-numbered than any leaf in the subtree rooted at $L$. Again, this follows from the left-to-right ordering of the leafs in the tree. 
 
@@ -130,23 +164,22 @@ This gives a recursive $O(\log n)$ procedure for counting how many higher-number
     <br> Algorithm 2 - recursively count higher-numbered leafs
 </p>
 **Input**: \
-Complete binary annotated tree `T`\
+Complete binary annotated tree $T$\
 Numeric chord label $i$ to close \
-`leaf` array of pointers to leafs of `T` \
+$LF$, array of pointers to leafs of $T$ \
 **Output**: Number $G$ of currently open chords with numeric label $>i$
 
-> Initialize $G=0$, `cur = leaf[i]`\
-**while** `cur.parent` isn't null:\
-&emsp;set A to `cur.parent`\
-&emsp;**if** `cur` is left child of A **then** \
+> Initialize $G=0$, cur $= LF[i]$\
+**while** cur's parent isn't null:\
+&emsp;set A to cur's parent\
+&emsp;**if** cur is left child of A **then** \
 &emsp;&emsp;add size of A's right child to $G$\
-&emsp;set `cur` to A
+&emsp;set cur to A
 
 
 ## Final $O(n\log n)$ algo
 
-<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/fce9c4b2-93bc-4cee-b883-4ccb7cc2e22b" controls="controls" style="max-width: 730px;">
-</video>
+{% include carousel.html height="50" unit="%" duration="3" number="2" %}
 <p align="center" width="100%">
     Figure 5 - Fast algorithm illustration
 </p>
@@ -161,34 +194,24 @@ Now that we can count a single chord's higher-numbered intersections in $O(\log 
 
 > Initialize intersection count $I=0$\
 Initialize $n=$ length$(C)$\
-Initialize complete binary tree `T`$=$ root node\
-&emsp;Any node added to `T` starts with size = 0\
+Initialize complete binary tree $T=$ root node\
+&emsp;Any node added to $T$ starts with size = 0\
 Initialize depth $d=\lceil \log n \rceil$\
-Initialize array `leaf` of length $n$\
-Initialize empty endpoints arrays $P, P', P"$\
+Initialize array $LF$ of length $n$\
 \
 **for** $k=0,n-1$ **do**\
-&emsp;**if** $s_k>e_k$ **then** swap$(s_k,e_k)$\
-&emsp;Add a leaf to `T` at depth $d$\
+&emsp;Add a leaf to $T$ at depth $d$\
 &emsp;Leaf should be as far left as possible\
-&emsp;Set `leaf[k]` to point to leaf node\
-Set $C"$ to be $C$, sorted in order of increasing $s_k$\
-**for** $k=0,n-1$ **do**\
-&emsp;add tuple $(s_k, k)$ to $P$\
-&emsp;add tuple $(e_k, k)$ to $P$\
-$P$ is now an array of (angle, chord label)\
-Set $P'$ to be $P$, sorted in order of increasing angle\
-Drop angles from $P'$ to get $P"$ \
-$P"$ is an array of $2n$ chord labels\
+&emsp;Set $LF[k]$ to point to the leaf\
+Set $P"$ to be an array of $2n$ chord labels, in order of appearance\
+&emsp;(this is a preprocessing of $C$)
 \
 **for** $i=0,2n-1$ **do**\
 &emsp;Get next chord label $m=P"[i]$\
-&emsp;**if** `leaf[m]` is 0 **then**\
+&emsp;**if** $LF[m]$ is 0 **then**\
 &emsp;&emsp;Increment the leaf's and its ancestors' sizes\
-&emsp;**if** `leaf[m]` is 1 **then**\
+&emsp;**if** $LF[m]$ is 1 **then**\
 &emsp;&emsp;Set $G=$ higher-numbered leaf count (Algorithm 2) \
 &emsp;&emsp;Decrement the leaf's and its ancestors' sizes\
 &emsp;&emsp;Update total intersection count: $I=I+G$ 
 
-
-{% include carousel.html height="50" unit="%" duration="3" number="1" %}
