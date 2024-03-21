@@ -46,7 +46,7 @@ carousels:
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
 
-# Table of contents
+# Topics
 1. [Problem Formulation](#s1)
 2. [Checking whether 2 chords intersect](#s2)
 3. [Slow $O(n^2)$ Algorithm](#s3)
