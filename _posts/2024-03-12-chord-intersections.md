@@ -37,7 +37,9 @@ After sorting list: $C'' = [(40^{\circ},150^{\circ}),(90^{\circ},330^{\circ}),(1
 The order of $C''$ gives the numeric chord labeling. 
 
 <p align="center" width="100%">
-    <img width="60%" src="/assets/images/chord4.png"> <br>
+    <img width="50%" src="/assets/images/chord4.gif"> 
+    <img width="50%" src="/assets/images/gif9.gif"> 
+    <br>
     Figure 2
 </p>
 
