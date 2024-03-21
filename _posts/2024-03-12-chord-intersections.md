@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Counting Chord Intersections"
-categories: Computer Science
+categories: Algorithms
 author: Cam Benesch
 meta: "Chicago"
 ---
