@@ -202,7 +202,7 @@ Initialize array $LF$ of length $n$\
 &emsp;Leaf should be as far left as possible\
 &emsp;Set $LF[k]$ to point to the leaf\
 Compute $P"$, an array of $2n$ chord labels\
-&emsp;(this is the preprocessing of $C$ [described above](# Sorted list of endpoint labels))
+&emsp;(this is the preprocessing of $C$ [described above](#Sorted list of endpoint labels))
 \
 **for** $i=0,2n-1$ **do**\
 &emsp;Get next chord label $m=P"[i]$\
