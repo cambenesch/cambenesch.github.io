@@ -3,6 +3,10 @@ layout: post
 title: "Counting Chord Intersections"
 author: Cam Benesch
 meta: "Chicago"
+carousels:
+  - images: 
+    - image: /assets/images/chord1.png
+    - image: /assets/images/chord2.png
 ---
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
@@ -185,3 +189,6 @@ $P"$ is an array of $2n$ chord labels\
 &emsp;&emsp;Set $G=$ higher-numbered leaf count (Algorithm 2) \
 &emsp;&emsp;Decrement the leaf's and its ancestors' sizes\
 &emsp;&emsp;Update total intersection count: $I=I+G$ 
+
+
+{% include carousel.html height="50" unit="%" duration="3" number="1" %}
