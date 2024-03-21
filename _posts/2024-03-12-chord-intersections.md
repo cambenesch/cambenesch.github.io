@@ -86,10 +86,10 @@ Now sort $P$ by increasing angle. For Figure 2's example, $P$ is now $[(40^{\cir
 ## Counting higher-numbered "open" chords
 We'll try counting intersections via a single loop thru $P$. As we loop through $P$, let's call a chord **"open"** if we've encountered exactly one of its endpoints, and **"closed"** if we've encountered neither or both of its endpoints. To keep track of open/closed status, we can maintain a hashset $h$ which contains the numeric labels of only the currently open chords. 
 
-Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $o_1+\cdots+o_n$ total intersections.
+Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
 <p align="center" width="100%">
-    <img width="60%" src="/assets/images/chord5.gif"> <br>
+    <img width="100%" src="/assets/images/chord5.gif"> <br>
     Figure 4
 </p>
 
