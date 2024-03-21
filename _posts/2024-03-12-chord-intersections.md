@@ -6,7 +6,7 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. Easy read if you're familiar with binary trees, arrays, and big O notation. 
+This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
 
 ## Problem Formulation
 
