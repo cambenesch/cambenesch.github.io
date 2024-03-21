@@ -61,17 +61,20 @@ Remember that we labeled the chords by starting at the green dashed line and sea
 ### Slow $O(n^2)$ Algorithm
 Using this observation, we can write an $O(n^2)$ algorithm which just checks each pair of chords for an intersection:
 
+<p align="center" width="100%">
+    Algorithm 1 - slow intersection counting
+</p>
 **Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
 
 > Initialize $I=0$\
-**for** $k=1,n$:\
+**for** $k=0,n-1$:\
 &emsp;**if** $s_k>e_k$ **then** swap$(s_k,e_k)$\
 sort $C$ by increasing $s_k$\
 \
-**for** $i=1,n$ **do**\
+**for** $i=0,n-1$ **do**\
 &emsp;Get chord endpoints $(s_i,e_i)=C[i]$\
-&emsp; **for** $j=i+1,n$ **do**\
+&emsp; **for** $j=i+1,n-1$ **do**\
 &emsp;&emsp;Get chord endpoints $(s_j,e_j)=C[j]$\
 &emsp;&emsp;**if** $s_i<s_j<e_i<e_j$ **then**\
 &emsp;&emsp;&emsp;increment $I$
@@ -88,9 +91,11 @@ We'll try counting intersections via a single loop thru $P$. As we loop through 
 
 Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
-<video src="https://github.com/cambenesch/cambenesch.github.io/blob/master/assets/images/chord6_video.mp4" controls="controls" style="max-width: 730px;">
+<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321" controls="controls" style="max-width: 730px;">
 </video>
-<p style="text-align: center;">Figure 4 - Slow algorithm illustration</p>
+<p align="center" width="100%">
+    Figure 4 - Slow algorithm illustration
+</p>
 
 In this example, we would open 0, open 1, open 2, close 0 (add two intersections since chords 1 and 2 are still open), open 3, close 2 (add one intersection since chord 3 is open), close 3, close 1. This gives $I=2+1=3$, as in Figre 4 above. (The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2.)
 
@@ -110,7 +115,7 @@ For quick constant-time access to leafs (indexing), we can use an array `leaf` w
 
 ## Annotating the tree
 
-Each tree node, leaf or not, is annotated with a "size". Leaf $i$'s size is 1 if Chord $i$ is open, 0 otherwise. A non-leaf's size is the number of open leafs in its subtree. For instance, the root's size is equal to the current size of `h`. Before looping thru $P$, all nodes have initial value 0. 
+Each tree node, leaf or not, is annotated with a "size". Leaf $i$'s size is 1 if Chord $i$ is open, 0 otherwise. A non-leaf's size is the number of open leafs in its subtree. For instance, the root's size is equal to the total number of open leafs. Before looping thru $P$, all nodes have initial value 0. 
 
 What happens when we open chord $i$? Clearly, we should set `leaf[i].size=1`. Each of $i$'s ancestors' sizes should also be incremented, since one leaf in their subtree was newly opened. This takes $O(\log n)$ time. Likewise, closing chord $i$ requires setting `leaf[i].size=0`, and decrementing each of $i$'s ancestors' sizes. 
 
@@ -118,12 +123,11 @@ Now, back to the reason we created `t`: When we close a chord, we need to quickl
 - Suppose node $R$ is a **right** child of its immediate parent $A$. Consider the highest-numbered leaf $B$ in the subtree rooted at $A$. Since the leafs are in increasing order from left to right, $B$ must also be in the subtree rooted at $R$. Thus, $A$ contains no higher-numbered leafs than $R$. 
 - Suppose node $L$ is a **left** child of $A$, and $A$ has right child $R$. Then every single open leaf in the subtree rooted at $R$ is higher-numbered than any leaf in the subtree rooted at $L$. Again, this follows from the left-to-right ordering of the leafs in the tree. 
 
-This gives a recursive $O(\log n)$ procedure for counting how many higher-numbered chords are open when we close Chord $i$. 
+This gives a recursive $O(\log n)$ procedure for counting how many higher-numbered chords are open when we close Chord $i$. See Fig 5 for an illustration. 
 
-<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/fce9c4b2-93bc-4cee-b883-4ccb7cc2e22b" controls="controls" style="max-width: 730px;">
-</video>
-<p style="text-align: center;">Figure 5 - Fast algorithm illustration</p>
-
+<p align="center" width="100%">
+    Algorithm 2 - recursively count higher-numbered leafs
+</p>
 **Input**: Complete binary annotated tree `t`, Chord number $i$ to close \
 **Output**: Number $G$ of currently open chords with numeric label $>i$
 
@@ -134,14 +138,50 @@ This gives a recursive $O(\log n)$ procedure for counting how many higher-number
 &emsp;&emsp;add size of A's right child to $G$\
 &emsp;set `cur` to A
 
+
 ## Final $O(n\log n)$ algo
 
-We have everything we need for the fast algorithm. 
+<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/fce9c4b2-93bc-4cee-b883-4ccb7cc2e22b" controls="controls" style="max-width: 730px;">
+</video>
+<p align="center" width="100%">
+    Figure 5 - Fast algorithm illustration
+</p>
 
-Loop through each Chord label in $P$, of which there are $2n$. 
+Now that we can count a single chord's higher-numbered intersections in $O(\log n)$ time, we can do this for each chord to get an $O(n\log n)$ algorithm. Illustration in Fig 5, pseudocode below. 
 
-- If we encounter a new chord, we relabel it `i` (the order in which it was first encountered) and activate the leaf node with `val=i`. Activating a leaf node involves incrementing $\Theta(\log n)$ `size` attributes, one for each of its ancestors. 
+<p align="center" width="100%">
+    Algorithm 3 - fast intersection counting
+</p>
+**Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
+**Output**: $I$, the number of intersecting pairs of the given chords. 
 
-- Chord already seen -> get its relabeled `i` from the hashmap, and deactivate leaf node `i`. Deactivation involves decrementing its $\Theta(\log n)$ ancestors' `size` attributes. But before this deactivation, we compute in $\Theta(\log n)$ time how many higher-numbered leaf nodes are activated. A higher-numbered leaf node `j>i` is activated IFF we encountered `i`'s and `j`'s endpoints in the order `[i,j,i,j]`. Thus, this count gives us the exact number of intersections between `i` and `j`. 
-
-Running this loop takes $\Theta(n \log n)$ time. Summing the higher-numbered-activated-leaf-node counts gives the solution. No step takes more than $\Theta(n \log n)$ time, so the algorithm takes $\Theta(n \log n)$ time. 
+> Initialize $I=0$\
+Initialize $n=$length$(C)$\
+Initialize depth $d=lceil \log n \rceil$\
+Initialize complete binary tree `t`$=$ root node\
+&emsp;Any node added to `T` starts with size = 0
+Initialize array `leafs` of length $n$\
+Initialize empty endpoints array $P$\
+\
+**for** $k=0,n-1$:\
+&emsp;**if** $s_k>e_k$ **then** swap$(s_k,e_k)$\
+&emsp;Add a leaf to `T` at depth $d$\
+&emsp;Leaf should be as far left as possible\
+&emsp;Set `leafs[k]` to point to leaf node\
+Sort $C$ by increasing $s_k$\
+**for** $k=0,n-1$:\
+&emsp;add tuple $(s_k, k)$ to $P$\
+&emsp;add tuple $(e_k, k)$ to $P$\
+$P$ is now an array of (angle, chord label)\
+Sort $P$ by increasing angle\
+Prop angles from $P$\
+$P$ is now an array of $2n$ chord labels\
+\
+**for** $i=0,2n-1$ **do**\
+&emsp;Get next chord label $m=P[i]$\
+&emsp;**if** `leafs[m]` is 0 **then**\
+&emsp;&emsp;Increment the leaf's and its ancestors' sizes\
+&emsp;**if** `leafs[m]` is 1 **then**\
+&emsp;&emsp;Set $G=$ higher-numbered leaf count (Algorithm 3) \
+&emsp;&emsp;Update total count: $I=I+G$ \
+&emsp;&emsp;Decrement the leaf's and its ancestors' sizes\
