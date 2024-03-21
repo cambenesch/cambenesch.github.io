@@ -12,7 +12,7 @@ This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ 
 
 Let's draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on a circle. A point on the circle's circumference is identified by its [polar angle](https://en.wikipedia.org/wiki/Polar_coordinate_system) $0^{\circ}\leq \theta < 360^{\circ}$, indicating the point's counterclockwise angle from the green dashed line in Fig 1. A chord has 2 endpoints, each a point on the circle's circumference. Thus, we will identify a chord using a tuple of its endpoint angles: $C_i = (s_i, e_i)$. 
 
-As input we are given $n$ chords, $C=[(s_1,e_1),...,(s_n,e_n)]$. For simplicity, assume no endpoints are reused (see Fig 1). We'll discuss how to efficiently count the number $I$ of distinct pairs of intersecting chords. 
+As input we are given $n$ chords, $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$. For simplicity, assume no endpoints are reused (see Fig 1). We'll discuss how to efficiently count the number $I$ of distinct pairs of intersecting chords. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
@@ -64,7 +64,7 @@ Using this observation, we can write an $O(n^2)$ algorithm which just checks eac
 <p align="center" width="100%">
     <br> Algorithm 1 - slow intersection counting
 </p>
-**Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
+**Input**: $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$, where $s_k,e_k$ are endpoint angles of chord $k$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
 
 > Initialize $I=0$\
@@ -153,28 +153,28 @@ Now that we can count a single chord's higher-numbered intersections in $O(\log 
 <p align="center" width="100%">
     <br> Algorithm 3 - fast intersection counting**
 </p>
-**Input**: $C=[(s_1,e_1),...,(s_n,e_n)]$, where $s_k,e_k$ are endpoint angles of chord $i$. \
+**Input**: $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$, where $s_k,e_k$ are endpoint angles of chord $k$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
 
-> Initialize $I=0$\
-Initialize $n=$length$(C)$\
-Initialize depth $d=lceil \log n \rceil$\
+> Initialize intersection count $I=0$\
+Initialize $n=$ length$(C)$\
+Initialize depth $d=\lceil \log n \rceil$\
 Initialize complete binary tree `T`$=$ root node\
-&emsp;Any node added to `T` starts with size = 0
+&emsp;Any node added to `T` starts with size = 0\
 Initialize array `leaf` of length $n$\
 Initialize empty endpoints arrays $P, P', P"$\
 \
-**for** $k=0,n-1$:\
+**for** $k=0,n-1$ **do**\
 &emsp;**if** $s_k>e_k$ **then** swap$(s_k,e_k)$\
 &emsp;Add a leaf to `T` at depth $d$\
 &emsp;Leaf should be as far left as possible\
 &emsp;Set `leaf[k]` to point to leaf node\
-Sort $C$ by increasing $s_k$\
+Set $C"$ to be $C$, sorted in order of increasing $s_k$\
 **for** $k=0,n-1$:\
-&emsp;add tuple $(s_k, k)$ to $P'$\
-&emsp;add tuple $(e_k, k)$ to $P'$\
-$P'$ is now an array of (angle, chord label)\
-Sort $P'$ by increasing angle\
+&emsp;add tuple $(s_k, k)$ to $P$\
+&emsp;add tuple $(e_k, k)$ to $P$\
+$P$ is now an array of (angle, chord label)\
+Set $P'$ to be $P$, sorted in order of increasing angle\
 Drop angles from $P'$ to get $P"$ \
 $P"$ is an array of $2n$ chord labels\
 \
@@ -183,6 +183,6 @@ $P"$ is an array of $2n$ chord labels\
 &emsp;**if** `leaf[m]` is 0 **then**\
 &emsp;&emsp;Increment the leaf's and its ancestors' sizes\
 &emsp;**if** `leaf[m]` is 1 **then**\
-&emsp;&emsp;Set $G=$ higher-numbered leaf count (Algorithm 3) \
-&emsp;&emsp;Update total count: $I=I+G$ \
+&emsp;&emsp;Set $G=$ higher-numbered leaf count (Algorithm 2) \
 &emsp;&emsp;Decrement the leaf's and its ancestors' sizes\
+&emsp;&emsp;Update total intersection count: $I=I+G$ 
