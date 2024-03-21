@@ -98,6 +98,8 @@ Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, the
 
 ![video1](https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321)
 
+<video src="https://user-images.githubusercontent.com/169707/126715420-991ad821-9ac8-4b66-b79e-e0966e0f3a89.mp4" controls="controls" style="max-width: 730px;">
+</video>
 
 
 In this example, we would open 0, open 1, open 2, close 0 (add two intersections since chords 1 and 2 are still open), open 3, close 2 (add one intersection since chord 3 is open), close 3, close 1. This gives $I=2+1=3$, which agrees with the diagram. (The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2.)
