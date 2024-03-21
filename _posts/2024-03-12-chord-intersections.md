@@ -138,7 +138,7 @@ The "higher-numbered" condition is crucial. Without it, we would count a false i
 
 ## Indexed complete binary tree
 
-It turns out we can't do better. Just kidding, we can. We'll count higher-numbered elements in $O(\log n)$ time by extending a [complete binary tree](https://www.geeksforgeeks.org/complete-binary-tree/). 
+It turns out we can't do better. Just kidding, we can. We'll count higher-numbered chords in $O(\log n)$ time by extending a [complete binary tree](https://www.geeksforgeeks.org/complete-binary-tree/). For those interested, this is similar to the Rank function for [order statistic trees](https://en.wikipedia.org/wiki/Order_statistic_tree). 
 
 Our tree $T$ will have one **leaf** node for each of the $n$ chords. All leaf nodes reside at the same depth level, $d=\lceil \log n \rceil$, where the root has depth 0. (Logs in this post use base 2.)
 
