@@ -94,8 +94,9 @@ Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, the
 </p>
 
 
+![gif2](https://github.com/cambenesch/cambenesch.github.io/assets/33947384/87710c41-eb4d-4c70-a48f-d728b1d9ced2)
 
-https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321
+![video1](https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321)
 
 
 
