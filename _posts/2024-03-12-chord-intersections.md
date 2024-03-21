@@ -119,6 +119,7 @@ $C"$ = $C$ sorted by increasing $s_k$\
 
 The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$ time. Next we'll describe a faster algorithm.
 
+<a name="preprocessing"></a>
 ## Sorted list of endpoint labels
 Starting with $C"$, construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Each entry in $P$ contains the angle of an endpoint, and the numeric label of that endpoint. 
 
@@ -202,7 +203,7 @@ Initialize array $LF$ of length $n$\
 &emsp;Leaf should be as far left as possible\
 &emsp;Set $LF[k]$ to point to the leaf\
 Compute $P"$, an array of $2n$ chord labels\
-&emsp;(this is the preprocessing of $C$ [described above](#Sorted list of endpoint labels))
+&emsp;(this is the preprocessing of $C$ [described above](#abcd))
 \
 **for** $i=0,2n-1$ **do**\
 &emsp;Get next chord label $m=P"[i]$\
