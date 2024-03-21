@@ -25,7 +25,14 @@ Note that a chord doesn't change if the starting and ending angles are swapped. 
 
 As another preprocessing step, sort $C'$ in increasing order of starting angle $s_i$. We'll call the sorted list $C''$. After this sorting, each chord's number is its position in $C''$. Visually, starting at the green dashed line and proceeding counterclockwise, the chords are numerically labeled in order of first appearance of an endpoint. See the example below for clarity. 
 
-## Example (Figure 2)
+## Example
+
+<p align="center" width="100%">
+    <img width="57%" src="/assets/images/chord4.gif"> 
+    <img width="42%" src="/assets/images/chord3.png"> 
+    <br>
+    Figure 2
+</p>
 
 Fig 2 shows $n=4$ chords numbered 0 thru 3. There are ${4\choose 2} = 6$ pairs of distinct chords. Four of these pairs intersect: 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3 and 1 & 3 do not intersect.
 
@@ -35,13 +42,6 @@ After sorting each tuple: $C' = [(110^{\circ},270^{\circ}),(180^{\circ},320^{\ci
 
 After sorting list: $C'' = [(40^{\circ},150^{\circ}),(90^{\circ},330^{\circ}),(110^{\circ},270^{\circ}),(180^{\circ},320^{\circ})]$. \
 The order of $C''$ gives the numeric chord labeling. 
-
-<p align="center" width="100%">
-    <img width="50%" src="/assets/images/chord4.gif"> 
-    <img width="50%" src="/assets/images/chord3.png"> 
-    <br>
-    Figure 2
-</p>
 
 ## Number of possible intersections
 
