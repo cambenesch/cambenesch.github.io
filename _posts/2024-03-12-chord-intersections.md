@@ -36,12 +36,6 @@ carousels:
     - image: /assets/images/chords/Slide20.JPG
     - image: /assets/images/chords/Slide21.JPG
     - image: /assets/images/chords/Slide22.JPG
-    - image: /assets/images/chords/Slide23.JPG
-    - image: /assets/images/chords/Slide24.JPG
-    - image: /assets/images/chords/Slide25.JPG
-    - image: /assets/images/chords/Slide26.JPG
-    - image: /assets/images/chords/Slide27.JPG
-    - image: /assets/images/chords/Slide28.JPG
 ---
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
