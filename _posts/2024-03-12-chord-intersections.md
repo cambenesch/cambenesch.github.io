@@ -122,7 +122,7 @@ The sorting step takes $O(n\log n)$ time, and the nested for loops take $O(n^2)$
 ## Sorted list of endpoint labels
 Starting with $C"$, construct a new list $P$ as follows: for every $(s_i,e_i)$ in $C$, add $(s_i,i)$ and $(e_i,i)$ to $P$. Each entry in $P$ contains the angle of an endpoint, and the numeric label of that endpoint. 
 
-Now sort $P$ by increasing angle to get $P'$. For Fig 2's example, $P'$ is $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. As a final step, completely remove the angles, such that $P"$ is just a list of $2n$ endpoint labels in their order of appearance, e.g. $P"=[0,1,2,0,3,2,3,1]$.
+Now sort $P$ by increasing angle to get $P'$. For Fig 2's example, $P'$ is $[(40^{\circ},0),(90^{\circ},1),(110^{\circ},2),(150^{\circ},0),$ $(180^{\circ},3),(270^{\circ},2),(320^{\circ},3),(330^{\circ},1)]$. As a final step, completely remove the angles, such that $P"$ is just a list of $2n$ endpoint labels in their order of appearance, e.g. $P"=[0,1,2,0,3,2,3,1]$.
 
 ## Counting higher-numbered "open" chords
 We'll try counting intersections via a single loop thru $P"$. As we loop through $P"$, let's call a chord **"open"** if we've encountered exactly one of its endpoints, and **"closed"** if we've encountered neither or both of its endpoints. 
