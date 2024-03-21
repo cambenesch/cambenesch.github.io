@@ -107,11 +107,11 @@ Checking each element of `h` takes $O(n)$ time. Clearly, doing so each time we c
 
 It turns out we can't do better. Just kidding, we can. We can count higher-numbered elements in $O(\log n)$ time by extending a [complete binary tree](https://www.geeksforgeeks.org/complete-binary-tree/). As a quick summary, each leaf will correspond to a chord, each node will store the number of open leafs in its subtree, and via a bubble-up procedure, we can count the number of open leafs to the right of any specified leaf. 
 
-Our tree `t` will have one **leaf** node for each of the $n$ chords. All leaf nodes reside at the same depth level: $d=\lceil \log n \rceil$, where the root has depth 0. (Logs in this post use base 2.)
+Our tree `T` will have one **leaf** node for each of the $n$ chords. All leaf nodes reside at the same depth level: $d=\lceil \log n \rceil$, where the root has depth 0. (Logs in this post use base 2.)
 
-The leafs have the same left-to-right order as the chord numberings. For instance, Chord 0 corresponds to `t`'s leftmost leaf, and Chord $n-1$ corresponds to the rightmost leaf. Since we know $n$'s value, we can construct `t` by adding leafs one at a time. Each leaf addition takes $d=O(\log n)$ time, so constructing `t` with $n$ leafs takes $O(n\log n)$ time. 
+The leafs have the same left-to-right order as the chord numberings. For instance, Chord 0 corresponds to `T`'s leftmost leaf, and Chord $n-1$ corresponds to the rightmost leaf. Since we know $n$'s value, we can construct `T` by adding leafs one at a time. Each leaf addition takes $d=O(\log n)$ time, so constructing `T` with $n$ leafs takes $O(n\log n)$ time. 
 
-For quick constant-time access to leafs (indexing), we can use an array `leaf` with `leaf[i]` pointing to Chord $i$'s leaf node in `t`. This will make life easier. And for quick two-way traversal of `t`, each node has 3 pointers: left child, right child, and parent. 
+For quick constant-time access to leafs (indexing), we can use an array `leaf` with `leaf[i]` pointing to Chord $i$'s leaf node in `T`. This will make life easier. And for quick two-way traversal of `T`, each node has 3 pointers: left child, right child, and parent. 
 
 ## Annotating the tree
 
@@ -128,10 +128,10 @@ This gives a recursive $O(\log n)$ procedure for counting how many higher-number
 <p align="center" width="100%">
     Algorithm 2 - recursively count higher-numbered leafs
 </p>
-**Input**: Complete binary annotated tree `t`, Chord number $i$ to close \
+**Input**: Complete binary annotated tree `T`, Chord number $i$ to close \
 **Output**: Number $G$ of currently open chords with numeric label $>i$
 
-> Initialize $G=0$, `cur = t[i]`\
+> Initialize $G=0$, `cur = T[i]`\
 **while** `cur.parent` isn't null:\
 &emsp;set A to `cur.parent`\
 &emsp;**if** `cur` is left child of A **then** \
@@ -158,7 +158,7 @@ Now that we can count a single chord's higher-numbered intersections in $O(\log 
 > Initialize $I=0$\
 Initialize $n=$length$(C)$\
 Initialize depth $d=lceil \log n \rceil$\
-Initialize complete binary tree `t`$=$ root node\
+Initialize complete binary tree `T`$=$ root node\
 &emsp;Any node added to `T` starts with size = 0
 Initialize array `leafs` of length $n$\
 Initialize empty endpoints array $P$\
