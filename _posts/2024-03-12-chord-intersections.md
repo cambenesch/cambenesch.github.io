@@ -3,8 +3,6 @@ layout: post
 title: "Counting Chord Intersections"
 author: Cam Benesch
 meta: "Chicago"
-toc: true
-toc_label: "Sections"
 carousels:
   - images: 
     - image: /assets/images/chords/foo.png
