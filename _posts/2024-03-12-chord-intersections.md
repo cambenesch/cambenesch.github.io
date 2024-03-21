@@ -6,7 +6,7 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. Easy read if you're familiar with binary trees, hashmaps, and big O notation. 
+This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. Easy read if you're familiar with binary trees, arrays, and big O notation. 
 
 ## Problem Formulation
 
@@ -88,7 +88,7 @@ We'll try counting intersections via a single loop thru $P$. As we loop through 
 
 Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
-<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321" controls="controls" style="max-width: 730px;">
+<video src="https://github.com/cambenesch/cambenesch.github.io/blob/master/assets/images/chord6_video.mp4" controls="controls" style="max-width: 730px;">
 </video>
 Figure 4
 
