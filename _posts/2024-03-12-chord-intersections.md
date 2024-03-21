@@ -16,7 +16,7 @@ As input we are given $n$ chords, $C=[(s_1,e_1),...,(s_n,e_n)]$. For simplicity,
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord1.png"> <br>
-    Figure 1
+    Figure 1 - No shared endpoints
 </p>
 
 ## Chord labeling procedure
@@ -31,7 +31,7 @@ As another preprocessing step, sort $C'$ in increasing order of starting angle $
     <img width="57%" src="/assets/images/chord4.gif"> 
     <img width="42%" src="/assets/images/chord3.png"> 
     <br>
-    Figure 2
+    Figure 2 - Labeling the chords
 </p>
 
 Fig 2 shows $n=4$ chords numbered 0 thru 3. There are ${4\choose 2} = 6$ pairs of distinct chords. Four of these pairs intersect: 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3 and 1 & 3 do not intersect.
@@ -55,7 +55,7 @@ Remember that we labeled the chords by starting at the green dashed line and sea
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chord2.png"> <br>
-    Figure 3
+    Figure 3 - Checking whether 2 chords intersect
 </p>
 
 ### Slow $O(n^2)$ Algorithm
@@ -90,8 +90,7 @@ Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, the
 
 <video src="https://github.com/cambenesch/cambenesch.github.io/blob/master/assets/images/chord6_video.mp4" controls="controls" style="max-width: 730px;">
 </video>
-Figure 4
-
+<p style="text-align: center;">Figure 4 - Slow algorithm illustration</p>
 
 In this example, we would open 0, open 1, open 2, close 0 (add two intersections since chords 1 and 2 are still open), open 3, close 2 (add one intersection since chord 3 is open), close 3, close 1. This gives $I=2+1=3$, as in Figre 4 above. (The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2.)
 
@@ -120,6 +119,10 @@ Now, back to the reason we created `t`: When we close a chord, we need to quickl
 - Suppose node $L$ is a **left** child of $A$, and $A$ has right child $R$. Then every single open leaf in the subtree rooted at $R$ is higher-numbered than any leaf in the subtree rooted at $L$. Again, this follows from the left-to-right ordering of the leafs in the tree. 
 
 This gives a recursive $O(\log n)$ procedure for counting how many higher-numbered chords are open when we close Chord $i$. 
+
+<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/fce9c4b2-93bc-4cee-b883-4ccb7cc2e22b" controls="controls" style="max-width: 730px;">
+</video>
+<p style="text-align: center;">Figure 5 - Fast algorithm illustration</p>
 
 **Input**: Complete binary annotated tree `t`, Chord number $i$ to close \
 **Output**: Number $G$ of currently open chords with numeric label $>i$
