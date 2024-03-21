@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Gibbs Sampling and Hierarchical Bayes"
-categories: Statistics
 author: Cam Benesch
 meta: "Chicago"
 ---
