@@ -129,7 +129,7 @@ We'll try counting intersections via a single loop thru $P"$. As we loop through
 
 Refer to Fig 4. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
-{% include carousel.html height="100" unit="%" duration="3" number="1" %}
+{% include carousel.html height="65" unit="%" duration="3" number="1" %}
 <p align="center" width="100%">
     Figure 4 - Slow algorithm illustration
 </p>
@@ -179,7 +179,7 @@ $LF$, array of pointers to leafs of $T$ \
 
 ## Final $O(n\log n)$ algo
 
-{% include carousel.html height="100" unit="%" duration="3" number="2" %}
+{% include carousel.html height="57" unit="%" duration="3" number="2" %}
 <p align="center" width="100%">
     Figure 5 - Fast algorithm illustration
 </p>
