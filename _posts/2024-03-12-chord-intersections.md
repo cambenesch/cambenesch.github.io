@@ -151,7 +151,7 @@ Numeric chord label $i$ to close \
 Now that we can count a single chord's higher-numbered intersections in $O(\log n)$ time, we can do this for each chord to get an $O(n\log n)$ algorithm. Illustration in Fig 5, pseudocode below. 
 
 <p align="center" width="100%">
-    <br> Algorithm 3 - fast intersection counting**
+    <br> Algorithm 3 - fast intersection counting
 </p>
 **Input**: $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$, where $s_k,e_k$ are endpoint angles of chord $k$. \
 **Output**: $I$, the number of intersecting pairs of the given chords. 
