@@ -98,7 +98,7 @@ Refer to Fig 2. During our loop, first we come across chord 0, then chord 1, the
 
 ![video1](https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321)
 
-<video src="https://user-images.githubusercontent.com/169707/126715420-991ad821-9ac8-4b66-b79e-e0966e0f3a89.mp4" controls="controls" style="max-width: 730px;">
+<video src="https://github.com/cambenesch/cambenesch.github.io/assets/33947384/35971a3d-981c-465e-98a5-8c0d78c9e321" controls="controls" style="max-width: 730px;">
 </video>
 
 
