@@ -5,43 +5,43 @@ author: Cam Benesch
 meta: "Chicago"
 carousels:
   - images: 
-    - image: /assets/images/final_algo/foo.png
-    - image: /assets/images/final_algo/foo0.png
-    - image: /assets/images/final_algo/foo1.png
-    - image: /assets/images/final_algo/foo2.png
-    - image: /assets/images/final_algo/foo3.png
-    - image: /assets/images/final_algo/foo4.png
-    - image: /assets/images/final_algo/foo5.png
-    - image: /assets/images/final_algo/foo6.png
-    - image: /assets/images/final_algo/foo7.png
-    - image: /assets/images/final_algo/foo8.png
+    - image: /assets/images/chords/foo.png
+    - image: /assets/images/chords/foo0.png
+    - image: /assets/images/chords/foo1.png
+    - image: /assets/images/chords/foo2.png
+    - image: /assets/images/chords/foo3.png
+    - image: /assets/images/chords/foo4.png
+    - image: /assets/images/chords/foo5.png
+    - image: /assets/images/chords/foo6.png
+    - image: /assets/images/chords/foo7.png
+    - image: /assets/images/chords/foo8.png
   - images: 
-    - image: /assets/images/final_algo/Slide3.JPG
-    - image: /assets/images/final_algo/Slide4.JPG
-    - image: /assets/images/final_algo/Slide5.JPG
-    - image: /assets/images/final_algo/Slide6.JPG
-    - image: /assets/images/final_algo/Slide7.JPG
-    - image: /assets/images/final_algo/Slide8.JPG
-    - image: /assets/images/final_algo/Slide9.JPG
-    - image: /assets/images/final_algo/Slide10.JPG
-    - image: /assets/images/final_algo/Slide11.JPG
-    - image: /assets/images/final_algo/Slide12.JPG
-    - image: /assets/images/final_algo/Slide13.JPG
-    - image: /assets/images/final_algo/Slide14.JPG
-    - image: /assets/images/final_algo/Slide15.JPG
-    - image: /assets/images/final_algo/Slide16.JPG
-    - image: /assets/images/final_algo/Slide17.JPG
-    - image: /assets/images/final_algo/Slide18.JPG
-    - image: /assets/images/final_algo/Slide19.JPG
-    - image: /assets/images/final_algo/Slide20.JPG
-    - image: /assets/images/final_algo/Slide21.JPG
-    - image: /assets/images/final_algo/Slide22.JPG
-    - image: /assets/images/final_algo/Slide23.JPG
-    - image: /assets/images/final_algo/Slide24.JPG
-    - image: /assets/images/final_algo/Slide25.JPG
-    - image: /assets/images/final_algo/Slide26.JPG
-    - image: /assets/images/final_algo/Slide27.JPG
-    - image: /assets/images/final_algo/Slide28.JPG
+    - image: /assets/images/chords/Slide3.JPG
+    - image: /assets/images/chords/Slide4.JPG
+    - image: /assets/images/chords/Slide5.JPG
+    - image: /assets/images/chords/Slide6.JPG
+    - image: /assets/images/chords/Slide7.JPG
+    - image: /assets/images/chords/Slide8.JPG
+    - image: /assets/images/chords/Slide9.JPG
+    - image: /assets/images/chords/Slide10.JPG
+    - image: /assets/images/chords/Slide11.JPG
+    - image: /assets/images/chords/Slide12.JPG
+    - image: /assets/images/chords/Slide13.JPG
+    - image: /assets/images/chords/Slide14.JPG
+    - image: /assets/images/chords/Slide15.JPG
+    - image: /assets/images/chords/Slide16.JPG
+    - image: /assets/images/chords/Slide17.JPG
+    - image: /assets/images/chords/Slide18.JPG
+    - image: /assets/images/chords/Slide19.JPG
+    - image: /assets/images/chords/Slide20.JPG
+    - image: /assets/images/chords/Slide21.JPG
+    - image: /assets/images/chords/Slide22.JPG
+    - image: /assets/images/chords/Slide23.JPG
+    - image: /assets/images/chords/Slide24.JPG
+    - image: /assets/images/chords/Slide25.JPG
+    - image: /assets/images/chords/Slide26.JPG
+    - image: /assets/images/chords/Slide27.JPG
+    - image: /assets/images/chords/Slide28.JPG
 ---
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
@@ -53,7 +53,7 @@ Let's draw a few [chords](https://en.wikipedia.org/wiki/Chord_(geometry)) on a c
 As input we are given $n$ chords, $C=[(s_0,e_0),...,(s_{n-1},e_{n-1})]$. For simplicity, assume no endpoints are reused (see Fig 1). We'll discuss how to efficiently count the number $I$ of distinct pairs of intersecting chords. 
 
 <p align="center" width="100%">
-    <img width="100%" src="/assets/images/chord1.png"> <br>
+    <img width="100%" src="/assets/images/chords/chord1.png"> <br>
     Figure 1 - No shared endpoints
 </p>
 
@@ -66,8 +66,8 @@ As another preprocessing step, sort $C'$ in increasing order of starting angle $
 ## Example
 
 <p align="center" width="100%">
-    <img width="57%" src="/assets/images/chord4.gif"> 
-    <img width="42%" src="/assets/images/chord3.png"> 
+    <img width="57%" src="/assets/images/chords/chord4.gif"> 
+    <img width="42%" src="/assets/images/chords/chord3.png"> 
     <br>
     Figure 2 - Labeling the chords
 </p>
@@ -92,7 +92,7 @@ How can we determine whether chords $C_i"=(s_i,e_i)$ and $C_j"=(s_j,e_j)$ inters
 Remember that we sorted $C"$ by starting angle. So if $i<j$, then $s_i$ must be the minimum of $s_i,e_i,s_j,e_j$. From here, convince yourself that there are only 3 possible orderings: $s_i<s_j<e_i<e_j$, or $s_i<s_j<e_j<e_i$, or $s_i<e_i<s_j<e_j$. Of these orderings, as illustrated in Fig 3, only $s_i<s_j<e_i<e_j$ indicates an intersection between chords $i$ and $j$. 
 
 <p align="center" width="100%">
-    <img width="100%" src="/assets/images/chord2.png"> <br>
+    <img width="100%" src="/assets/images/chords/chord2.png"> <br>
     Figure 3 - Checking whether 2 chords intersect
 </p>
 
@@ -129,7 +129,7 @@ We'll try counting intersections via a single loop thru $P"$. As we loop through
 
 Refer to Fig 4. During our loop, first we come across chord 0, then chord 1, then chord 2 - all three of these chords are now open. Then we come across chord 0 again. This means the endpoints of chords 0 and 1 occur in the sequence $[0,1,0,1]$, as in Fig 3's left diagram. Therefore, chord 0 intersects chord 1. Likewise for chords 0 and 2. Every time we close chord $i$, if we know how many **higher-numbered** chords are open, say $o_i$, then there are simply $I=o_1+\cdots+o_n$ total intersections.
 
-{% include carousel.html height="50" unit="%" duration="3" number="1" %}
+{% include carousel.html height="100" unit="%" duration="3" number="1" %}
 <p align="center" width="100%">
     Figure 4 - Slow algorithm illustration
 </p>
@@ -179,7 +179,7 @@ $LF$, array of pointers to leafs of $T$ \
 
 ## Final $O(n\log n)$ algo
 
-{% include carousel.html height="50" unit="%" duration="3" number="2" %}
+{% include carousel.html height="100" unit="%" duration="3" number="2" %}
 <p align="center" width="100%">
     Figure 5 - Fast algorithm illustration
 </p>
