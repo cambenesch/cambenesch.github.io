@@ -36,6 +36,12 @@ carousels:
     - image: /assets/images/chords/Slide20.JPG
     - image: /assets/images/chords/Slide21.JPG
     - image: /assets/images/chords/Slide22.JPG
+    - image: /assets/images/chords/Slide23.JPG
+    - image: /assets/images/chords/Slide24.JPG
+    - image: /assets/images/chords/Slide25.JPG
+    - image: /assets/images/chords/Slide26.JPG
+    - image: /assets/images/chords/Slide27.JPG
+    - image: /assets/images/chords/Slide28.JPG
 ---
 
 This post is about a cool way to speed up an $O(n^2)$ algorithm to $O(n\log n)$ runtime using annotated trees. 15 minute read if you're familiar with binary trees, arrays, and big O notation. 
@@ -195,8 +201,8 @@ Initialize array $LF$ of length $n$\
 &emsp;Add a leaf to $T$ at depth $d$\
 &emsp;Leaf should be as far left as possible\
 &emsp;Set $LF[k]$ to point to the leaf\
-Set $P"$ to be an array of $2n$ chord labels, in order of appearance\
-&emsp;(this is the preprocessing of $C$ described above)
+Compute $P"$, an array of $2n$ chord labels\
+&emsp;(this is the preprocessing of $C$ [described above](# Sorted list of endpoint labels))
 \
 **for** $i=0,2n-1$ **do**\
 &emsp;Get next chord label $m=P"[i]$\
