@@ -7,7 +7,7 @@ meta: "Chicago"
 
 This is about the butterfly network topology. We'll walk through how it naturally arises in the FFT algorithm. Then I'll discuss some nice properties and use cases for butterfly networks. 
 
-# Topics
+## Topics
 1. [Motivation](#s1)
 2. [FFT example](#s2)
 3. [Butterfly network topology](#s3)
@@ -15,7 +15,7 @@ This is about the butterfly network topology. We'll walk through how it naturall
 
 <a name="s1"></a>
 
-# Motivation (polynomial multiplication)
+## Motivation (polynomial multiplication)
 Consider the problem of multiplying two polynomials \
 a(x)=∑_(i=0)^d〖a_i x^i 〗; b(x)=∑_(i=0)^d〖b_i x^i 〗\
 . The degree of a,b is just d – the largest power of x appearing in the polynomial. 
@@ -32,7 +32,7 @@ That’s exactly what we’ll try to do below. In particular, we’ll focus on c
 
 <a name="s2"></a>
 
-# Fast Fourier Transform
+## Fast Fourier Transform
 Let’s take a divide and conquer approach. Write a d-degree polynomial as the sum of two ≈d/2-degree polynomials. We can do this by grouping even and odd terms together.\
 a(x)=(a_0+a_2 x^2+⋯+a_(d-1) x^(d-1) )+x(a_1+a_3 x^2+⋯+a_d x^d )\
 Notice how we pulled the x out of the odd group, so that now each group only has even terms. This allows us to write a simple decomposition: \
@@ -63,7 +63,7 @@ A single evaluation a(x_i ) requires traversing a complete binary tree of sub-po
 
 <a name="s3"></a>
 
-# Butterfly network topology
+## Butterfly network topology
 
 Let’s take a closer look at these trees of polynomials. Each arrow in the diagram is a (direct) dependency. For instance, the vertical uppermost red arrow indicates that computing a(i) requires first computing a_+ (-1) and a_- (-1). To fully evaluate a(x_2), we only require the connections outlined in red. To fully evaluate all points, a(x_1),…,a(x_n), we require all of the red and blue connections. These connections form what’s called a butterfly network, simply because the two-node version looks like a butterfly. In Fig 2, you can see a butterfly at the bottom left, and another at the bottom right.
  
@@ -76,7 +76,7 @@ FFTs are important in computing – important enough that if necessary, butterfl
  
 <a name="s4"></a>
 
-# Properties and Applications
+## Properties and Applications
 
 Figure 3 - Butterfly network compared to other network topologies [4]
 
