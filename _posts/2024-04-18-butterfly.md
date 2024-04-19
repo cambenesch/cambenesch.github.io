@@ -7,6 +7,14 @@ meta: "Chicago"
 
 This is about the butterfly network topology. We'll walk through how it naturally arises in the FFT algorithm. Then I'll discuss some nice properties and use cases for butterfly networks. 
 
+# Topics
+1. [Motivation](#s1)
+2. [FFT example](#s2)
+3. [Butterfly network topology](#s3)
+4. [Properties and applications](#s4)
+
+<a name="s1"></a>
+
 # Motivation (polynomial multiplication)
 Consider the problem of multiplying two polynomials \
 a(x)=∑_(i=0)^d〖a_i x^i 〗; b(x)=∑_(i=0)^d〖b_i x^i 〗\
@@ -21,6 +29,8 @@ As an alternative specification, suppose we are given a selection of distinct po
 How does this help us? If we know a(x_1 ),b(x_1), clearly we also know C(x_1) by simply multiplying a(x_1 )⋅b(x_1). So if we manage to convert a,b from coefficient representation to evaluation representation, we can quickly compute C’s evaluation representation. Then, if we can convert the other way around – from C’s evaluation representation to C’s coefficient representation – we’re done! 
 
 That’s exactly what we’ll try to do below. In particular, we’ll focus on converting a from coefficient representation to evaluation representation. This conversion is a called Discrete Fourier Transform (DFT), and the Fast Fourier Transform (FFT) is an algorithm to do the conversion quickly. (The reverse conversion, and Inverse DFT, uses similar ideas, so we won’t discuss it here.) [1, 2]
+
+<a name="s2"></a>
 
 # Fast Fourier Transform
 Let’s take a divide and conquer approach. Write a d-degree polynomial as the sum of two ≈d/2-degree polynomials. We can do this by grouping even and odd terms together.\
@@ -51,6 +61,8 @@ a_+ (x_1^2 )=a_+ (x_3^2 );   a_+ (x_2^2 )=a_+ (x_4^2);   x_1 a_- (x_1^2 )=-x_3 a
 A single evaluation a(x_i ) requires traversing a complete binary tree of sub-polynomials. Likewise, evaluating a(x_1),…,a(x_n) involves traversing n of these complete binary trees. But the trees share nodes, and sometimes entire subtrees, in such a way that the entire transform can be computed in O(n log⁡n) time, which is fast. This concept is illustrated in the next section. 
 
 
+<a name="s3"></a>
+
 # Butterfly network topology
 
 Let’s take a closer look at these trees of polynomials. Each arrow in the diagram is a (direct) dependency. For instance, the vertical uppermost red arrow indicates that computing a(i) requires first computing a_+ (-1) and a_- (-1). To fully evaluate a(x_2), we only require the connections outlined in red. To fully evaluate all points, a(x_1),…,a(x_n), we require all of the red and blue connections. These connections form what’s called a butterfly network, simply because the two-node version looks like a butterfly. In Fig 2, you can see a butterfly at the bottom left, and another at the bottom right.
@@ -62,13 +74,16 @@ In theory, FFTs are trivial to parallelize. To compute an FFT with input size n 
 In practice, FFTs are often performed on huge images or complex audio signals, and the communication cost (i.e. transferring the stored solutions between processors) becomes prohibitively large. One obvious, but very involved, solution is to design your processor network in a way that reduces these costs. And in this case, the FFT algorithm readily illustrates its own ideal network topology. In Fig 2, the four boxes on top (the x_i to be evaluated) represent processors, and the other 8 boxes represent routers or switching nodes. And of course, the arrows represent wires. 
 FFTs are important in computing – important enough that if necessary, butterfly networks would surely be built for the sole purpose of computing FFTs. As it turns out, the butterfly topology has nice properties [3] that make it useful in other settings as well. 
  
+<a name="s4"></a>
+
+# Properties and Applications
+
 Figure 3 - Butterfly network compared to other network topologies [4]
 
 - A network’s diameter is the max number of switches between any two processors. In Fig 2, going from P1 (processor 1) to P3 takes requires passing through just 1 router. P1 to P2 passes through 3 routers, as does P1 to P4. In general, a butterfly network requires passing through no more than O(log_2⁡n) routers. 
 - A network’s bandwidth measures how many wires can be used before a bottleneck is  unavoidable. Butterfly networks have an extremely high bandwidth, as seen above. 
 - This speed and capacity comes at a cost. Butterfly networks are expensive to build, requiring more wires and routers than other network topologies.  
 
-# Applications
 
 In the polynomial example, we assumed that n was a power of two. In their FFT algorithm, Cookey and Tukey made a similar assumption. Several years before that, in 1958, Good and Thomas suggested a prime-factor FFT algorithm which worked only for prime factors [5]. Different FFT algorithms have emerged, and have been combined in different ways to support arbitrary n. One of the most popular libraries for FFT computation, FFTW [6], reflects this combined approach, but still runs more slowly if n has fewer factors. FFTW also contains OpenMP and MPI implementations, as well as optimizations for special cases of the FFT. 
 
