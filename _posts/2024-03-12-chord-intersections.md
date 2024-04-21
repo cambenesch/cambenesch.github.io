@@ -79,7 +79,7 @@ As another preprocessing step, sort $C'$ in increasing order of starting angle $
     <img width="57%" src="/assets/images/chords/chord4.gif"> 
     <img width="42%" src="/assets/images/chords/chord3.png"> 
     <br>
-    Figure 2 - Labeling the chords
+    Figure 2 - Labeling the chords (gif)
 </p>
 
 Fig 2 shows $n=4$ chords labeled 0 thru 3. There are ${4\choose 2} = 6$ pairs of distinct chords. $I=4$ of these pairs intersect: 0 & 1, 0 & 2, 1 & 2, and 2 & 3. Chords 0 & 3 and 1 & 3 do not intersect.
@@ -105,7 +105,7 @@ Remember that we sorted $C"$ by starting angle. So if $i<j$, then $s_i$ must be 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chords/chord2.png"> <br>
-    Figure 3 - Checking whether 2 chords intersect
+    Figure 3 - Checking whether 2 chords intersect (click arrow to fast forward)
 </p>
 
 <a name="s3"></a>
@@ -199,7 +199,7 @@ $LF$, array of pointers to leafs of $T$ \
 
 {% include carousel.html height="57" unit="%" duration="5" number="2" %}
 <p align="center" width="100%">
-    Figure 5 - Fast algorithm illustration
+    Figure 5 - Fast algorithm illustration (click arrow to fast forward)
 </p>
 
 Now that we can count a single chord's higher-numbered intersections in $O(\log n)$ time, we can do this for each chord to get an $O(n\log n)$ algorithm. Illustration in Fig 5, pseudocode below. 
