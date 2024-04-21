@@ -19,10 +19,9 @@ This is about the butterfly network topology. We'll walk through how it naturall
 Consider the problem of multiplying two polynomials \
 $a(x)=\sum_{i=0}^d a_ix^i; b(x)=\sum_{i=0}^d b_ix^i$ \
 . The degree of $a,b$ is just $d$ – the largest power of $x$ appearing in the polynomials. 
-In middle school, we learn a simple approach to multiplying these: \
+In middle school, we learn a simple $O(n^2 )$ double-summation approach to multiplying these: \
 $C(x)=a(x)b(x)=\sum_{i=0}^d \sum_{j=0}^d a_ib_jx^{i+j}$ \
-, a double summation which requires $O(n^2 )$ computations. \
- called the Fast Fourier Transform (FFT), we can compute $C(x)$ in $O(n \log ⁡n)$ time. Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying a via its coefficient representation $[a_0,…,a_d]$; likewise for $b$.
+To improve to $O(n \log ⁡n)$ time, we can use an algorithm called the Fast Fourier Transform (FFT). Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying a via its coefficient representation $[a_0,…,a_d]$; likewise for $b$.
 
 As an alternative specification, suppose we are given a selection of distinct points, $x_1,...,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values at any n distinct points. Hence, we can also fully specify $a$ via its evaluation representation $[a(x_1 ),…,a(x_n )]$. 
 
@@ -86,7 +85,7 @@ FFTs are important in computing – important enough that if necessary, butterfl
 ## Properties and Applications
 
 <p align="center" width="100%">
-    <img width="75%" src="/assets/images/butterfly/fig1.png"> <br>
+    <img width="75%" src="/assets/images/butterfly/fig3.png"> <br>
     <a href="https://ieeexplore.ieee.org/document/4815631"> Figure 3 - Butterfly network performance evaluation compared to other network topologies. </a>
 </p>
 
