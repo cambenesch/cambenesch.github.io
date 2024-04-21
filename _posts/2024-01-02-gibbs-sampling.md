@@ -23,11 +23,11 @@ distribution
 
 $$\\ 
 k_{X,Y}(x,y) \sim N\left( \begin{bmatrix}
-> 0 \\
-> 0
-> \end{bmatrix},\begin{bmatrix}
-> 1 & 0.5 \\
-> 0.5 & 1
+0 \\
+0
+\end{bmatrix},\begin{bmatrix}
+1 & 0.5 \\
+0.5 & 1
 \end{bmatrix} \right) 
 \\$$
 
@@ -39,9 +39,13 @@ $E\left\lbrack W(X,Y) \right\rbrack$?
 
 As a first attempt, we can use the law of the unconscious statistician:
 
-$$\\ E\left\lbrack W(X,Y) \right\rbrack = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} \\$$
+$$\\ 
+E\left\lbrack W(X,Y) \right\rbrack = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)} dx dy} 
+\\$$
 
-$$\\  = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}\frac{xy\sqrt{\log{(x + y)}}}{2\pi\sqrt{0.75}}\exp\left\lbrack - 2(x^{2} - xy + y^{2}) \right\rbrack dx\ dy} \\$$
+$$\\  
+= \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}\frac{xy\sqrt{\log{(x + y)}}}{2\pi\sqrt{0.75}}\exp\left\lbrack - 2(x^{2} - xy + y^{2}) \right\rbrack dx dy} 
+\\$$
 
 As we can see, this gets very messy. This density does not match that of any well-studied bivariate distribution, and even Wolfram times out when trying to compute it in closed form.
 
@@ -55,7 +59,9 @@ Clearly, once we have selected the sample, it is easy to estimate
 $E\left\lbrack W(X,Y) \right\rbrack$ by computing
 $W\left( X_{i},Y_{i} \right)$ for each draw in the sample, and averaging those results:
 
-$$\\ E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} = \frac{1}{n}\sum_{i = 1}^{n}{x_{i}y_{i}\sqrt{\log{(x_{i} + y_{i})}}} \\$$
+$$\\ 
+E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} = \frac{1}{n}\sum_{i = 1}^{n}{x_{i}y_{i}\sqrt{\log{(x_{i} + y_{i})}}} 
+\\$$
 
 From this example, it should be clear why sampling from a joint
 distribution can be useful.
@@ -140,7 +146,9 @@ $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$
 to be a random sample from $k_{X,Y}$. In fact, under reasonable
 conditions detailed by Roberts & Smith in [this paper](https://doi.org/10.1016/0304-4149(94)90134-1), as $n \rightarrow \infty$ it is guaranteed that
 
-$$\\ \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} \rightarrow \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} \\$$
+$$\\ 
+\frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} \rightarrow \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} 
+\\$$
 
 The speed of convergence depends on the sampler's *mixing time*, which is a term describing how large an $n$ is required for the sample's distribution to approach the true joint distribution $k$.
 
@@ -154,8 +162,8 @@ as our sample from $k$.
 
 (2) For $j \in \lbrack 1..m\rbrack$:
 
-> Sample $x_{i}^{(j)}$ from
-> $g_{j}\left( x^{(j)} \middle| x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
+    Sample $x_{i}^{(j)}$ from
+    $g_{j}\left( x^{(j)} \middle| x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
 
 (3) Record
     $\mathbf{x_i}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
@@ -170,16 +178,20 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x|\theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
-$$\\ k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta) \\$$
+$$\\
+k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta)
+\\$$
 
 which describes our belief about $\theta$'s distribution after observing $x$.
 
 Let's think about how we might justify using such a model, including justifying our choice of $h(\theta)$. Say we're heading to a new fishing spot, and we want to estimate $\theta$, the number of fish we'll catch in an hourlong fishing session. Given our skill level, the weather, the time of year, and the nature of the spot, there should be some true mean rate of fish caught. And given that rate, how long it takes to catch one fish shouldn't affect the time it takes to catch the next fish. Thus, even without prior data, it seems reasonable to say that $X \sim Poisson(\theta)$.
 
-But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta|\alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
-specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta|\alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
+But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta | \alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
+specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta | \alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
 
-$$\\ k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta) \\$$
+$$\\
+k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta) 
+\\$$
 
 To recap, we're starting with a prior distribution for $\alpha,\beta$.
 Then we observe $x$, and use it to estimate a posterior distribution for
@@ -188,19 +200,27 @@ which is what we originally wanted.
 
 As a more concrete example, from page 681 of [this textbook](https://minerva.it.manchester.ac.uk/~saralees/statbook2.pdf) by Hogg, suppose we set
 
-$$\\ g(\alpha,\beta) = \left\lbrack \ 1,\ \ \frac{\exp\left\lbrack {- (\beta\tau)}^{- 1} \right\rbrack}{\tau\beta^{2}} \right\rbrack = \lbrack 1,g(\beta)\rbrack \\$$
+$$\\ 
+g(\alpha,\beta) = \left\lbrack \ 1,\ \ \frac{\exp\left\lbrack {- (\beta\tau)}^{- 1} \right\rbrack}{\tau\beta^{2}} \right\rbrack = \lbrack 1,g(\beta)\rbrack 
+\\$$
 
 $g$ is a nonconstant function only of $\beta$, so our posterior
 simplifies to
 
-$$\\ k\left( \theta,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \beta \right)g(\beta) \\$$
+$$\\ 
+k\left( \theta,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \beta \right)g(\beta) 
+\\$$
 
 which is the product of a Poisson, Gamma, and Inverse-Gamma
 distribution. [One can show](https://minerva.it.manchester.ac.uk/~saralees/statbook2.pdf) that the conditionals are:
 
-$$\\ g_{1}\left( \theta \middle| \beta,x \right) \propto L\left( \mathbf{x} \middle| \theta \right)h\left( \theta \middle| \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right) \\$$
+$$\\ 
+g_{1}\left( \theta \middle| \beta,x \right) \propto L\left( \mathbf{x} \middle| \theta \right)h\left( \theta \middle| \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right) 
+\\$$
 
-$$\\ g_{2}\left( \beta \middle| x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \middle| \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right) \\$$
+$$\\ 
+g_{2}\left( \beta \middle| x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \middle| \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right) 
+\\$$
 
 We see that in this case, the multivariate posterior is difficult to
 represent and sample from, whereas each univariate conditional is easy
