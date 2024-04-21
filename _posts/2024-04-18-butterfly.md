@@ -52,7 +52,7 @@ Our goal in choosing x_i is to allow for reuse of polynomial evaluations. Consid
 One particular set of numbers with an abundance of these desirable properties is the $n^th$ roots of unity; that is, the complex numbers $z_1,…,z_n$ satisfying $z_i^n=1$. The first root of unity is 1. The second roots of unity are 1,-1. The fourth roots of unity are $1,i,-1,-i$. In general, the roots of unity are just $n$ equally spaced points on the complex unit circle, starting with 1, as illustrated in Fig 1. 
 
 <p align="center" width="100%">
-    <img width="100%" src="/assets/images/butterfly/fig3.png"> <br>
+    <img width="50%" src="/assets/images/butterfly/fig1.png"> <br>
     Figure 1 - 7th roots of unity on complex plane
 </p>
  
@@ -86,7 +86,7 @@ FFTs are important in computing – important enough that if necessary, butterfl
 ## Properties and Applications
 
 <p align="center" width="100%">
-    <img width="100%" src="/assets/images/butterfly/fig1.png"> <br>
+    <img width="75%" src="/assets/images/butterfly/fig1.png"> <br>
     <a href="https://ieeexplore.ieee.org/document/4815631"> Figure 3 - Butterfly network performance evaluation compared to other network topologies. </a>
 </p>
 
