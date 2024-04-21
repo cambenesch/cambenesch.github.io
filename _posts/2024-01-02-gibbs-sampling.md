@@ -176,7 +176,7 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 ## Application: Hierarchical Bayes
 
-Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x|\theta)$. Applying Bayes' theorem, we obtain a posterior distribution
+Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x | \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
 $$\\
 k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta)
@@ -265,7 +265,7 @@ sampling is quite low compared to the post-sample cost of estimation. This trade
 Another important property, encompassed by the [reasonable conditions](https://doi.org/10.1016/0304-4149(94)90134-1) mentioned above, is that for highly correlated
 $X^{(i)},X^{(j)}$, Gibbs sampling becomes very slow to converge. For
 instance, suppose $X^{(1)} = X^{(2)}$ always, so our sample space is
-$\Omega = \{(c,c)|c \in R\}$, and we initially set
+$\Omega = \\{(c,c) | c \in R \\}$, and we initially set
 $\left( x_{1}^{(1)},\ x_{1}^{(2)} \right) = (a,a)$. The conditional
 distribution is $g_{1}\left( x^{(1)} \middle| x_{1}^{(2)} \right) = a$,
 so our draw gives $x_{2}^{(1)} = a$. But we already had
