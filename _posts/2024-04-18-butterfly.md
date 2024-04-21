@@ -17,10 +17,10 @@ This is about the butterfly network topology. We'll walk through how it naturall
 
 ## Motivation (polynomial multiplication)
 Consider the problem of multiplying two polynomials \
-$a(x)=\sum_{i=0}^d a_ix^i; b(x)=\sum_{i=0}^d b_ix^i$ \
+$$a(x)=\sum_{i=0}^d a_ix^i; b(x)=\sum_{i=0}^d b_ix^i$$ 
 . The degree of $a,b$ is just $d$ – the largest power of $x$ appearing in the polynomials. 
 In middle school, we learn a simple $O(n^2 )$ double-summation approach to multiplying these: \
-$C(x)=a(x)b(x)=\sum_{i=0}^d \sum_{j=0}^d a_ib_jx^{i+j}$ \
+$$C(x)=a(x)b(x)=\sum_{i=0}^d \sum_{j=0}^d a_ib_jx^{i+j}$$ 
 To improve to $O(n \log ⁡n)$ time, we can use an algorithm called the Fast Fourier Transform (FFT). Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying a via its coefficient representation $[a_0,…,a_d]$; likewise for $b$.
 
 As an alternative specification, suppose we are given a selection of distinct points, $x_1,...,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values at any n distinct points. Hence, we can also fully specify $a$ via its evaluation representation $[a(x_1 ),…,a(x_n )]$. 
@@ -35,11 +35,12 @@ This example is based on [these great lecture notes](https://s3.amazonaws.com/co
 
 ## Fast Fourier Transform
 Let’s take a divide and conquer approach. Write a $d$-degree polynomial as the sum of two $\approx d/2$-degree polynomials. We can do this by grouping even and odd terms together.\
-$a(x)=[a_0+a_2 x^2+\cdots+a_{d-1} x^{d-1} ]$ $+x[a_1+a_3 x^2+\cdots+a_d x^{d-1} ]$\
+$$a(x)=[a_0+a_2 x^2+\cdots+a_{d-1} x^{d-1} ]$$
+$$+x[a_1+a_3 x^2+\cdots+a_d x^{d-1} ]$$
 Notice how we pulled the $x$ out of the odd group, so that now each group only has even terms. This allows us to write a simple decomposition: \
 $a(x)=a_+ (x^2 )+xa_- (x^2 )$, where \
-$a_+ (y)=a_0+a_2 y+⋯+a_{d-1} y^{(d-1)/2}$\
-$a_- (y)=a_1+a_3 y+⋯+a_d y^{(d-1)/2}$\
+$$a_+ (y)=a_0+a_2 y+⋯+a_{d-1} y^{(d-1)/2}$$
+$$a_- (y)=a_1+a_3 y+⋯+a_d y^{(d-1)/2}$$
 Then, in the spirit of divide and conquer, we can do this again with each of $a_+,a_-$, to get four polynomials, each of degree $\approx d/4$. 
 
 For instance, $a_{++}$ will contain the coefficients $a_i$ where $i$ is a multiple of 4; and $a_{-+}$ will contain coefficients where $i$ is 3 greater than a multiple of 4. We can keep doing this until each of our small polynomials consists of just one constant term $a_j$. 
@@ -56,7 +57,8 @@ One particular set of numbers with an abundance of these desirable properties is
 </p>
  
 Using these numbers makes it very easy to share sub-polynomial evaluations. For instance, as discussed above, in the n=4 case with $x_1=1,x_2=i,x_3=-1,x_4=-i$, we have \
-$a(n)=a_0+a_1 x+a_2 x^2+a_3 x^3$ $=a_+ (x^2 )+xa_- (x^2 )$
+$$a(n)=a_0+a_1 x+a_2 x^2+a_3 x^3$$
+$$=a_+ (x^2 )+xa_- (x^2 )$$
 
 Note that $i^2= (-i)^2=-1$ and $-1^2=1^2=1$. This makes things easier, since \
 $a_+ (x_1^2 )=a_+ (x_3^2 )$; $a_+ (x_2^2 )=a_+ (x_4^2)$; $x_1 a_- (x_1^2 )=-x_3 a_- (x_3^2 )$, etc. 
