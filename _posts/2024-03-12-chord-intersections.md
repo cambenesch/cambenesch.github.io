@@ -105,7 +105,7 @@ Remember that we sorted $C"$ by starting angle. So if $i<j$, then $s_i$ must be 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/chords/chord2.png"> <br>
-    Figure 3 - Checking whether 2 chords intersect (click arrow to fast forward)
+    Figure 3 - Checking whether 2 chords intersect
 </p>
 
 <a name="s3"></a>
@@ -147,7 +147,7 @@ Refer to Fig 4. During our loop, first we come across chord 0, then chord 1, the
 
 {% include carousel.html height="65" unit="%" duration="5" number="1" %}
 <p align="center" width="100%">
-    Figure 4 - Slow algorithm illustration
+    Figure 4 - Slow algorithm illustration (click arrow to fast forward)
 </p>
 
 The "higher-numbered" condition is crucial. Without it, we would count a false intersection between Chords 1 & 2, since 1 is still open when we close 2. With this method, checking each open chord takes $O(n)$ time (worst case). Clearly, doing so each time we close a chord just produces another $O(n^2)$ algorithm. Can we do better? In particular, when we close a chord, can we count how many **higher-numbered** chords are currently open in less than $O(n)$ time? 
