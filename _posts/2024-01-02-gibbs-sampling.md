@@ -7,16 +7,16 @@ meta: "Chicago"
 
 We'll give an overview of Gibbs sampling here, and point to some basic research regarding its practical use. Some background in probability is assumed.
 
-# History of the term
+## History of the term
 
 In 1868, while studying thermal properties of gases, physicist Ludwig Boltzmann discovered a probability distribution describing the state of a system of particles as a function of the system's energy and temperature. This distribution was further studied by physicist Josiah Gibbs in 1902, and today it's called the Gibbs distribution or the [Boltzmann distribution](https://en.wikipedia.org/wiki/Boltzmann_distribution). 
 
 Fast forward to 1984, when the German brothers and Stuart German (UMass Amherst) developed an algorithm with roots in statistical mechanics to recover degraded images. This algorithm required sampling from the Gibbs distribution, and to achieve this, the German brothers [developed and proved convergence](https://ieeexplore.ieee.org/document/4767596) of a sampling method which they coined the Gibbs
 sampler. While similar methods may have been used earlier, the Gibbs sampler was popularized by this paper, so the name stuck. Today, that paper remains fundamental and highly cited, and the Gibbs sampler is used more frequently than ever.
 
-# Description of Gibbs Sampling
+## Description of Gibbs Sampling
 
-### Motivation: sampling from a joint distribution
+#### Motivation: sampling from a joint distribution
 
 Suppose we have 2 random variables $X,Y$ with joint probability
 distribution
@@ -40,6 +40,7 @@ $E\left\lbrack W(X,Y) \right\rbrack$?
 As a first attempt, we can use the law of the unconscious statistician:
 
 $$\\ E\left\lbrack W(X,Y) \right\rbrack = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} \\$$
+
 $$\\  = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}\frac{xy\sqrt{\log{(x + y)}}}{2\pi\sqrt{0.75}}\exp\left\lbrack - 2(x^{2} - xy + y^{2}) \right\rbrack dx\ dy} \\$$
 
 As we can see, this gets very messy. This density does not match that of any well-studied bivariate distribution, and even Wolfram times out when trying to compute it in closed form.
@@ -59,7 +60,7 @@ $$\\ E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\le
 From this example, it should be clear why sampling from a joint
 distribution can be useful.
 
-### Example Gibbs sampling procedure
+#### Example Gibbs sampling procedure
 
 But how do we select the sample to begin with? In the univariate case, we can sample from a distribution directly by passing $Unif(0,1)$ samples through that distribution's inverse CDF. In the bivariate case, however, the inverse CDF would be a bijection from $\lbrack 0,1\rbrack \rightarrow R^{2}$, which may not exist.
 
@@ -94,7 +95,7 @@ At the end, we have a sample
 $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$
 from the joint distribution $k_{X,Y}$. This is Gibbs sampling!
 
-### Intuition
+#### Intuition
 
 Let's reflect on what we just did. To estimate a difficult-to-compute
 expectation, we wanted to sample from a bivariate normal distribution
@@ -143,7 +144,7 @@ $$\\ \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} \rightarrow \int_{
 
 The speed of convergence depends on the sampler's *mixing time*, which is a term describing how large an $n$ is required for the sample's distribution to approach the true joint distribution $k$.
 
-### Definition
+#### Definition
 
 Rather than just $X,Y$, let's generalize to more than 2 variables. Call them $X^{(1)},\ldots,X^{(m)}$, with joint pdf
 $k\left( x^{(1)},\ldots,x^{(m)} \right)$, joint sample space $\Omega$, and conditionals $g_{j}\left( x^{(j)} \middle| x^{(l \neq j)} \right)$. As before, suppose we cannot sample from $k$, but we can sample from each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs sampling is the following procedure, which generates $\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$, where $\mathbf{X_i}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
@@ -165,7 +166,7 @@ as our sample from $k$.
 This is very similar to our 2 variable procedure. One difference is that here, we are first fixing $\mathbf{x_1}$ as a full draw from the joint distribution. In contrast, for our 2 variable case, we only required choosing $x_{1}$ (as opposed to $(x_{1},y_{1})$), and we did one preliminary conditional sample to choose $y_{1}$. This difference is unimportant, as we will soon see. The important thing to note is that each conditional draw in Step (2) conditions on the *most recent* value of each $x^{(l \neq j)}$. If $x_{i}^{(l)}$ has already been computed,
 then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
-# Application: Hierarchical Bayes
+## Application: Hierarchical Bayes
 
 Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x|\theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
@@ -209,7 +210,7 @@ would begin by setting some initial $\theta_{1} > 0$, sampling
 $\beta_{1}$ from $g_{2}(\beta|x,\theta)$, and sampling $\theta_{2}$ from
 $g_{1}(\theta|\beta_{1},x)$.
 
-# Relevant research
+## Relevant research
 
 One important property of our sample
 $\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$
