@@ -21,13 +21,15 @@ sampler. While similar methods may have been used earlier, the Gibbs sampler was
 Suppose we have 2 random variables $X,Y$ with joint probability
 distribution
 
-> $$k_{X,Y}(x,y) \sim N\left( \begin{bmatrix}
+$$\\ 
+k_{X,Y}(x,y) \sim N\left( \begin{bmatrix}
 > 0 \\
 > 0
 > \end{bmatrix},\begin{bmatrix}
 > 1 & 0.5 \\
 > 0.5 & 1
-> \end{bmatrix} \right)$$
+\end{bmatrix} \right) 
+\\$$
 
 which is the [standard bivariate normal distribution](https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php) with
 correlation coefficient $ \rho = \frac{1}{2} $.
@@ -37,7 +39,8 @@ $E\left\lbrack W(X,Y) \right\rbrack$?
 
 As a first attempt, we can use the law of the unconscious statistician:
 
-$$E\left\lbrack W(X,Y) \right\rbrack = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}\frac{xy\sqrt{\log{(x + y)}}}{2\pi\sqrt{0.75}}\exp\left\lbrack - 2(x^{2} - xy + y^{2}) \right\rbrack dx\ dy}$$
+$$\\ E\left\lbrack W(X,Y) \right\rbrack = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} \\$$
+$$\\  = \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}\frac{xy\sqrt{\log{(x + y)}}}{2\pi\sqrt{0.75}}\exp\left\lbrack - 2(x^{2} - xy + y^{2}) \right\rbrack dx\ dy} \\$$
 
 As we can see, this gets very messy. This density does not match that of any well-studied bivariate distribution, and even Wolfram times out when trying to compute it in closed form.
 
@@ -51,7 +54,7 @@ Clearly, once we have selected the sample, it is easy to estimate
 $E\left\lbrack W(X,Y) \right\rbrack$ by computing
 $W\left( X_{i},Y_{i} \right)$ for each draw in the sample, and averaging those results:
 
-$$E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} = \frac{1}{n}\sum_{i = 1}^{n}{x_{i}y_{i}\sqrt{\log{(x_{i} + y_{i})}}}$$
+$$\\ E\left\lbrack W(X,Y) \right\rbrack \approx \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} = \frac{1}{n}\sum_{i = 1}^{n}{x_{i}y_{i}\sqrt{\log{(x_{i} + y_{i})}}} \\$$
 
 From this example, it should be clear why sampling from a joint
 distribution can be useful.
@@ -136,7 +139,7 @@ $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$
 to be a random sample from $k_{X,Y}$. In fact, under reasonable
 conditions detailed by Roberts & Smith in [this paper](https://doi.org/10.1016/0304-4149(94)90134-1), as $n \rightarrow \infty$ it is guaranteed that
 
-$$\frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} \rightarrow \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy}$$
+$$\\ \frac{1}{n}\sum_{i = 1}^{n}{W\left( X_{i},Y_{i} \right)} \rightarrow \int_{- \infty}^{\infty}{\int_{- \infty}^{\infty}{k(x,y)W(x,y)}dx\ dy} \\$$
 
 The speed of convergence depends on the sampler's *mixing time*, which is a term describing how large an $n$ is required for the sample's distribution to approach the true joint distribution $k$.
 
@@ -166,7 +169,7 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x|\theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
-$$k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta)$$
+$$\\ k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta) \\$$
 
 which describes our belief about $\theta$'s distribution after observing $x$.
 
@@ -175,7 +178,7 @@ Let's think about how we might justify using such a model, including justifying 
 But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta|\alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
 specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta|\alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
 
-$$k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta)$$
+$$\\ k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta) \\$$
 
 To recap, we're starting with a prior distribution for $\alpha,\beta$.
 Then we observe $x$, and use it to estimate a posterior distribution for
@@ -184,19 +187,19 @@ which is what we originally wanted.
 
 As a more concrete example, from page 681 of [this textbook](https://minerva.it.manchester.ac.uk/~saralees/statbook2.pdf) by Hogg, suppose we set
 
-$$g(\alpha,\beta) = \left\lbrack \ 1,\ \ \frac{\exp\left\lbrack {- (\beta\tau)}^{- 1} \right\rbrack}{\tau\beta^{2}} \right\rbrack = \lbrack 1,g(\beta)\rbrack$$
+$$\\ g(\alpha,\beta) = \left\lbrack \ 1,\ \ \frac{\exp\left\lbrack {- (\beta\tau)}^{- 1} \right\rbrack}{\tau\beta^{2}} \right\rbrack = \lbrack 1,g(\beta)\rbrack \\$$
 
 $g$ is a nonconstant function only of $\beta$, so our posterior
 simplifies to
 
-$$k\left( \theta,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \beta \right)g(\beta)$$
+$$\\ k\left( \theta,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \beta \right)g(\beta) \\$$
 
 which is the product of a Poisson, Gamma, and Inverse-Gamma
 distribution. [One can show](https://minerva.it.manchester.ac.uk/~saralees/statbook2.pdf) that the conditionals are:
 
-$$g_{1}\left( \theta \middle| \beta,x \right) \propto L\left( \mathbf{x} \middle| \theta \right)h\left( \theta \middle| \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right)$$
+$$\\ g_{1}\left( \theta \middle| \beta,x \right) \propto L\left( \mathbf{x} \middle| \theta \right)h\left( \theta \middle| \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right) \\$$
 
-$$g_{2}\left( \beta \middle| x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \middle| \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right)$$
+$$\\ g_{2}\left( \beta \middle| x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \middle| \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right) \\$$
 
 We see that in this case, the multivariate posterior is difficult to
 represent and sample from, whereas each univariate conditional is easy
@@ -255,24 +258,14 @@ converge to the true joint distribution $k$. Gibbs sampling reduces a
 multivariate problem to a series of univariate problems, but in some
 cases this is an oversimplification.
 
-In our definition of the Gibbs sampler, we repeatedly sample the
-conditionals in a fixed order, which is referred to as *systematic
-scan*. Clearly, changing the scan order can affect the path of the
-Markov chain, thus producing a different sample. It is natural to ask
-how big that effect can be, and *He et al* [explored that
+In our definition of the Gibbs sampler, we repeatedly sample the conditionals in a fixed order, which is referred to as *systematic scan*. Clearly, changing the scan order can affect the path of the Markov chain, thus producing a different sample. It is natural to ask how big that effect can be, and *He et al* [explored that
 question](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064). In particular, they compared systematic scan to *random scan*, in which the order of conditionals for the entire sample is a sequence of iid variable choices. For instance, systematic scan with two variables $m = 2$ and sample size $n = 3$ yields either $(x_{1},x_{2},x_{1},x_{2},x_{1},x_{2})$ or $(x_{2},x_{1},x_{2},x_{1},x_{2},x_{1})$ as the scan order. On the other hand, random scan could yield a scan order of $(x_{2},x_{1},x_{2},x_{2},x_{2},x_{1})$; each conditional need not be sampled exactly $n$ times. Additionally, *He et al* frequently refer to a *best systematic scan*, and a *worst systematic scan*, which are intuitively the systematic scan orders yielding the minimum and maximum mixing times.
 
-It was previously conjectured that these three scans (best systematic, worst systematic, and random) could not differ in mixing time by more than a constant factor. This paper constructed specific counterexamples, and proved that mixing time could in fact differ by up to a polynomial factor. In the table below, note that the two islands model (data is divided into two clusters) mixes exponentially slowly. One can think of
-it as a nearly-reducible Markov chain.
+It was previously conjectured that these three scans (best systematic, worst systematic, and random) could not differ in mixing time by more than a constant factor. This paper constructed specific counterexamples, and proved that mixing time could in fact differ by up to a polynomial factor. In the table below, note that the two islands model (data is divided into two clusters) mixes exponentially slowly. One can think of it as a nearly-reducible Markov chain.
 
 <p align="center" width="100%">
     <img width="70%" src="/assets/images/gibbs3.png"> <br>
 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5361064"> Figure 3</a>
 </p>
 
-These relatively new findings have immense practical implications. In
-practice, Gibbs sampling may not be appropriate for certain datasets.
-And even when it is, quality of results may depend heavily on scan
-order. How to choose a good scan order is a topic for future research.
-Regardless, great care must be taken to verify whether an implementation
-of Gibbs sampling is appropriate for sampling from a particular $k$.
+These relatively new findings have immense practical implications. In practice, Gibbs sampling may not be appropriate for certain datasets. And even when it is, quality of results may depend heavily on scan order. How to choose a good scan order is a topic for future research. Regardless, great care must be taken to verify whether an implementation of Gibbs sampling is appropriate for sampling from a particular $k$.
