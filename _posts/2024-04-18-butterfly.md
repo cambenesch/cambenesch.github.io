@@ -87,7 +87,7 @@ FFTs are important in computing – important enough that if necessary, butterfl
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/butterfly/fig1.png"> <br>
-    Figure 3 - Butterfly network <a href="https://ieeexplore.ieee.org/document/4815631"> performance evaluation</a> compared to other network topologies. [has nice properties](https://en.wikipedia.org/wiki/Butterfly_network#Butterfly_network_parameters) 
+    <a href="https://ieeexplore.ieee.org/document/4815631"> Figure 3 - Butterfly network performance evaluation compared to other network topologies. </a>
 </p>
 
 - A network’s diameter is the max number of switches between any two processors. In Fig 2, going from P1 (processor 1) to P3 takes requires passing through just 1 router. P1 to P2 passes through 3 routers, as does P1 to P4. In general, a butterfly network requires passing through no more than $O(\log ⁡n) $ routers. 
