@@ -24,7 +24,7 @@ $C(x)=a(x)b(x)=\sum_{i=0}^d \sum_{j=0}^d a_ib_jx^{i+j}$ \
 , a double summation which requires $O(n^2 )$ computations. \
  called the Fast Fourier Transform (FFT), we can compute $C(x)$ in $O(n \log ⁡n)$ time. Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying a via its coefficient representation $[a_0,…,a_d]$; likewise for $b$.
 
-As an alternative specification, suppose we are given a selection of distinct points, $x_1,\cdots,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values at any n distinct points. Hence, we can also fully specify $a$ via its evaluation representation $[a(x_1 ),…,a(x_n )]$. 
+As an alternative specification, suppose we are given a selection of distinct points, $x_1,...,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values at any n distinct points. Hence, we can also fully specify $a$ via its evaluation representation $[a(x_1 ),…,a(x_n )]$. 
 
 How does this help us? If we know $a(x_1 ),b(x_1)$, clearly we also know $C(x_1)$ by simply multiplying $a(x_1) \cdot b(x_1)$. So if we manage to convert $a,b$ from coefficient representation to evaluation representation, we can quickly compute $C$’s evaluation representation. Then, if we can convert the other way around – from $C$’s evaluation representation to $C$’s coefficient representation – we’re done! 
 
@@ -35,21 +35,21 @@ This example is based on [these great lecture notes](https://s3.amazonaws.com/co
 <a name="s2"></a>
 
 ## Fast Fourier Transform
-Let’s take a divide and conquer approach. Write a d-degree polynomial as the sum of two $\approx d/2$-degree polynomials. We can do this by grouping even and odd terms together.\
-$a(x)=[a_0+a_2 x^2+\cdots+a_(d-1) x^(d-1) ]$ $+x[a_1+a_3 x^2+\cdots+a_d x^d ]$\
-Notice how we pulled the x out of the odd group, so that now each group only has even terms. This allows us to write a simple decomposition: \
+Let’s take a divide and conquer approach. Write a $d$-degree polynomial as the sum of two $\approx d/2$-degree polynomials. We can do this by grouping even and odd terms together.\
+$a(x)=[a_0+a_2 x^2+\cdots+a_{d-1} x^{d-1} ]$ $+x[a_1+a_3 x^2+\cdots+a_d x^{d-1} ]$\
+Notice how we pulled the $x$ out of the odd group, so that now each group only has even terms. This allows us to write a simple decomposition: \
 $a(x)=a_+ (x^2 )+xa_- (x^2 )$, where \
-$a_+ (y)=a_0+a_2 y+⋯+a_(d-1) y^((d-1)/2)$\
-$a_- (y)=a_1+a_3 y+⋯+a_d y^(d/2)$\
+$a_+ (y)=a_0+a_2 y+⋯+a_{d-1} y^{(d-1)/2}$\
+$a_- (y)=a_1+a_3 y+⋯+a_d y^{(d-1)/2}$\
 Then, in the spirit of divide and conquer, we can do this again with each of $a_+,a_-$, to get four polynomials, each of degree $\approx d/4$. 
 
-For instance, $a_{++}$ will contain the coefficients $a_i$ where $i$ is a multiple of 4; and $a_(-+)$ will contain coefficients where $i$ is 3 greater than a multiple of 4. We can keep doing this until each of our small polynomials consists of just one constant term $a_j$. 
+For instance, $a_{++}$ will contain the coefficients $a_i$ where $i$ is a multiple of 4; and $a_{-+}$ will contain coefficients where $i$ is 3 greater than a multiple of 4. We can keep doing this until each of our small polynomials consists of just one constant term $a_j$. 
 
-How long will this take? Well, all we’ve done here is just turned a degree-$$ polynomial into $d+1$ degree-1 polynomials. Evaluating a single $a(x_i)$ will still take $O(n)$ time, and evaluating $a(x_1 ),…,a(x_n)$ still takes $O(n^2 )$ time. We’ll have to make further improvements, which we can do by carefully choosing the $x_1,...,x_n$. 
+How long will it take? Well, all we’ve done here is just turned a degree-$d$ polynomial into $d+1$ degree-1 polynomials. Evaluating a single $a(x_i)$ will still take $O(n)$ time, and evaluating $a(x_1 ),…,a(x_n)$ still takes $O(n^2 )$ time. We’ll have to make further improvements, which we can do by carefully choosing the $x_1,...,x_n$. 
 
 Our goal in choosing x_i is to allow for reuse of polynomial evaluations. Consider $a_+ (x^2 )$ and $a_- (x^2 )$. If we choose $x_1=1,x_2=-1$, then clearly $x_1^2=x_2^2$ and $a_+ (x_1^2 )=a_+ (x_2^2 )$. As one guideline, for every $x_i$, we should also choose $-x_i$ to be in our set of points. Also apparent from above: we can save an evaluation if both $x_i$ and $x_i^2$ are in our set of points. 
 
-One particular set of numbers that is rife with these desirable properties is the $n^th$ roots of unity; that is, the complex numbers $z_1,…,z_n$ satisfying $z_i^n=1$. The first root of unity is 1. The second roots of unity are 1,-1. The fourth roots of unity are $1,i,-1,-i$. In general, the roots of unity are just $n$ equally spaced points on the complex unit circle, starting with 1, as illustrated in Fig 1. 
+One particular set of numbers with an abundance of these desirable properties is the $n^th$ roots of unity; that is, the complex numbers $z_1,…,z_n$ satisfying $z_i^n=1$. The first root of unity is 1. The second roots of unity are 1,-1. The fourth roots of unity are $1,i,-1,-i$. In general, the roots of unity are just $n$ equally spaced points on the complex unit circle, starting with 1, as illustrated in Fig 1. 
 
 <p align="center" width="100%">
     <img width="100%" src="/assets/images/butterfly/fig3.png"> <br>
