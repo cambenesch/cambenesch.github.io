@@ -102,7 +102,7 @@ $g_{Y|X}$ were both univariate normal, and were easy to sample from.
 
 <p align="center" width="100%">
     <img width="60%" src="/assets/images/gibbs1.png"> <br>
-    <a href="https://ieeexplore.ieee.org/document/4815631"> Figure 1</a>
+    <a href="https://www.researchgate.net/figure/Linking-two-points-using-a-bivariate-Gaussian-distribution-enables-the-conditional-pdf_fig1_318429539"> Figure 1</a>
 </p>
 
 So we chose a starting value $x_{1}$ (We didn't specify how that
