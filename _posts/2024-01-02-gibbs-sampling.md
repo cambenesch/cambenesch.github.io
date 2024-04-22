@@ -176,6 +176,8 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 ## Application: Hierarchical Bayes
 
+f
+
 Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x \middle| \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
 $$\\
