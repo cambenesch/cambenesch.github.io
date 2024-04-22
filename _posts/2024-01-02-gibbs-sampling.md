@@ -162,8 +162,8 @@ as our sample from $k$.
 
 (2) For $j \in \lbrack 1..m\rbrack$:
 
-    Sample $x_{i}^{(j)}$ from
-    $g_{j}\left( x^{(j)} \vert x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
+Sample $x_{i}^{(j)}$ from
+$g_{j}\left( x^{(j)} \vert x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
 
 (3) Record
     $\mathbf{x_i}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
