@@ -74,16 +74,16 @@ Fortunately, we have tools available for sampling from bivariate normal distribu
 
 [We know](https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php) that the conditional distributions of a bivariate normal are each univariate normal:
 
-$g_{Y|X}\left( y \middle| X = x \right) \sim N\left( \rho x,1 - \rho^{2} \right)$
+$g_{Y|X}\left( y \vert X = x \right) \sim N\left( \rho x,1 - \rho^{2} \right)$
 and
-$g_{X|Y}\left( x \middle| Y = y \right) \sim N\left( \rho y,1 - \rho^{2} \right)$.
+$g_{X|Y}\left( x \vert Y = y \right) \sim N\left( \rho y,1 - \rho^{2} \right)$.
 
 Thus, given an $x_{1}$, we can then sample $y_{1}$ from
-$g_{Y|X}\left( y \middle| X = x_{1} \right)$, and together the pair
+$g_{Y|X}\left( y \vert X = x_{1} \right)$, and together the pair
 $(x_{1},y_{1})$ will form a draw from $k_{X,Y}$, which was our stated
 goal. And this argument is symmetrical in $x$ and $y$; we could also
 start with $y_{1}$ and sample from
-$g_{X|Y}\left( x \middle| Y = y_{1} \right)$. Thus, we have the
+$g_{X|Y}\left( x \vert Y = y_{1} \right)$. Thus, we have the
 following procedure for sampling from $k_{X,Y}$, i.e. for generating
 $\lbrack\left( X_{1},Y_{1} \right),\ldots,\left( X_{n},Y_{n} \right)\rbrack$:
 
@@ -118,7 +118,7 @@ $g_{Y|X}$ were both univariate normal, and were easy to sample from.
 So we chose a starting value $x_{1}$ (We didn't specify how that
 starting value was chosen -- we'll discuss that later.) Then we computed
 the conditional probability of $y$ given $x_{1}$. For instance,
-$g_{Y|X}\left( y \middle| X = x_{1} \right)$ is the univariate normal
+$g_{Y|X}\left( y \vert X = x_{1} \right)$ is the univariate normal
 distribution shown by the red line in Figure 1. We then sampled $y_{1}$
 from that conditional, thus establishing $(x_{1},y_{1})$ (indicated by
 the green dot) as our first draw from $k_{X,Y}$.
@@ -128,10 +128,10 @@ with the green dot still representing $(x_{1},y_{1})$. Note that the
 green dot's horizontal position in Figure 2 was already established by
 our initial choice $x_{1}$, and its vertical position $y_{1}$ was
 established by sampling from
-$g_{Y|X}\left( y \middle| X = x_{1} \right)$. To compute our second draw
+$g_{Y|X}\left( y \vert X = x_{1} \right)$. To compute our second draw
 $(x_{2},y_{2})$, we first take a horizontal step by sampling from
-$g_{X|Y}\left( x \middle| Y = y_{1} \right)$. Then we take a vertical
-step by sampling from $g_{Y|X}\left( y \middle| X = x_{2} \right)$.
+$g_{X|Y}\left( x \vert Y = y_{1} \right)$. Then we take a vertical
+step by sampling from $g_{Y|X}\left( y \vert X = x_{2} \right)$.
 Following the black arrows, we now have $(x_{2},y_{2})$ as our next draw
 from $k_{X,Y}$!
 
@@ -155,7 +155,7 @@ The speed of convergence depends on the sampler's *mixing time*, which is a term
 #### Definition
 
 Rather than just $X,Y$, let's generalize to more than 2 variables. Call them $X^{(1)},\ldots,X^{(m)}$, with joint pdf
-$k\left( x^{(1)},\ldots,x^{(m)} \right)$, joint sample space $\Omega$, and conditionals $g_{j}\left( x^{(j)} \middle| x^{(l \neq j)} \right)$. As before, suppose we cannot sample from $k$, but we can sample from each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs sampling is the following procedure, which generates $\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$, where $\mathbf{X_i}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
+$k\left( x^{(1)},\ldots,x^{(m)} \right)$, joint sample space $\Omega$, and conditionals $g_{j}\left( x^{(j)} \vert x^{(l \neq j)} \right)$. As before, suppose we cannot sample from $k$, but we can sample from each of the conditioanls $g_{1},\ldots,g_{m}$. In this case, Gibbs sampling is the following procedure, which generates $\left\lbrack \mathbf{X_1},\ldots,\mathbf{X_n} \right\rbrack$, where $\mathbf{X_i}\mathbf{=}\left( X_{i}^{(1)},\ldots,X_{i}^{(m)} \right),$
 as our sample from $k$.
 
 (1) Choose $\mathbf{x_1}\mathbf{\in}\Omega$, and set $i = 2$.
@@ -163,7 +163,7 @@ as our sample from $k$.
 (2) For $j \in \lbrack 1..m\rbrack$:
 
     Sample $x_{i}^{(j)}$ from
-    $g_{j}\left( x^{(j)} \middle| x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
+    $g_{j}\left( x^{(j)} \vert x_{i}^{(1)},\ldots,x_{i}^{(j - 1)},x_{i - 1}^{(j + 1)},\ldots,x_{i - 1}^{(m)} \right)$
 
 (3) Record
     $\mathbf{x_i}\mathbf{=}\left( x_{i}^{(1)},\ldots,x_{i}^{(m)} \right)$,
@@ -176,23 +176,23 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 ## Application: Hierarchical Bayes
 
-f
+g
 
-Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x \middle| \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
+Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x \vert \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
 $$\\
-k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta)
+k\left( \theta \vert \mathbf{x} \right) \propto h(\theta)f(x|\theta)
 \\$$
 
 which describes our belief about $\theta$'s distribution after observing $x$.
 
 Let's think about how we might justify using such a model, including justifying our choice of $h(\theta)$. Say we're heading to a new fishing spot, and we want to estimate $\theta$, the number of fish we'll catch in an hourlong fishing session. Given our skill level, the weather, the time of year, and the nature of the spot, there should be some true mean rate of fish caught. And given that rate, how long it takes to catch one fish shouldn't affect the time it takes to catch the next fish. Thus, even without prior data, it seems reasonable to say that $X \sim Poisson(\theta)$.
 
-But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta \middle| \alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
-specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta \middle| \alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
+But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta \vert \alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
+specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta \vert \alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
 
 $$\\
-k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta) 
+k\left( \theta,\alpha,\beta \vert x \right) \propto f\left( x \vert \theta \right)h\left( \theta \vert \alpha,\beta \right)g(\alpha,\beta) 
 \\$$
 
 To recap, we're starting with a prior distribution for $\alpha,\beta$.
@@ -210,18 +210,18 @@ $g$ is a nonconstant function only of $\beta$, so our posterior
 simplifies to
 
 $$\\ 
-k\left( \theta,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \beta \right)g(\beta) 
+k\left( \theta,\beta \vert x \right) \propto f\left( x \vert \theta \right)h\left( \theta \vert \beta \right)g(\beta) 
 \\$$
 
 which is the product of a Poisson, Gamma, and Inverse-Gamma
 distribution. [One can show](https://minerva.it.manchester.ac.uk/~saralees/statbook2.pdf) that the conditionals are:
 
 $$\\ 
-g_{1}\left( \theta \middle| \beta,x \right) \propto L\left( \mathbf{x} \middle| \theta \right)h\left( \theta \middle| \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right) 
+g_{1}\left( \theta \vert \beta,x \right) \propto L\left( \mathbf{x} \vert \theta \right)h\left( \theta \vert \beta \right) \sim Gamma\left( x + 1,\frac{\beta}{\beta + 1} \right) 
 \\$$
 
 $$\\ 
-g_{2}\left( \beta \middle| x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \middle| \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right) 
+g_{2}\left( \beta \vert x\mathbf{,\theta} \right) \propto g(\beta)h\left( \theta \vert \beta \right) \sim InverseGamma\left( 2,\frac{\tau}{\theta\tau + 1} \right) 
 \\$$
 
 We see that in this case, the multivariate posterior is difficult to
@@ -267,9 +267,9 @@ sampling is quite low compared to the post-sample cost of estimation. This trade
 Another important property, encompassed by the [reasonable conditions](https://doi.org/10.1016/0304-4149(94)90134-1) mentioned above, is that for highly correlated
 $X^{(i)},X^{(j)}$, Gibbs sampling becomes very slow to converge. For
 instance, suppose $X^{(1)} = X^{(2)}$ always, so our sample space is
-$\Omega = \\{(c,c) \middle| c \in R \\}$, and we initially set
+$\Omega = \\{(c,c) \vert c \in R \\}$, and we initially set
 $\left( x_{1}^{(1)},\ x_{1}^{(2)} \right) = (a,a)$. The conditional
-distribution is $g_{1}\left( x^{(1)} \middle| x_{1}^{(2)} \right) = a$,
+distribution is $g_{1}\left( x^{(1)} \vert x_{1}^{(2)} \right) = a$,
 so our draw gives $x_{2}^{(1)} = a$. But we already had
 $x_{1}^{(1)} = a$!
 
