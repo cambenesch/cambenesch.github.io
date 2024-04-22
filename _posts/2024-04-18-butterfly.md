@@ -20,25 +20,25 @@ Consider the problem of multiplying two polynomials
 
 $$\\ a(x)=\sum_{i=0}^d a_ix^i; b(x)=\sum_{i=0}^d b_ix^i \\$$ 
 
-. The degree of $a,b$ is just $d$ – the largest power of $x$ appearing in the polynomials. 
+. The **degree** of $a,b$ is just $d$ – the largest power of $x$ appearing in the polynomials. 
 In middle school, we learn a simple $O(n^2 )$ double-summation approach to multiplying these: 
 
 $$\\ C(x)=a(x)b(x)=\sum_{i=0}^d \sum_{j=0}^d a_ib_jx^{i+j} \\$$
 
-To improve to $O(n \log ⁡n)$ time, we can use an algorithm called the Fast Fourier Transform (FFT). Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying a via its coefficient representation $[a_0,…,a_d]$; likewise for $b$.
+We'll try to improve to $O(n \log ⁡n)$ time. Assume for simplicity that $n=d+1$ is a power of 2. Let’s consider how we are representing the polynomials $a,b$. We’re currently specifying $a$ via its **coefficient representation** $[a_0,…,a_d]$; likewise for $b$.
 
-As an alternative specification, suppose we are given a selection of distinct points, $x_1,...,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values at any n distinct points. Hence, we can also fully specify $a$ via its evaluation representation $[a(x_1 ),…,a(x_n )]$. 
+As an alternative specification, suppose we are given a selection of distinct points, $x_1,...,x_n$, at which $a(x),b(x)$ are evaluated. From algebra, we know that a polynomial can also be fully specified by its values $n$ distinct points. Hence, we can also fully specify $a$ via its **evaluation representation** $[a(x_1 ),…,a(x_n )]$. 
 
 How does this help us? If we know $a(x_1 ),b(x_1)$, clearly we also know $C(x_1)$ by simply multiplying $a(x_1) \cdot b(x_1)$. So if we manage to convert $a,b$ from coefficient representation to evaluation representation, we can quickly compute $C$’s evaluation representation. Then, if we can convert the other way around – from $C$’s evaluation representation to $C$’s coefficient representation – we’re done! 
 
-That’s exactly what we’ll try to do below. In particular, we’ll focus on converting a from coefficient representation to evaluation representation. This conversion is a called Discrete Fourier Transform (DFT), and the Fast Fourier Transform (FFT) is an algorithm to do the conversion quickly. (The reverse conversion, and Inverse DFT, uses similar ideas, so we won’t discuss it here.) 
+That’s exactly what we’ll try to do below. In particular, we’ll focus on converting $a$ from coefficient representation to evaluation representation. This conversion is a called **Discrete Fourier Transform (DFT)**, and the **Fast Fourier Transform (FFT)** is an algorithm to do the conversion quickly. (The reverse conversion, and Inverse DFT, uses similar ideas, so we won’t discuss it here.) 
 
 This example is based on [these great lecture notes](https://s3.amazonaws.com/content.udacity-data.com/courses/gt-cs6505/fft.html) and [this video](https://www.youtube.com/watch?v=h7apO7q16V0&ab_channel=Reducible). 
 
 <a name="s2"></a>
 
 ## Fast Fourier Transform
-Let’s take a divide and conquer approach. Write a $d$-degree polynomial as the sum of two $\approx d/2$-degree polynomials. We can do this by grouping even and odd terms together.
+Let’s take a divide and conquer approach. Write a degree-$d$ polynomial as the sum of two $\approx d/2$ degree polynomials. We can do this by grouping even and odd terms together.
 
 $$\\ a(x)=[a_0+a_2 x^2+\cdots+a_{d-1} x^{d-1} ] \\$$
 
@@ -51,15 +51,15 @@ $$\\ a_+ (y)=a_0+a_2 y+⋯+a_{d-1} y^{(d-1)/2} \\$$
 
 $$\\ a_- (y)=a_1+a_3 y+⋯+a_d y^{(d-1)/2} \\$$
 
-Then, in the spirit of divide and conquer, we can do this again with each of $a_+,a_-$, to get four polynomials, each of degree $\approx d/4$. 
+Then, in the spirit of divide and conquer, we further divide each of $a_+,a_-$, to get four polynomials, each of degree $\approx d/4$. We'll divide $a_+$ into $a_{++}, a_{+-}$, and we'll divide $a_-$ into $a_{-+}, a_{--}$. 
 
-For instance, $a_{++}$ will contain the coefficients $a_i$ where $i$ is a multiple of 4; and $a_{-+}$ will contain coefficients where $i$ is 3 greater than a multiple of 4. We can keep doing this until each of our small polynomials consists of just one constant term $a_j$. 
+For instance, $a_{++}$ will contain the coefficients $a_i$ where $i$ is a multiple of 4; and $a_{-+}$ will contain $a_i$ where $i$ is 3 greater than a multiple of 4. We can keep doing this until each of our small polynomials consists of just one constant term $a_j$. 
 
 How long will it take? Well, all we’ve done here is just turned a degree-$d$ polynomial into $d+1$ degree-1 polynomials. Evaluating a single $a(x_i)$ will still take $O(n)$ time, and evaluating $a(x_1 ),…,a(x_n)$ still takes $O(n^2 )$ time. We’ll have to make further improvements, which we can do by carefully choosing the $x_1,...,x_n$. 
 
-Our goal in choosing x_i is to allow for reuse of polynomial evaluations. Consider $a_+ (x^2 )$ and $a_- (x^2 )$. If we choose $x_1=1,x_2=-1$, then clearly $x_1^2=x_2^2$ and $a_+ (x_1^2 )=a_+ (x_2^2 )$. As one guideline, for every $x_i$, we should also choose $-x_i$ to be in our set of points. Also apparent from above: we can save an evaluation if both $x_i$ and $x_i^2$ are in our set of points. 
+Our goal in choosing these is to allow for reuse of polynomial evaluations. Consider $a_+ (x^2 )$ and $a_- (x^2 )$. If we choose $x_1=1,x_2=-1$, then $x_1^2=x_2^2$ and $a_+ (x_1^2 )=a_+ (x_2^2 )$. This means we can reuse the evaluation $a_+(1)$. As one guideline, for every $x_i$, we should also choose $-x_i$ to be in our set of points. Also apparent from above: we can save an evaluation if both $x_i$ and $x_i^2$ are in our set of points. 
 
-One particular set of numbers with an abundance of these desirable properties is the $n^th$ roots of unity; that is, the complex numbers $z_1,…,z_n$ satisfying $z_i^n=1$. The first root of unity is 1. The second roots of unity are 1,-1. The fourth roots of unity are $1,i,-1,-i$. In general, the roots of unity are just $n$ equally spaced points on the complex unit circle, starting with 1, as illustrated in Fig 1. 
+One particular set of numbers full of these desirable properties is the **$n^th$ roots of unity**; that is, the complex numbers $z_1,…,z_n$ satisfying $z_i^n=1$. The first root of unity is 1. The second roots of unity are 1,-1. The fourth roots of unity are $1,i,-1,-i$. In general, the roots of unity are just $n$ equally spaced points on the complex unit circle, starting with 1, as illustrated in Fig 1. 
 
 <p align="center" width="100%">
     <img width="50%" src="/assets/images/butterfly/fig1.png"> <br>
@@ -95,7 +95,8 @@ Let’s take a closer look at these trees of polynomials. Each arrow in the diag
 
 In theory, FFTs are trivial to parallelize. To compute an FFT with input size $n$ on $p$ processors, you can start by having each processor evaluate $n/2^0 p$ of the degree-1 polynomials (the leaves of the tree shown above). Next, you can have each processor evaluate $n/2^1 p$ of the degree-2 polynomials, accessing the degree-1 solutions as needed, and continuing up the network. This is the natural approach to parallelizing any divide and conquer algorithm. 
 
-In practice, FFTs are often performed on huge images or complex audio signals, and the communication cost (i.e. transferring the stored solutions between processors) becomes prohibitively large. One obvious, but very involved, solution is to design your processor network in a way that reduces these costs. And in this case, the FFT algorithm readily illustrates its own ideal network topology. In Fig 2, the four boxes on top (the $x_i$ to be evaluated) represent processors, and the other 8 boxes represent routers or switching nodes. And of course, the arrows represent wires. 
+In practice, FFTs are often performed on huge images or complex audio signals, and the communication cost (i.e. transferring the stored solutions between processors) becomes prohibitively large. One obvious (but very involved) solution is to design your processor network in a way that reduces these costs. And in this case, the FFT algorithm readily illustrates its own ideal network topology. In Fig 2, the four boxes on top (the $x_i$ to be evaluated) represent processors, and the other 8 boxes represent routers or switching nodes. And of course, the arrows represent wires. 
+
 FFTs are important in computing – important enough that if necessary, butterfly networks would surely be built for the sole purpose of computing FFTs. As it turns out, the butterfly topology [has nice properties](https://en.wikipedia.org/wiki/Butterfly_network#Butterfly_network_parameters) that make it useful in other settings as well. 
  
 <a name="s4"></a>
@@ -107,8 +108,8 @@ FFTs are important in computing – important enough that if necessary, butterfl
     <a href="https://ieeexplore.ieee.org/document/4815631"> Figure 3 - Butterfly network performance evaluation compared to other network topologies. </a>
 </p>
 
-- A network’s diameter is the max number of switches between any two processors. In Fig 2, going from P1 (processor 1) to P3 takes requires passing through just 1 router. P1 to P2 passes through 3 routers, as does P1 to P4. In general, a butterfly network requires passing through no more than $O(\log ⁡n) $ routers. 
-- A network’s bandwidth measures how many wires can be used before a bottleneck is  unavoidable. Butterfly networks have an extremely high bandwidth, as seen above. 
+- A network’s **diameter** is the max number of switches between any two processors. In Fig 2, going from P1 (processor 1) to P3 takes requires passing through just 1 router. P1 to P2 passes through 3 routers, as does P1 to P4. In general, a butterfly network requires passing through no more than $O(\log ⁡n) $ routers. 
+- A network’s **bandwidth** measures how many wires can be used before a bottleneck becomes inevitable. Butterfly networks have an extremely high bandwidth, as seen above. 
 - This speed and capacity comes at a cost. Butterfly networks are expensive to build, requiring more wires and routers than other network topologies.
 
 
