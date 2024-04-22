@@ -176,7 +176,7 @@ then we use it; otherwise, we resort to using $x_{i - 1}^{(l)}$.
 
 ## Application: Hierarchical Bayes
 
-Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x | \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
+Consider the problem of estimating the distribution of a parameter $\theta$. Suppose we have a *prior* belief that $\theta \sim h(\theta)$. Then, we observe data $x$ with likelihood $f(x \middle| \theta)$. Applying Bayes' theorem, we obtain a posterior distribution
 
 $$\\
 k\left( \theta \middle| \mathbf{x} \right) \propto h(\theta)f(x|\theta)
@@ -186,8 +186,8 @@ which describes our belief about $\theta$'s distribution after observing $x$.
 
 Let's think about how we might justify using such a model, including justifying our choice of $h(\theta)$. Say we're heading to a new fishing spot, and we want to estimate $\theta$, the number of fish we'll catch in an hourlong fishing session. Given our skill level, the weather, the time of year, and the nature of the spot, there should be some true mean rate of fish caught. And given that rate, how long it takes to catch one fish shouldn't affect the time it takes to catch the next fish. Thus, even without prior data, it seems reasonable to say that $X \sim Poisson(\theta)$.
 
-But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta | \alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
-specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta | \alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
+But what do we think the rate $\theta$ is, before actually fishing? We need a prior distribution $h(\theta)$, and in many cases $h$ can heavily influence our posterior. For computational convenience (given the lack of an obviously better option), we may want to choose $h$ such that the posterior $k$ will have the same form as $h$. For a Poisson likelihood, the Gamma prior $h\left( \theta \middle| \alpha,\beta \right) = Gamma(\alpha,\beta)$ satisfies this property. But this doesn't solve the problem of having to set arbitrary $\alpha, \beta$. To avoid that, we can "add a layer" by
+specifying a distribution $g(\alpha,\beta)$. So we have our prior $h(\theta \middle| \alpha,\beta)$, and we now have a second-level prior $g(\alpha,\beta)$. We still have to specify the distribution $g$, but this structure makes $h(\theta)$ more flexible WRT $x$. In summary, we have
 
 $$\\
 k\left( \theta,\alpha,\beta \middle| x \right) \propto f\left( x \middle| \theta \right)h\left( \theta \middle| \alpha,\beta \right)g(\alpha,\beta) 
@@ -265,7 +265,7 @@ sampling is quite low compared to the post-sample cost of estimation. This trade
 Another important property, encompassed by the [reasonable conditions](https://doi.org/10.1016/0304-4149(94)90134-1) mentioned above, is that for highly correlated
 $X^{(i)},X^{(j)}$, Gibbs sampling becomes very slow to converge. For
 instance, suppose $X^{(1)} = X^{(2)}$ always, so our sample space is
-$\Omega = \\{(c,c) | c \in R \\}$, and we initially set
+$\Omega = \\{(c,c) \middle| c \in R \\}$, and we initially set
 $\left( x_{1}^{(1)},\ x_{1}^{(2)} \right) = (a,a)$. The conditional
 distribution is $g_{1}\left( x^{(1)} \middle| x_{1}^{(2)} \right) = a$,
 so our draw gives $x_{2}^{(1)} = a$. But we already had
