@@ -25,7 +25,7 @@ Warning: cossim is usually not appropriate for comparing vectors. For example, s
 
 If you're still here, you don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. Here's the formula for cossim:
 
-$$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{||t|| ||y||} \\$$
+$$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{\sqrt{(t_1^2+\cdots +t_D^2)(y_1^2+\cdots + y_D^2)}} \\$$
 
 <a name="s2"></a>
 
@@ -81,21 +81,27 @@ $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{
 , which yields $C= \left\lbrack C_1,...,C_D \right\rbrack$. Now we can scale each target $t^{(k)}$ to be the component-wise product $C \odot t^{(k)}$. After this scaling, Condition 1 becomes:
 
 $$\\ \mathbb{E}\left\lbrack {\mid}(C_ia_i)(C_ib_i){\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}(C_ja_j)(C_jb_j){\mid} \right\rbrack \\$$
+
 $$\\ C_i^2 \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = C_j^2 \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \\$$
+
 $$\\ C_i^2 \frac1{C_i^2} = C_j^2 \frac1{C_j^2} \\$$
 
-The last step makes use of our approximation, under which Condition 1 is clearly fulfilled. 
-
+The last step uses our approximation, under which Condition 1 is clearly true/fulfilled. 
 
 <a name="s4"></a>
 
 ## Normally distributed targets
 
-Remember the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. 
+Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since we know $f$, approximation is no longer necessary. Condition 1 is 
 
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
+Each target follows a univariate normal distribution $a_i\sim \mathcal{N}(0,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(0,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation we know:
 
- 
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \\$$
+
+So in this case, Condition 1 just implies that $\Sigma_{ii} = \Sigma_{jj}$. We can easily enforce this by standardizing each target (i.e. scaling vector is $C = \left\lbrack 1/\sqrt{\Sigma_{11}}, ..., 1/\sqrt{\Sigma_{DD}} \right\rbrack$). 
+
 <a name="s5"></a>
 
 ## Feature weights
