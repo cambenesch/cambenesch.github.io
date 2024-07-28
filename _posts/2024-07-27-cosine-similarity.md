@@ -23,9 +23,9 @@ We'll abbreviate [cosine similarity](https://en.wikipedia.org/wiki/Cosine_simila
 
 Warning: cossim is usually not appropriate for comparing vectors. For example, suppose we have a model which predicts a device's exact movement based on noisy GPS data. There are 2 targets (N/S movement and E/W movement), hence they comprise a vector. But if we're using this model to actually locate the device, then cossim is useless: it treats \[1 inch, 2 inches\] the same as \[10 miles, 20 miles\] (cossim = 1). On top of that, it treats those both very differently (in fact maximally differently) than \[-1 inch, -2 inches\] (cossim = -1). Cossim ignores magnitude, and is very sensitive to small perturbations near the origin. So if you want to model the direction the device has moved, and if you're confident it has moved far enough to withstand some noise, then go ahead and use cossim. Otherwise, leave this page and find another metric. 
 
-If you're still here, you don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. To simplify things, I'll assume you've already L2-normalized your vectors $t,y$. This makes things way easier since the cossim just becomes a dot product:
+If you're still here, you don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. Here's the formula for cossim:
 
-$$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_Dy_D \\$$
+$$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{||t|| ||y||} \\$$
 
 <a name="s2"></a>
 
@@ -33,7 +33,7 @@ $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_D
 
 The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We have a dataset with $N$ L2-normalized iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ targets. 
 
-Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's targets, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using any input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require 
+Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's targets, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using the input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require its cossim's numerator to be zero:
 
 $$\\ \mathbb{E}\left\lbrack a\cdot b \right\rbrack = 0 \\$$
 
@@ -50,13 +50,13 @@ $$\\ = \mathbb{E}\left\lbrack a_1 \right\rbrack^2 + \cdots + \mathbb{E}\left\lbr
 
 $$\\ \implies \mathbb{E}\left\lbrack a_i \right\rbrack = 0 \\$$
 
-for each target $i$. We can easily enforce this condition by zero-centering the targets. In particular, we compute $\mu = \frac1N (t^{(1)} + \cdots + t^{(N)})$ and center the data by subtracting $\mu$ from each $t^{(k)}$. The preprocessing now involves per-sample L2-normalization followed by per-dimension zero-centering.
+for each target $i$. We can easily enforce this condition by zero-centering the targets. In particular, we compute $\mu = \frac1N (t^{(1)} + \cdots + t^{(N)})$ and center the data by subtracting $\mu$ from each $t^{(k)}$. 
 
 <a name="s3"></a>
 
 ## Scaling
 
-In many cases you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final dot product (the cossim). Note that equal opportunity doesn't mean equal contribution. If we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
+In many cases you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final cossim. Note that equal opportunity doesn't mean equal contribution. If we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
 
 There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which we sampled from our dataset's target vectors. Consider any 2 targets $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
 
@@ -74,16 +74,17 @@ Likewise for $j$. Thus Condition 1 becomes
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
 $$\\ \implies \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
-This is easily enforced. For each target $i$, the dataset allows us to estimate a scaling factor $C_i$ for each dimension:
+This is easily enforced. For each target dimension $i$, the dataset allows us to estimate a scaling factor $C_i$:
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{k=1}^N {\mid}t^{(k)}_i{\mid} = \frac1{C_i} \\$$
 
-, which yields $C= \left\lbrack C_1,...,C_D \right\rbrack$. Now we can scale each target $t^{(k)}$ to be the component-wise product $C \odot t^{(k)}$. After this scaling,
+, which yields $C= \left\lbrack C_1,...,C_D \right\rbrack$. Now we can scale each target $t^{(k)}$ to be the component-wise product $C \odot t^{(k)}$. After this scaling, Condition 1 becomes:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}(C_ia_i)(C_ib_i){\mid} \right\rbrack - \mathbb{E}\left\lbrack {\mid}(C_ja_j)(C_jb_j){\mid} \right\rbrack \\$$
-$$\\ = C_i^2 \frac1{C_i^2} - C_j^2 \frac1{C_j^2} \approx 0 \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}(C_ia_i)(C_ib_i){\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}(C_ja_j)(C_jb_j){\mid} \right\rbrack \\$$
+$$\\ C_i^2 \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = C_j^2 \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \\$$
+$$\\ C_i^2 \frac1{C_i^2} = C_j^2 \frac1{C_j^2} \\$$
 
-thus proving Condition 1 is fulfilled. 
+The last step makes use of our approximation, under which Condition 1 is clearly fulfilled. 
 
 
 <a name="s4"></a>
@@ -91,6 +92,8 @@ thus proving Condition 1 is fulfilled.
 ## Normally distributed targets
 
 Remember the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. 
+
+
 
  
 <a name="s5"></a>
