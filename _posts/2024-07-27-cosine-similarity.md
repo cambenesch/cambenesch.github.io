@@ -23,10 +23,10 @@ We'll abbreviate [cosine similarity](https://en.wikipedia.org/wiki/Cosine_simila
 
 I'll start with a warning. Cossim is usually not appropriate for comparing vectors. For instance, say we're trying to predict a device's movement based on GPS data. There are 2 targets (N/S movement and E/W movement), hence they comprise a vector. But if we're using this model to actually locate the device, then cossim is useless: it treats \[1 inch, 2 inches\] the same as \[10 miles, 20 miles\] (cossim = 1). On top of that, it treats those both very differently, in fact maximally differently, than \[-1 inch, -2 inches\] (cossim = -1). Cossim ignores magnitude, and is very sensitive to small perturbations near the origin. So if you want to figure out the direction the device has moved, and if you're confident it has moved far enough to withstand some noise, then go ahead and use cossim. Otherwise, leave this page and find another metric. 
 
-Alright, moving on. You don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. You're in the right place. To simplify things, I'll assume you've already L2-normalized your vectors $t,y$. This makes things way easier since the cossim becomes the dot product:
+If you're still here, you don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. Great. To simplify things, we'll assume you've already L2-normalized your vectors $t,y$. This makes things way easier since the cossim just becomes the dot product:
 
 $$\\
-\cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t\cdot y} = \sum_{i=1}^D t_iy_i
+\cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_Dy_D
 \\$$
 
 Typically you'll want to scale your targets so that, in expectation, they contribute equally to the final cossim. While arbitrary, it seems obvious enough that "contribute equally" should mean $E[|t_iy_i|] = E[|t_jy_j|]$ (for any 2 targets $i,j$). In words: the cossim's $i$ and $j$ terms should have the same average magnitudes. How can we scale to ensure this? 
