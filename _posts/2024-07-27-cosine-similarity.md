@@ -21,11 +21,11 @@ Here I'll justify zero-centering, then briefly define our goal in scaling. I'll 
 
 ## Cosine similarity
 
-We'll abbreviate [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) as "cossim". It's a score from -1 to 1; just the cosine of the angle between 2 vectors. Say you have a model which processes some input features, then predicts some $D$-dimensional target vector $t=[t_1,...,t_D]$. Let's call your model's prediction $y=[y_1,...,y_D]$ (others might refer to it as $\hat{t}$). 
+We'll abbreviate [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) as "cossim". It's a score from -1 to 1; just the cosine of the angle between 2 vectors. Say you have a model which takes in some input features, then predicts a $D$-dimensional target vector $t=[t_1,...,t_D]$. Let's call your model's prediction $y=[y_1,...,y_D]$ (others might refer to it as $\hat{t}$). 
 
 Warning: cossim is usually not appropriate for comparing vectors. For example, suppose we have a model which predicts a device's exact movement based on noisy GPS data. There are 2 target dimensions (N/S movement and E/W movement), hence they comprise a vector. But if we're using this model to actually locate the device, then cossim is useless: it treats \[1 inch, 2 inches\] the same as \[10 miles, 20 miles\] (cossim = 1). On top of that, it treats those both very differently (in fact maximally differently) than \[-1 inch, -2 inches\] (cossim = -1). Cossim ignores magnitude, and is very sensitive to small perturbations near the origin. So if you want to model the direction the device has moved, and if you're confident it has moved far enough to withstand some noise, then go ahead and use cossim. Otherwise, leave this page and find another metric. 
 
-If you're still here, you don't care if $y$ doesn't match $t$ exactly - all you want is for them to point in the same direction. Here's the formula for cossim:
+If you're still here, you don't care whether $y$ matches $t$ exactly - all you want is for them to point in the same direction. Here's the formula for cossim:
 
 $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{\sqrt{(t_1^2+\cdots +t_D^2)(y_1^2+\cdots + y_D^2)}} \\$$
 
@@ -33,9 +33,9 @@ $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{
 
 ## Zero-centering
 
-The target vector $t$ is a draw from some $D$-dimensional distribution $f$. Our dataset contains $N$ L2-normalized iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ target dimensions. 
+The target vector $t$ is a draw from some $D$-dimensional distribution $f$. Our dataset contains $N$ iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ target dimensions. 
 
-Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using the input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require its cossim's numerator to be zero:
+Choose 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using the input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require its cossim's numerator to be zero:
 
 $$\\ \mathbb{E}\left\lbrack a\cdot b \right\rbrack = 0 \\$$
 
@@ -84,7 +84,7 @@ $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{
 
 $$\\ \mathbb{E}\left\lbrack {\mid}(C_ia_i)(C_ib_i){\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}(C_ja_j)(C_jb_j){\mid} \right\rbrack \\$$
 
-$$\\ C_i^2 \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = C_j^2 \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \\$$
+$$\\ C_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 = C_j^2 \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
 
 $$\\ C_i^2 \frac1{C_i^2} = C_j^2 \frac1{C_j^2} \\$$
 
@@ -94,7 +94,7 @@ The last step uses our approximation, under which Condition 1 is clearly true/fu
 
 ## Normally distributed targets
 
-Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since $f$ is known, approximation is no longer necessary. Condition 1 is 
+Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since $f$ is known, approximation is no longer necessary. As shown above, Condition 1 is 
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
@@ -112,7 +112,7 @@ We've been designing the scaling factor $C$ to give each target dimension an **e
 
 $$\\ \frac{\mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} = \frac{P_i}{P_j} \text{  (Condition 2)} \\$$
 
-Earlier, we computed equal-weighting scaling factors $C_i$ which fulfilled Condition 1. These can be reweighted: $Q_i = C_i\sqrt{P_i}$, and you can scale by $Q$ instead of $C$. Condition 2 is now fulfilled, as shown:
+Earlier, we computed equal-weighting scaling factors $C_i$ which fulfilled Condition 1. These can be reweighted: $Q_i = C_i\sqrt{P_i}$, and you can scale by $Q$ instead of $C$ to fulfill Condition 2 instead:
 
 $$\\ \frac{\mathbb{E}\left\lbrack {\mid}(Q_ia_i)(Q_ib_i){\mid} \right\rbrack}{\mathbb{E}\left\lbrack {\mid}(Q_ja_j)(Q_jb_j){\mid} \right\rbrack} \\$$
 
@@ -131,6 +131,6 @@ You have a dataset containing input features, and output target vectors $t^{(1)}
 1. Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. 
 2. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. This means dividing each dimension by its standard deviation. 
 3. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
-4. If your importance weights $P_i$ are all equal, this step isn't necessary. Otherwise, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
+4. If your importance weights $P_i$ are all equal, this step isn't necessary. If they're not, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
 
 Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
