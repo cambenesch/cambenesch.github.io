@@ -74,20 +74,16 @@ Likewise for $j$. Thus Condition 1 becomes
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
 $$\\ \implies \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
-How can we enforce this? For each target $i$, the dataset allows us to estimate
+This is easily enforced. For each target $i$, the dataset allows us to estimate a scaling factor $C_i$ for each dimension:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{k=1}^N {\mid}t^{(k)}_i{\mid} = C_i \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{k=1}^N {\mid}t^{(k)}_i{\mid} = \frac1{C_i} \\$$
 
-, which yields $D$ estimates $C_1,...,C_D$. Let $C_m$ be the min of these, then compute nonnegative scaling factors 
+, which yields $C= \left\lbrack C_1,...,C_D \right\rbrack$. Now we can scale each target $t^{(k)}$ to be the component-wise product $C \odot t^{(k)}$. After this scaling,
 
-$$\\ S = \left\lbrack S_1,...,S_D \right\rbrack = \left\lbrack \sqrt{C_m/C_1},...,\sqrt{C_m/C_D} \right\rbrack \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}(C_ia_i)(C_ib_i){\mid} \right\rbrack - \mathbb{E}\left\lbrack {\mid}(C_ja_j)(C_jb_j){\mid} \right\rbrack \\$$
+$$\\ = C_i^2 \frac1{C_i^2} - C_j^2 \frac1{C_j^2} \approx 0 \\$$
 
-Now we can scale each target $t^{(k)}$ to be the component-wise product $S \odot t^{(k)}$. After this scaling,
-
-$$\\ \mathbb{E}\left\lbrack {\mid}(S_ia_i)(S_ib_i){\mid} \right\rbrack - \mathbb{E}\left\lbrack {\mid}(S_ja_j)(S_jb_j){\mid} \right\rbrack \\$$
-$$\\ = S_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 - S_j^2 \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
-<!-- $$\\ = S_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 - S_j^2 \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$ -->
-
+thus proving Condition 1 is fulfilled. 
 
 
 <a name="s4"></a>
