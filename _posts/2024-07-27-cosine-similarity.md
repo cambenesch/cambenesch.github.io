@@ -5,9 +5,9 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that target dimensions (i.e. vector components) should be centered and scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may not be sufficient. 
+Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets be transformed before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may be insufficient. 
 
-Here I'll justify zero-centering, then briefly define our goal in scaling. I'll show how to properly scale in 2 cases: unknown target distributions (approximate scaling), and known normal target distributions (exact scaling). These methods reveal a clean way to compute dimension-weighted cosine similarity: in short, scale each target dimension by its desired weight's square root. Skip to the summary if you just want to see the recommended methods. 
+Here I'll justify zero-centering, then briefly define our goal in scaling. I'll show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. Skip to the summary if you just want to see the recommended transformations. 
 
 ## Topics
 1. [Cosine similarity](#s1)
