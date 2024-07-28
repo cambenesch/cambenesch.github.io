@@ -31,9 +31,9 @@ $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_D
 
 ## Zero-centering
 
-The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We have a dataset with $N$ iid samples $t^{(1)},...,t^{(N)}\sim f$. We've already L2-normalized each of $t^{(1)},...,t^{(N)}$. Now we'll justify the process of zero-centering each of the $D$ targets. 
+The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We have a dataset with $N$ L2-normalized iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ targets. 
 
-Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's targets, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using any input features. (For the $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case, just set $y=-t'$.) To thwart this naive model, we thus require 
+Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's targets, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using any input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require 
 
 $$\\ \mathbb{E}\left\lbrack a\cdot b \right\rbrack = 0 \\$$
 
@@ -56,23 +56,37 @@ for each target $i$. We can easily enforce this condition by zero-centering the 
 
 ## Scaling
 
-In many cases you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final dot product (the cossim). Note that equal opportunity doesn't mean equal contribution. For instance, if we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
+In many cases you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final dot product (the cossim). Note that equal opportunity doesn't mean equal contribution. If we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
 
-There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which we sampled from our dataset. Consider any 2 targets $i,j$. $a,b$ are independently drawn, so $a_i,a_j$ do not explain any variance in $b_i,b_j$. In this case, we clearly expect the cossim's $i$ and $j$ terms to have the same average magnitudes. In particular, we require
+There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which we sampled from our dataset's target vectors. Consider any 2 targets $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \text{  (Condition 1)} \\$$
 
-Since $a,b$ are iid,
+Since $a,b$ are iid, so too are ${\mid}a{\mid}, {\mid}b{\mid}$, and
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack \\$$
 $$\\ = \mathbb{E}\left\lbrack {\mid}a_i{\mid} \cdot {\mid}b_i{\mid} \right\rbrack \\$$
 $$\\ = \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \mathbb{E}\left\lbrack {\mid}b_i{\mid} \right\rbrack \\$$
 $$\\ = \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 \\$$
 
-and likewise for $j$. Thus Condition 1 becomes 
+Likewise for $j$. Thus Condition 1 becomes 
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
 $$\\ \implies \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
+
+How can we enforce this? For each target $i$, the dataset allows us to estimate
+
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack \approx \frac1N \sum_{k=1}^N {\mid}t^{(k)}_i{\mid} = C_i \\$$
+
+, which yields $D$ estimates $C_1,...,C_D$. Let $C_m$ be the min of these, then compute nonnegative scaling factors 
+
+$$\\ S = \left\lbrack S_1,...,S_D \right\rbrack = \left\lbrack \sqrt{C_m/C_1},...,\sqrt{C_m/C_D} \right\rbrack \\$$
+
+Now we can scale each target $t^{(k)}$ to be the component-wise product $S \odot t^{(k)}$. After this scaling,
+
+$$\\ \mathbb{E}\left\lbrack {\mid}(S_ia_i)(S_ib_i){\mid} \right\rbrack - \mathbb{E}\left\lbrack {\mid}(S_ja_j)(S_jb_j){\mid} \right\rbrack \\$$
+$$\\ = S_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 - S_j^2 \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$
+<!-- $$\\ = S_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2 - S_j^2 \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2 \\$$ -->
 
 
 
