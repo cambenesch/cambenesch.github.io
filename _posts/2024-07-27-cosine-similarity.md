@@ -5,9 +5,9 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets (i.e. vector components) should be centered and scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may not be sufficient. 
+Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that target dimensions (i.e. vector components) should be centered and scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may not be sufficient. 
 
-Here I'll briefly define our goal in scaling, then talk about how to achieve that for the case of normally distributed targets. Then I'll show an easy approximate scaling method for arbitrary/unknown target distributions. These methods give a clean way to compute a target-weighted cosine similarity: in short, scale each target by its desired weight's square root.
+Here I'll justify zero-centering, then briefly define our goal in scaling. Then I'll show how to properly scale in 2 cases: unknown target distributions (approximate scaling), and known normal target distributions (exact scaling). These methods reveal a clean way to compute dimension-weighted cosine similarity: in short, scale each target dimension by its desired weight's square root. Skip to the summary if you just want to see the recommended methods. 
 
 ## Topics
 1. [Cosine similarity](#s1)
@@ -122,7 +122,15 @@ $$\\ = \frac{P_i}{P_j} \frac{C_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right
 
 $$\\ = \frac{P_i}{P_j} \frac{C_i^2 (1 / C_i^2)}{C_j^2 (1 / C_j^2)} = \frac{P_i}{P_j} \\$$
 
-
 <a name="s6"></a>
 
 ## Summary
+
+You have a dataset containing input features, and output targets $t^{(1)},...,t^{(N)}$. Each sampled target vector $t^{(k)}$ is $D$-dimensional. You've also decided on importance weights $P = \left\lbrack P_1, ..., P_D \right\rbrack$ for the target dimensions.You want to compute a weighted cossim in which on average, each target dimension $i$'s contribution to the final cossim is proportional to $P_i$. 
+
+1. Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. 
+2. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. This means dividing each dimension by its standard deviation. 
+3. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i{\mid}$. 
+4. If your importance weights $P_i$ are all equal, this step isn't necessary. If not, then multiply each dimension by $\sqrt{P_i}$. 
+
+Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute $\cos(\theta) = \frac{t\cdot y}{||t|| ||y||}$, the cossim between your prediction and the true value. 
