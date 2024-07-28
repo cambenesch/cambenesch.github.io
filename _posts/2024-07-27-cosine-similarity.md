@@ -29,7 +29,7 @@ $$\\
 \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_Dy_D
 \\$$
 
-Typically you'll want to scale your targets so that, in expectation, they contribute equally to the final cossim. While arbitrary, it seems obvious enough that "contribute equally" should mean $E[|t_iy_i|] = E[|t_jy_j|]$ (for any 2 targets $i,j$). In words: the cossim's $i$ and $j$ terms should have the same average magnitudes. How can we scale to ensure this? 
+Typically you'll want to scale your targets so that in expectation, they contribute equally to the final cossim. While arbitrary, it seems obvious enough that "contribute equally" should mean $E[\mid t_iy_i\mid] = E[\mid t_jy_j\mid]$ (for any 2 targets $i,j$). In words, the cossim's $i$ and $j$ terms should have the same average magnitudes. How can we scale to ensure this? 
 
 <a name="s2"></a>
 
