@@ -33,7 +33,7 @@ $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{
 
 ## Zero-centering
 
-The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We have a dataset with $N$ L2-normalized iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ targets. 
+The target vector $t$ is a draw from some $D$-dimensional distribution $f$. Our dataset contains $N$ L2-normalized iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ targets. 
 
 Sample 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's targets, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using the input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require its cossim's numerator to be zero:
 
@@ -52,7 +52,7 @@ $$\\ = \mathbb{E}\left\lbrack a_1 \right\rbrack^2 + \cdots + \mathbb{E}\left\lbr
 
 $$\\ \implies \mathbb{E}\left\lbrack a_i \right\rbrack = 0 \\$$
 
-for each target $i$. We can easily enforce this condition by zero-centering the targets. In particular, we compute $\mu = \frac1N (t^{(1)} + \cdots + t^{(N)})$ and center the data by subtracting $\mu$ from each $t^{(k)}$. 
+for each target $i$. This condition is easily enforced by zero-centering the targets. In particular, compute $\mu = \frac1N (t^{(1)} + \cdots + t^{(N)})$ and center the data by subtracting $\mu$ from each $t^{(k)}$. 
 
 <a name="s3"></a>
 
@@ -60,7 +60,7 @@ for each target $i$. We can easily enforce this condition by zero-centering the 
 
 In many cases you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final cossim. Note that equal opportunity doesn't mean equal contribution. If we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
 
-There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which we sampled from our dataset's target vectors. Consider any 2 targets $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
+There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which were sampled from our dataset's target vectors. Consider any 2 targets $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \text{  (Condition 1)} \\$$
 
@@ -94,24 +94,33 @@ The last step uses our approximation, under which Condition 1 is clearly true/fu
 
 ## Normally distributed targets
 
-Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since we know $f$, approximation is no longer necessary. Condition 1 is 
+Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since $f$ is known, approximation is no longer necessary. Condition 1 is 
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
-Each target follows a univariate normal distribution $a_i\sim \mathcal{N}(0,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(0,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation we know:
+Each target follows a univariate normal distribution $a_i\sim \mathcal{N}(0,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(0,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known:
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \\$$
 
-So in this case, Condition 1 is equivalent to $\Sigma_{ii} = \Sigma_{jj}$. We can easily enforce this by standardizing each target, which means scaling by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. 
+So in this case, Condition 1 is equivalent to $\Sigma_{ii} = \Sigma_{jj}$. This is easily enforced by standardizing each target, which means scaling by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. 
 
 <a name="s5"></a>
 
 ## Dimension weighting
 
-We've been designing the scaling factor $C$ to give each target dimension an **equal** opportunity to contribute to cossim. But if we care some about some targets than others? Maybe we have a target importance vector $P = \left\lbrack P_1, ..., P_D \right\rbrack$, and instead of Condition 1, we want to achieve the following:
+We've been designing the scaling factor $C$ to give each target dimension an **equal** opportunity to contribute to cossim. But what if we care more about some targets than others? Maybe there's a target importance vector $P = \left\lbrack P_1, ..., P_D \right\rbrack$, and instead of Condition 1, we want to achieve the following:
 
 $$\\ \frac{\mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} = \frac{P_i}{P_j} \text{  (Condition 2)} \\$$
 
+Earlier, we computed equal-weighting scaling factors $C_i$ which fulfilled Condition 1. These can be reweighted: $Q_i = C_i\sqrt{P_i}$, and you can scale by $Q$ instead of $C$. Condition 2 is now fulfilled, as shown:
+
+$$\\ \frac{\mathbb{E}\left\lbrack {\mid}(Q_ia_i)(Q_ib_i){\mid} \right\rbrack}{\mathbb{E}\left\lbrack {\mid}(Q_ja_j)(Q_jb_j){\mid} \right\rbrack} \\$$
+
+$$\\ = \frac{Q_i^2 \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{Q_j^2\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} \\$$
+
+$$\\ = \frac{P_i}{P_j} \frac{C_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack^2}{C_j^2\mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack^2} \\$$
+
+$$\\ = \frac{P_i}{P_j} \frac{C_i^2 (1 / C_i^2)}{C_j^2 (1 / C_j^2)} = \frac{P_i}{P_j} \\$$
 
 
 <a name="s6"></a>
