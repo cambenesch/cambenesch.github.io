@@ -110,7 +110,7 @@ So in this case, Condition 1 is equivalent to $\Sigma_{ii} = \Sigma_{jj}$. We ca
 
 We've been designing the scaling factor $C$ to give each target dimension an **equal** opportunity to contribute to cossim. But if we care some about some targets than others? Maybe we have a target importance vector $P = \left\lbrack P_1, ..., P_D \right\rbrack$, and instead of Condition 1, we want to achieve the following:
 
-$$\\ \frac{\mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{\frac{\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} = \frac{P_i}{P_j} \text{  (Condition 2)} \\$$
+$$\\ \frac{\mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} = \frac{P_i}{P_j} \text{  (Condition 2)} \\$$
 
 
 
