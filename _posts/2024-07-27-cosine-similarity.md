@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Feature-Weighted Cosine Similarity"
+title: "Dimension-Weighted Cosine Similarity"
 author: Cam Benesch
 meta: "Chicago"
 ---
@@ -11,9 +11,11 @@ Here I'll briefly define our goal in scaling, then talk about how to achieve tha
 
 ## Topics
 1. [Cosine similarity](#s1)
-2. [Normally distributed targets](#s2)
-3. [Arbitrarily distributed targets](#s3)
-4. [Feature weights](#s4)
+2. [Zero-centering](#s2)
+3. [Scaling](#s3)
+3. [Normally distributed targets](#s4)
+5. [Dimension weighting](#s5)
+6. [Summary](#s6)
 
 <a name="s1"></a>
 
@@ -100,9 +102,18 @@ Each target follows a univariate normal distribution $a_i\sim \mathcal{N}(0,\Sig
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \\$$
 
-So in this case, Condition 1 just implies that $\Sigma_{ii} = \Sigma_{jj}$. We can easily enforce this by standardizing each target (i.e. scaling vector is $C = \left\lbrack 1/\sqrt{\Sigma_{11}}, ..., 1/\sqrt{\Sigma_{DD}} \right\rbrack$). 
+So in this case, Condition 1 is equivalent to $\Sigma_{ii} = \Sigma_{jj}$. We can easily enforce this by standardizing each target, which means scaling by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. 
 
 <a name="s5"></a>
 
-## Feature weights
+## Dimension weighting
 
+We've been designing the scaling factor $C$ to give each target dimension an **equal** opportunity to contribute to cossim. But if we care some about some targets than others? Maybe we have a target importance vector $P = \left\lbrack P_1, ..., P_D \right\rbrack$, and instead of Condition 1, we want to achieve the following:
+
+$$\\ \frac{\mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack}{\frac{\mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack} = \frac{P_i}{P_j} \text{  (Condition 2)} \\$$
+
+
+
+<a name="s6"></a>
+
+## Summary
