@@ -5,7 +5,7 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's well-known that targets (i.e. vector components) should be centered and scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may not be sufficient. 
+Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets (i.e. vector components) should be centered and scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may not be sufficient. 
 
 Here I'll briefly define our goal in scaling, then talk about how to achieve that for the case of normally distributed targets. Then I'll show an easy approximate scaling method for arbitrary/unknown target distributions. These methods give a clean way to compute a target-weighted cosine similarity: in short, scale each target by its desired weight's square root.
 
@@ -29,19 +29,13 @@ $$\\
 \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = t\cdot y = t_1y_1+\cdots +t_Dy_D
 \\$$
 
-Typically you'll want to scale your targets so that in expectation, each target contributes equally to the final cossim. While arbitrary, it seems obvious enough that "contributes equally" should be defined as (Condition 1)
-$$\\
-\mathbb{E}\left\lbrack {\mid}t_iy_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}t_jy_j{\mid} \right\rbrack
-\\$$
-for any 2 targets $i,j$. In words, the cossim's $i$ and $j$ terms should have the same average magnitudes. How can we scale to ensure this? 
-
 <a name="s2"></a>
 
 ## Zero-centering
 
 The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We've already L2-normalized each target vector in our dataset (let's say there are $N$ of them). Now we'll justify the process of zero-centering each of the $D$ targets. 
 
-Imagine another i.i.d draw $t'\sim f$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack > 0$. Then we can construct a naive model which just draws a random $t'$ from the dataset and predicts $y=t'$. This model produces a positive average cossim $y\cdot t>0$ without even using any input features whatsoever. (For the $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack < 0$ case, just set $y=-t'$.) To thwart this naive model, we require 
+Imagine another i.i.d draw $t'\sim f$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack > 0$. Then we can construct a naive model which just draws a random $t'$ from the dataset and predicts $y=t'$. This model produces a positive average cossim $y\cdot t>0$ without even using any input features. (For the $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack < 0$ case, just set $y=-t'$.) To thwart this naive model, we thus require 
 
 $$\\ \mathbb{E}\left\lbrack t\cdot t' \right\rbrack = 0 \\$$
 
@@ -53,30 +47,45 @@ $$\\ = \mathbb{E}\left\lbrack t_1t'_1 \right\rbrack + \cdots + \mathbb{E}\left\l
 and since $t,t'$ are iid,
 
 $$\\ \mathbb{E}\left\lbrack t_1 \right\rbrack \mathbb{E}\left\lbrack t'_1 \right\rbrack + \cdots + \mathbb{E}\left\lbrack t_D \right\rbrack \mathbb{E}\left\lbrack t'_D \right\rbrack \\$$
+
 $$\\ = \mathbb{E}\left\lbrack t_1 \right\rbrack^2 + \cdots + \mathbb{E}\left\lbrack t_D \right\rbrack^2 = 0 \\$$
+
 $$\\ \implies \mathbb{E}\left\lbrack t_i \right\rbrack = 0 \\$$
 
 for each target $i$. We can easily enforce this condition by zero-centering the targets. In particular, our dataset contains $N$ samples $t^{(1)},...,t^{(N)}$. So wea compute $\mu = (t^{(1)} + \cdots + t^{(N)})/N$ and center the data by subtracting $\mu$ from each $t^{(k)}$. The preprocessing now involves per-sample L2-normalization followed by per-dimension zero-centering.
 
+<a name="s3"></a>
 
-<a name="s2"></a>
+## Scaling
+
+Typically you'll want to scale your targets so that each target has an equal **opportunity** to contribute to the final dot product (the cossim). Note that equal opportunity doesn't mean equal contributions. For instance, if we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
+
+There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit the naive model where $y,t\sim f$ are iid. Consider any 2 targets $i,j$. Under the naive random-draw model, $y,t$ are independently drawn, so we're unable to explain any variance in $t_i$ or $t_j$. In this case, it's clearly fair to expect the cossim's $i$ and $j$ terms to have the same average magnitudes. In particular, we'll require
+
+$$\\ \mathbb{E}\left\lbrack {\mid}t_iy_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}t_jy_j{\mid} \right\rbrack \text{  (Condition 1)} \\$$
+
+Since $y,t$ are iid,
+
+$$\\ \mathbb{E}\left\lbrack {\mid}t_iy_i{\mid} \right\rbrack \\$$
+$$\\ = \mathbb{E}\left\lbrack {\mid}t_i{\mid} \cdot {\mid}y_i{\mid} \right\rbrack \\$$
+$$\\ = \mathbb{E}\left\lbrack {\mid}t_i{\mid} \right\rbrack \mathbb{E}\left\lbrack {\mid}y_i{\mid} \right\rbrack \\$$
+$$\\ = \mathbb{E}\left\lbrack {\mid}t_i{\mid} \right\rbrack^2 \\$$
+
+and likewise for $j$. Thus Condition 1 becomes 
+
+$$\\ \mathbb{E}\left\lbrack {\mid}t_i{\mid} \right\rbrack^2 = \mathbb{E}\left\lbrack {\mid}t_j{\mid} \right\rbrack^2 \\$$
+$$\\implies \mathbb{E}\left\lbrack {\mid}t_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}t_j{\mid} \right\rbrack \\$$
+
+We can 
+
+<a name="s4"></a>
 
 ## Normally distributed targets
 
-In this section assume the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. 
-
-$$\\
-\mathbb{E}\left\lbrack {\mid}t_iy_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}t_jy_j{\mid} \right\rbrack
-\mathbb{E}\left\lbrack {\mid}t_i{\mid} {\mid}y_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}t_j{\mid} {\mid}y_j{\mid} \right\rbrack
-\\$$
-
-<a name="s3"></a>
-
-## Arbitrarily distributed targets
-
+Remember the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. 
 
  
-<a name="s4"></a>
+<a name="s5"></a>
 
 ## Feature weights
 
