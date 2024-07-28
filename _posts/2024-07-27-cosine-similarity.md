@@ -37,16 +37,28 @@ for any 2 targets $i,j$. In words, the cossim's $i$ and $j$ terms should have th
 
 <a name="s2"></a>
 
+## Zero-centering
+
+The target vector $t$ is a draw from some $D$-dimensional distribution $f$. We've already L2-normalized each target vector in our dataset (let's say there are $N$ of them). Now we'll justify the process of zero-centering each of the $D$ targets. 
+
+Imagine another i.i.d draw $t'\sim f$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack > 0$. Then we can construct a naive model which just draws a random $t'$ from the dataset and sets $y=t'$. This model produces a positive average cossim $y\cdot t>0$ without even using any input features whatsoever. (For the $\mathbb{E}\left\lbrack t\cdot t' \right\rbrack < 0$ case, just set $y=-t'$.) To thwart that naive model, we require 
+$$\\ \mathbb{E}\left\lbrack t\cdot t' \right\rbrack = 0 \\$$
+which by linearity of expectation gives
+$$\\ \mathbb{E}\left\lbrack t_1t'_1 + \cdots + t_Dt_D' \right\rbrack = 0 \\$$
+$$\\ \mathbb{E}\left\lbrack t_1t'_1 \right\rbrack + \cdots + \mathbb{E}\left\lbrack t_Dt'_D \right\rbrack = 0 \\$$
+and since $t,t'$ are iid,
+$$\\ \mathbb{E}\left\lbrack t_1 \right\rbrack \mathbb{E}\left\lbrack t'_1 \right\rbrack + \cdots + \mathbb{E}\left\lbrack t_D \right\rbrack \mathbb{E}\left\lbrack t'_D \right\rbrack = 0 \\$$
+$$\\ \mathbb{E}\left\lbrack t_1 \right\rbrack^2 + \cdots + \mathbb{E}\left\lbrack t_D \right\rbrack^2 = 0 \\$$
+$$\\ \mathbb{E}\left\lbrack t_i \right\rbrack = 0 \\$$
+for each target $i$. We can easily enforce this condition by zero-centering the targets. In practice, our dataset contains $N$ samples $t^{(1)},...,t^{(N)}$. So we can estimate $\mu = t^{(1)}/N + \cdots + t^{(N)}/N$ and center the data by subtracting $\mu$ from each $t^{(i)}$. So our preprocessing now consists of per-sample L2-normalization followed by per-dimension zero-centering.
+
+
+<a name="s2"></a>
+
 ## Normally distributed targets
 
-We're assuming the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $\mathcal{N}(\mu,\Sigma)$. 
+in this section assume the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $\mathcal{N}(0,\Sigma)$. Note the distribution is zero-centered. 
 
-Given a dataset containing many draws (i.e. many values of $t$), one can roughly reconstruct this distribution. From there, we can imagine a naive baseline model which, regardless of the input features, predicts $y$ as an independent random draw from that same distribution $\mathcal{N}(\mu,\Sigma)$. Under this baseline model, $y$ and $t$ are iid. The baseline model is awful and naive because it just ranodmly chooses something that looks like the observed $t$'s, providing no explanatory or predictive power. So it would make sense to expect an average cossim of (Condition 2)
-$$\\
-\mathbb{E}\left\lbrack {\mid}t\cdot y{\mid} \right\rbrack = 0
-\\$$
-
-Combining Conditions 1 and 2 gives 
 $$\\
 \mathbb{E}\left\lbrack {\mid}t\cdot y{\mid} \right\rbrack
 = \mathbb{E}\left\lbrack {\mid}t_1y_1+\cdots +t_Dy_D{\mid} \right\rbrack
