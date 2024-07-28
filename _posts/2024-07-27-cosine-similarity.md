@@ -131,6 +131,6 @@ You have a dataset containing input features, and output target vectors $t^{(1)}
 1. Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. 
 2. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. This means dividing each dimension by its standard deviation. 
 3. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
-4. If your importance weights $P_i$ are all equal, this step isn't necessary. Otherwise, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.  -->
+4. If your importance weights $P_i$ are all equal, this step isn't necessary. Otherwise, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
 
-Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$, the cossim between your prediction and the true value.  -->
+Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
