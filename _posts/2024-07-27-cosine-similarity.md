@@ -75,13 +75,13 @@ Consider the case where the target vector $t$ is a draw from $D$-dimensional mul
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
-Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(\mu,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(\mu,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known to be the following ugly formula:
+Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(\mu,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(\mu,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known to be the following ugly expression:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \exp \left\lbrack -\frac{\mu^2}{2\sigma^2} \right\rbrack + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \exp \left\lbrack -\frac{\mu_i^2}{2\Sigma_{ii}^2} \right\rbrack + \mu_i - 2\mu_i \Phi(-\mu_i/\Sigma_{ii}) \\$$
 
-This is fine - it's evident that we can easily fulfill Condition 1 by ensuring $\mu_i = \mu_j$ and $\Sigma_{ii} = \Sigma_{jj}$. So you can choose any desired $u\in \mathbb{R}, v\in \mathbb{R}^+$, shift the target vectors such that $\mu = \left\lbrack u,...,u \right\rbrack$, then scale the target vectors such that $\text{diag}(\Sigma) = \left\lbrack v,...,v \right\rbrack$. 
+This is fine - we already know $\mu_i,\Sigma_{ii}$, so we can plug those in and compute the expectation. Then we can write that same formula and plug in $\mu_j$'s value and $\Sigma_{jj}$ as an unknown, set it equal to the computed expectation $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack $, and solve for $\Sigma_{jj}$. Then we simply scale the $j$-th target dimension to have variance $\Sigma_{jj}^2$. Repeat for every possible $j\neq i$, and boom, we've fulfilled Condition 1 without changing $\mu$. 
 
-If it makes sense with your dataset, though, choose $u=0$, $v=1$ to make life easier. Enforcing Condition 1 then just means standardizing each target dimension. First zero-center by subtracting $\mu$ from each $t^{(k)}$, then scale by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. And for what it's worth, $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack$ can now be expressed succinctly as $\sqrt{\frac{2}{\pi}}$. 
+But if $\mu = \mathbb{0}$, or if the application allows us to change $\mu$ without destroying our data's meaning, then there's a much easier way to fulfill Condition 1. Instead, just ensure that $\mu_i = \mu_j$ and $\Sigma_{ii} = \Sigma_{jj}$. So you can choose any desired $u\in \mathbb{R}, v\in \mathbb{R}^+$, shift the target vectors such that $\mu = \left\lbrack u,...,u \right\rbrack$, then scale the target vectors such that $\text{diag}(\Sigma) = \left\lbrack v,...,v \right\rbrack$. If possible, choose $u=0$, $v=1$ to make life easier. Enforcing Condition 1 then just means standardizing each target dimension. First zero-center by subtracting $\mu$ from each $t^{(k)}$, then scale by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. And for what it's worth, $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack$ can now be expressed succinctly as $\sqrt{\frac{2}{\pi}}$. 
 
 <a name="s4"></a>
 
@@ -107,9 +107,19 @@ $$\\ = \frac{P_i}{P_j} \frac{C_i^2 (1 / C_i^2)}{C_j^2 (1 / C_j^2)} = \frac{P_i}{
 
 You have a dataset containing input features, and output target vectors $t^{(1)},...,t^{(N)}$. Each sampled target vector $t^{(k)}$ is $D$-dimensional. You've also decided on importance weights $P = \left\lbrack P_1, ..., P_D \right\rbrack$ for the target dimensions.You want to compute a weighted cossim in which on average, each target dimension $i$'s contribution to the final cossim is proportional to $P_i$. 
 
-1. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. Step 1: (please consider implications first) Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. Step 2: divide each dimension by its standard deviation. 
-2. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
-3. If your importance weights $P_i$ are all equal, you're all set. If they're not, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
+**1a**. You're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal. <br>
+Divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
+
+**1b**. You're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution. You're also confident that distribution has mean 0, or you don't mind centering your data. <br>
+Standardize each dimension of each $t^{(k)}$. Step 1: (please consider implications first) Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. Step 2: divide each dimension by its standard deviation. 
+
+**1c**. You're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution with nonzero mean, and you don't want to center your data. <br>
+Use the scaling formula outlined in [Normally distributed targets](#s3). 
+
+**2a**. Your importance weights $P_i$ are all equal. You're all set. 
+
+**2b**. Your importance weights differ. <br>
+Multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
 
 Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
 
