@@ -117,7 +117,7 @@ As explained below, I also suggest computing the average pairwise cossim of targ
 
 <a name="s6"></a>
 
-## Open question: Recentering
+## Baseline cossim
 
 I cautiously recommended zero-centering normally distributed targets. Why not zero-center in general? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some applications, including the GPS example above, shifting is just incorrect and entirely changes the data's meaning. In the rest of this page, assume that the application allows for shifting. 
 
