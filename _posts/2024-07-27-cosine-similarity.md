@@ -7,7 +7,7 @@ meta: "Chicago"
 
 Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets be scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may or may not be sufficient. 
 
-Here I'll briefly define our goal in scaling, then show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. I'll end with a quick discussion of recentering the data, which is an open question. Skip to the summary if you just want to see the recommended transformations. 
+Here I'll briefly define our goal in scaling, then show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. I'll end with a quick discussion of baseline cossim, along with an open question. Skip to the summary if you just want to see the recommended transformations. 
 
 ## Topics
 1. [Cosine similarity](#s1)
@@ -15,7 +15,7 @@ Here I'll briefly define our goal in scaling, then show how to properly scale in
 3. [Normally distributed targets](#s3)
 4. [Dimension weighting](#s4)
 5. [Summary](#s5)
-6. [Recentering](#s6)
+6. [Baseline cossim](#s6)
 
 <a name="s1"></a>
 
@@ -112,6 +112,8 @@ You have a dataset containing input features, and output target vectors $t^{(1)}
 3. If your importance weights $P_i$ are all equal, you're all set. If they're not, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
 
 Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
+
+As explained below, I also recommend computing the average pairwise cossim of target vectors within your datasets as a baseline metric. Your model should not underperform this baseline. 
 
 <a name="s6"></a>
 
