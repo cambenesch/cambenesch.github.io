@@ -5,17 +5,17 @@ author: Cam Benesch
 meta: "Chicago"
 ---
 
-Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets be transformed before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may be insufficient. 
+Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets be scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may or may not be sufficient. 
 
-Here I'll justify zero-centering, then briefly define our goal in scaling. I'll show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. Skip to the summary if you just want to see the recommended transformations. 
+Here I'll briefly define our goal in scaling, then show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. I'll end with a quick discussion of recentering the data, which is an open question. Skip to the summary if you just want to see the recommended transformations. 
 
 ## Topics
 1. [Cosine similarity](#s1)
-2. [Zero-centering](#s2)
-3. [Scaling](#s3)
-3. [Normally distributed targets](#s4)
-5. [Dimension weighting](#s5)
-6. [Summary](#s6)
+2. [Scaling](#s2)
+3. [Normally distributed targets](#s3)
+4. [Dimension weighting](#s4)
+5. [Summary](#s5)
+6. [Recentering](#s6)
 
 <a name="s1"></a>
 
@@ -29,38 +29,15 @@ If you're still here, you don't care whether $y$ matches $t$ exactly - all you w
 
 $$\\ \cos(\theta) = \frac{t\cdot y}{||t|| ||y||} = \frac{t_1y_1+\cdots +t_Dy_D}{\sqrt{(t_1^2+\cdots +t_D^2)(y_1^2+\cdots + y_D^2)}} \\$$
 
+We also have a dataset containing $N$ target vectors $t^{(1)},...,t^{(N)}\sim f$, each an iid sample from some $D$-dimensional target distribution $f$. 
+
 <a name="s2"></a>
-
-## Zero-centering
-
-The target vector $t$ is a draw from some $D$-dimensional distribution $f$. Our dataset contains $N$ iid samples $t^{(1)},...,t^{(N)}\sim f$. Now we'll justify zero-centering each of the $D$ target dimensions. 
-
-Choose 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack a\cdot b \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim $y\cdot t>0$ without even using the input features. (The $\mathbb{E}\left\lbrack a\cdot b \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we thus require its cossim's numerator to be zero:
-
-$$\\ \mathbb{E}\left\lbrack a\cdot b \right\rbrack = 0 \\$$
-
-which by linearity of expectation gives
-
-$$\\ \mathbb{E}\left\lbrack a_1b_1 + \cdots + a_Db_D \right\rbrack \\$$
-$$\\ = \mathbb{E}\left\lbrack a_1b_1 \right\rbrack + \cdots + \mathbb{E}\left\lbrack a_Db_D \right\rbrack = 0 \\$$
-
-and since $a,b$ are iid,
-
-$$\\ \mathbb{E}\left\lbrack a_1 \right\rbrack \mathbb{E}\left\lbrack b_1 \right\rbrack + \cdots + \mathbb{E}\left\lbrack a_D \right\rbrack \mathbb{E}\left\lbrack b_D \right\rbrack \\$$
-
-$$\\ = \mathbb{E}\left\lbrack a_1 \right\rbrack^2 + \cdots + \mathbb{E}\left\lbrack a_D \right\rbrack^2 = 0 \\$$
-
-$$\\ \implies \mathbb{E}\left\lbrack a_i \right\rbrack = 0 \\$$
-
-for each target dimension $i$. This condition is easily enforced by zero-centering the target dimensions. In particular, compute $\mu = \frac1N (t^{(1)} + \cdots + t^{(N)})$ and center the data by subtracting $\mu$ from each $t^{(k)}$. 
-
-<a name="s3"></a>
 
 ## Scaling
 
 In many cases you'll want to scale your target dimensions so that each target dimension has an equal **opportunity** to contribute to the final cossim. Note that equal opportunity doesn't mean equal contribution. If we're very good (or uncannily bad) at predicting $t_i$ but not $t_j$, then ${\mid}y_it_i{\mid} > {\mid}y_jt_j{\mid}$ in expectation. 
 
-There are, however, scenarios where we **should** expect equal contributions. For instance, let's revisit $a, b\sim f$, which were sampled from our dataset's target vectors. Consider any 2 target dimensions $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
+There are, however, scenarios where we **should** expect equal contributions. For instance, let's sample $a, b\sim f$ iid from our dataset's target vectors $t^{(1)},...,t^{(N)}$. Consider any 2 target dimensions $i,j$. Since $a,b$ are independently drawn, $a_i,a_j$ cannot explain any variance in $b_i,b_j$. In this case, the cossim's $i$ and $j$ terms must have the same average magnitudes. In particular, we require
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_ib_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_jb_j{\mid} \right\rbrack \text{  (Condition 1)} \\$$
 
@@ -90,21 +67,23 @@ $$\\ C_i^2 \frac1{C_i^2} = C_j^2 \frac1{C_j^2} \\$$
 
 The last step uses our approximation, under which Condition 1 is clearly true/fulfilled. 
 
-<a name="s4"></a>
+<a name="s3"></a>
 
 ## Normally distributed targets
 
-Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(0,\Sigma)$. Of course, $f$ is zero-centered. Since $f$ is known, approximation is no longer necessary. As shown above, Condition 1 is 
+Consider the case where the target vector $t$ is a draw from $D$-dimensional multivariate normal distribution $f=\mathcal{N}(\mu,\Sigma)$. Since $f$ is known, approximation is no longer necessary. As shown above, Condition 1 is 
 
 $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbrack {\mid}a_j{\mid} \right\rbrack \\$$
 
-Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(0,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(0,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known:
+Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(\mu,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(\mu,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known to be the following ugly formula:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \exp{-\frac{\mu^2}{2\sigma^2}} + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
 
-So in this case, Condition 1 is equivalent to $\Sigma_{ii} = \Sigma_{jj}$. This is easily enforced by standardizing each target dimension, which means scaling by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. 
+This is fine - it's evident that we can easily fulfill Condition 1 by ensuring $\mu_i = \mu_j$ and $\Sigma_{ii} = \Sigma_{jj}$. So you can choose any desired $u\in \mathbb{R}, v\in \mathbb{R}^+$, shift the target vectors such that $\mu = \left\lbrack u,...,u \right\rbrack$, then scale the target vectors such that $\text{diag}(\Sigma) = \left\lbrack v,...,v \right\rbrack$. 
 
-<a name="s5"></a>
+If it makes sense with your dataset, though, I recommend choosing $u=0$, $v=1$ to make life easier. Enforcing Condition 1 then just means standardizing each target dimension. First zero-center by subtracting $\mu$ from each $t^{(k)}$, then scale by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. And for what it's worth, $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack$ can now be expressed succinctly as $\sqrt{\frac{2}{\pi}}$. 
+
+<a name="s4"></a>
 
 ## Dimension weighting
 
@@ -122,15 +101,42 @@ $$\\ = \frac{P_i}{P_j} \frac{C_i^2 \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right
 
 $$\\ = \frac{P_i}{P_j} \frac{C_i^2 (1 / C_i^2)}{C_j^2 (1 / C_j^2)} = \frac{P_i}{P_j} \\$$
 
-<a name="s6"></a>
+<a name="s5"></a>
 
 ## Summary
 
 You have a dataset containing input features, and output target vectors $t^{(1)},...,t^{(N)}$. Each sampled target vector $t^{(k)}$ is $D$-dimensional. You've also decided on importance weights $P = \left\lbrack P_1, ..., P_D \right\rbrack$ for the target dimensions.You want to compute a weighted cossim in which on average, each target dimension $i$'s contribution to the final cossim is proportional to $P_i$. 
 
-1. Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. 
-2. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. This means dividing each dimension by its standard deviation. 
-3. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
-4. If your importance weights $P_i$ are all equal, this step isn't necessary. If they're not, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
+1. If you're confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal distribution, then standardize each dimension of each $t^{(k)}$. Step 1: (please consider implications first) Zero-center your targets by averaging $t^{(1)},...,t^{(N)}$ then subtracting that mean from each $t^{(k)}$. Step 2: divide each dimension by its standard deviation. 
+2. If you're not confident $t^{(1)},...,t^{(N)}$ were drawn from a multivariate normal, then divide each dimension by its average absolute value $\frac1N \sum_{k=1}^N {\mid}t^{(k)}_i {\mid} $. 
+3. If your importance weights $P_i$ are all equal, you're all set. If they're not, multiply each target vector's $i$-th dimension by $\sqrt{P_i}$.
 
 Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
+
+<a name="s6"></a>
+
+## Open question: Recentering
+
+I cautiously recommended zero-centering normally distributed targets. Why not zero-center in general? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some datasets, including the GPS example above, shifting is just incorrect and changes the meaning entirely. In the rest of this page, assume that shifting data isn't blatantly incorret. 
+
+Choose 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim without even using the input features. (The $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we would like cossim to have zero expectation:
+
+$$\\ \mathbb{E}\left\lbrack \frac{a\cdot b}{ \mid \mid a\mid \mid \mid \mid b\mid \mid } \right\rbrack = 0 \\$$
+
+Since $a,b$ are iid and expectation is linear, this is equivalent to 
+
+$$\\ \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack = 0 \\$$
+
+If $D=1$, we end up with $\mathbb{E}\left\lbrack \sign(a) \right\rbrack = 0$, which can be achieved by subtracting $t$'s median from each $t^{(k)}$. If $D>1$, this is extremely hard to enforce, [even for the normal special case](https://stats.stackexchange.com/a/265902). So the open question is how to thwart the naive model in general. 
+
+Until that's solved, I'd recommend just computing cossim for each pair of target vectors in the dataset. Average those, then use that as a baseline when you're evaluating models. This takes $O(N^2D)$ time. With a bit of optimization, we can reduce that to $O(ND)$:
+
+$$\\ \mathbb{E}\left\lbrack \frac{a\cdot b}{ \mid \mid a\mid \mid \mid \mid b\mid \mid } \right\rbrack \\$$
+
+$$\\ = \sum_{i=1}^D \mathbb{E}\left\lbrack \frac{a_ib_i}{ \mid \mid a\mid \mid \mid \mid b\mid \mid } \right\rbrack \\$$
+
+$$\\ = \sum_{i=1}^D \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack \mathbb{E}\left\lbrack \frac{b_i}{ \mid \mid b\mid \mid } \right\rbrack \\$$
+
+$$\\ = \sum_{i=1}^D \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack^2 \\$$
+
+Precompute $\mid \mid a\mid \mid$ for each data point, which takes $O(ND)$ time total. Compute $\frac{a_i}{ \mid \mid a\mid \mid }$ for each dimension of each data point, which again takes $O(ND)$ time total. Finally, add those up across the data points to get all your $\mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack$ terms. Square and sum the expectations to get your baseline cossim. 
