@@ -7,7 +7,7 @@ meta: "Chicago"
 
 Cosine similarity is a frequently used scalar metric to evaluate multi-output (i.e. vector) predictions. It's often advised that targets be scaled before computing cosine similarity, but there isn't much material on how precisely this should be done. Depending on the targets' distributions and the desired metric properties, traditional standardization may or may not be sufficient. 
 
-Here I'll briefly define our goal in scaling, then show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. I'll end with a quick discussion of baseline cossim, along with an open question. Skip to the summary if you just want to see the recommended transformations. 
+Here I'll briefly define our goal in scaling, then show how to properly scale in 2 cases: unknown target distributions (approximate L1-normalization), and known normal target distributions (exact standardization). These methods reveal a clean way to compute dimension-weighted cosine similarity: scale each target dimension by its desired weight's square root. I'll end with a quick discussion of baseline cossim, along with an open question. Skip to the summary if you just want to see the suggested transformations. 
 
 ## Topics
 1. [Cosine similarity](#s1)
@@ -77,11 +77,11 @@ $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbra
 
 Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(\mu,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(\mu,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known to be the following ugly formula:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \exp{-\frac{\mu^2}{2\sigma^2}} + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \left\lbrack \exp -\frac{\mu^2}{2\sigma^2} \right\rbrack + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
 
 This is fine - it's evident that we can easily fulfill Condition 1 by ensuring $\mu_i = \mu_j$ and $\Sigma_{ii} = \Sigma_{jj}$. So you can choose any desired $u\in \mathbb{R}, v\in \mathbb{R}^+$, shift the target vectors such that $\mu = \left\lbrack u,...,u \right\rbrack$, then scale the target vectors such that $\text{diag}(\Sigma) = \left\lbrack v,...,v \right\rbrack$. 
 
-If it makes sense with your dataset, though, I recommend choosing $u=0$, $v=1$ to make life easier. Enforcing Condition 1 then just means standardizing each target dimension. First zero-center by subtracting $\mu$ from each $t^{(k)}$, then scale by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. And for what it's worth, $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack$ can now be expressed succinctly as $\sqrt{\frac{2}{\pi}}$. 
+If it makes sense with your dataset, though, choose $u=0$, $v=1$ to make life easier. Enforcing Condition 1 then just means standardizing each target dimension. First zero-center by subtracting $\mu$ from each $t^{(k)}$, then scale by $C = \left\lbrack \frac1{\sqrt{\Sigma_{11}}}, ..., \frac1{\sqrt{\Sigma_{DD}}} \right\rbrack$. And for what it's worth, $\mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack$ can now be expressed succinctly as $\sqrt{\frac{2}{\pi}}$. 
 
 <a name="s4"></a>
 
@@ -113,13 +113,13 @@ You have a dataset containing input features, and output target vectors $t^{(1)}
 
 Now that you've preprocessed your dataset's target vectors, you can train a model to take some input features and produce a prediction $y$ of the target vector associated with those inputs. The correct target vector from your dataset is $t$. Finally, you can compute the weighted cossim $\cos(\theta) = \frac{t\cdot y}{ \mid \mid t\mid \mid \mid \mid y\mid \mid }$ between your prediction and the true value.
 
-As explained below, I also recommend computing the average pairwise cossim of target vectors within your datasets as a baseline metric. Your model should not underperform this baseline. 
+As explained below, I also suggest computing the average pairwise cossim of target vectors within your datasets as a baseline metric. Your model should not underperform this baseline. 
 
 <a name="s6"></a>
 
 ## Open question: Recentering
 
-I cautiously recommended zero-centering normally distributed targets. Why not zero-center in general? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some datasets, including the GPS example above, shifting is just incorrect and changes the meaning entirely. In the rest of this page, assume that shifting data isn't blatantly incorret. 
+I cautiously recommended zero-centering normally distributed targets. Why not zero-center in general? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some applications, including the GPS example above, shifting is just incorrect and entirely changes the data's meaning. In the rest of this page, assume that the application allows for shifting. 
 
 Choose 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim without even using the input features. (The $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we would like cossim to have zero expectation:
 
