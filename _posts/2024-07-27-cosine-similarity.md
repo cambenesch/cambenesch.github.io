@@ -129,7 +129,7 @@ Since $a,b$ are iid and expectation is linear, this is equivalent to
 
 $$\\ \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack = 0 \\$$
 
-If $D=1$, we end up with $\mathbb{E}\left\lbrack \text{sign}(a) \right\rbrack = 0$, which can be achieved by subtracting $t$'s median from each $t^{(k)}$. If $D>1$, this is extremely hard to enforce, [even for the normal special case](https://stats.stackexchange.com/a/265902). So the open question is how to thwart the naive model for arbitrary $f$. 
+If $D=1$, we end up with $\mathbb{E}\left\lbrack \text{sign}(a) \right\rbrack = 0$, which can be achieved by subtracting $t$'s median from each $t^{(k)}$. If $D>1$, this is extremely hard to enforce, [even for the normal special case](https://stats.stackexchange.com/a/265902). So the open question is how to thwart the naive model for arbitrary $f$ and $D$. 
 
 Until that's solved, I'd recommend just computing cossim for each pair of distinct target vectors in the dataset. Average those, then use that as a baseline when you're evaluating models. That takes $O(N^2D)$ time. With a bit of optimization, we can reduce it to $O(ND)$:
 
