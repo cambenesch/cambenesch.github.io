@@ -77,7 +77,7 @@ $$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \mathbb{E}\left\lbra
 
 Each target dimension follows a univariate normal distribution $a_i\sim \mathcal{N}(\mu,\Sigma_{ii})$ and $a_j\sim \mathcal{N}(\mu,\Sigma_{jj})$. Therefore, ${\mid}a_i{\mid}, {\mid}a_j{\mid}$ each follow the [folded normal distribution](https://en.wikipedia.org/wiki/Folded_normal_distribution), whose expectation is known to be the following ugly formula:
 
-$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \left\lbrack \exp -\frac{\mu^2}{2\sigma^2} \right\rbrack + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
+$$\\ \mathbb{E}\left\lbrack {\mid}a_i{\mid} \right\rbrack = \sqrt{\frac{2\Sigma_{ii}^2}{\pi}} \exp \left\lbrack -\frac{\mu^2}{2\sigma^2} \right\rbrack + \mu - 2\mu \Phi(-\mu/\sigma) \\$$
 
 This is fine - it's evident that we can easily fulfill Condition 1 by ensuring $\mu_i = \mu_j$ and $\Sigma_{ii} = \Sigma_{jj}$. So you can choose any desired $u\in \mathbb{R}, v\in \mathbb{R}^+$, shift the target vectors such that $\mu = \left\lbrack u,...,u \right\rbrack$, then scale the target vectors such that $\text{diag}(\Sigma) = \left\lbrack v,...,v \right\rbrack$. 
 
