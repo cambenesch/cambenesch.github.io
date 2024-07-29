@@ -129,9 +129,9 @@ Since $a,b$ are iid and expectation is linear, this is equivalent to
 
 $$\\ \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack = 0 \\$$
 
-If $D=1$, we end up with $\mathbb{E}\left\lbrack \sign(a) \right\rbrack = 0$, which can be achieved by subtracting $t$'s median from each $t^{(k)}$. If $D>1$, this is extremely hard to enforce, [even for the normal special case](https://stats.stackexchange.com/a/265902). So the open question is how to thwart the naive model in general. 
+If $D=1$, we end up with $\mathbb{E}\left\lbrack \text{sign}(a) \right\rbrack = 0$, which can be achieved by subtracting $t$'s median from each $t^{(k)}$. If $D>1$, this is extremely hard to enforce, [even for the normal special case](https://stats.stackexchange.com/a/265902). So the open question is how to thwart the naive model for arbitrary $f$. 
 
-Until that's solved, I'd recommend just computing cossim for each pair of target vectors in the dataset. Average those, then use that as a baseline when you're evaluating models. This takes $O(N^2D)$ time. With a bit of optimization, we can reduce that to $O(ND)$:
+Until that's solved, I'd recommend just computing cossim for each pair of distinct target vectors in the dataset. Average those, then use that as a baseline when you're evaluating models. That takes $O(N^2D)$ time. With a bit of optimization, we can reduce it to $O(ND)$:
 
 $$\\ \mathbb{E}\left\lbrack \frac{a\cdot b}{ \mid \mid a\mid \mid \mid \mid b\mid \mid } \right\rbrack \\$$
 
@@ -141,4 +141,4 @@ $$\\ = \sum_{i=1}^D \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \r
 
 $$\\ = \sum_{i=1}^D \mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack^2 \\$$
 
-Precompute $\mid \mid a\mid \mid$ for each data point, which takes $O(ND)$ time total. Compute $\frac{a_i}{ \mid \mid a\mid \mid }$ for each dimension of each data point, which again takes $O(ND)$ time total. Finally, add those up across the data points to get all your $\mathbb{E}\left\lbrack \frac{a_i}{ \mid \mid a\mid \mid } \right\rbrack$ terms. Square and sum the expectations to get your baseline cossim. 
+Precompute $\mid \mid t^{(k)}\mid \mid$ for each data point, which takes $O(ND)$ time total. Compute $\frac{t^{(k)}_i}{ \mid \mid t^{(k)}\mid \mid }$ for each dimension of each data point, which again takes $O(ND)$ time total. Finally, average those across the data points to get all your $\mathbb{E}\left\lbrack \frac{t_i}{ \mid \mid t\mid \mid } \right\rbrack$. Square and sum the expectations to get your baseline cossim. 
