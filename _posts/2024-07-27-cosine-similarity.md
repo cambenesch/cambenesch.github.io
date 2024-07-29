@@ -119,7 +119,7 @@ As explained below, I also suggest computing the average pairwise cossim of targ
 
 ## Baseline cossim
 
-I cautiously recommended zero-centering normally distributed targets. Why not zero-center in general? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some applications, including the GPS example above, shifting is just incorrect and entirely changes the data's meaning. In the rest of this page, assume that the application allows for shifting. 
+I cautiously recommended zero-centering normally distributed targets. Why was I cautious? A simple answer is that angles change, sometimes drastically, when you start shifting data. For some applications, including the GPS example above, shifting is just incorrect and entirely changes the data's meaning. In the rest of this page, assume that the application allows for shifting. 
 
 Choose 2 target vectors $a, b$ from $t^{(1)},...,t^{(N)}$. For the sake of contradiction, suppose $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack > 0$. Then we can construct a naive model which at test time discards the input features, samples a random $t'$ from the training dataset's target vectors, and predicts $y=t'$. Upon evaluation, this model produces a positive average cossim without even using the input features. (The $\mathbb{E}\left\lbrack \text{cossim}(a,b) \right\rbrack < 0$ case is similar; just set $y=-t'$.) To thwart this naive model, we would like cossim to have zero expectation:
 
